@@ -1,0 +1,218 @@
+---
+import statsData from '../data/stats.json';
+import projectsData from '../data/projects.json';
+import { ui, defaultLang } from '../i18n/ui';
+
+// Recibimos el idioma desde la página padre
+const { lang = 'es' } = Astro.props;
+
+// Obtenemos las traducciones correspondientes
+const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+
+// --- PROCESAMIENTO DE DATOS ---
+const activeProjects = projectsData.filter(p => p.status === 'active');
+const completedProjects = projectsData.filter(p => p.status === 'completed');
+
+// Ahora las etiquetas (labels) vienen del diccionario 't'
+const stats = [
+  {
+    value: activeProjects.length,
+    label: t.statActive,
+    color: "var(--color-active)",
+    pulse: true,
+    action: "openActive"
+  },
+  {
+    value: completedProjects.length,
+    label: t.statDone,
+    color: "var(--color-done)",
+    pulse: false,
+    action: "openCompleted"
+  },
+  {
+    value: statsData.freelanceSolutions,
+    label: t.statFreelance,
+    color: "var(--color-freelance)",
+    pulse: false,
+    action: null
+  },
+  {
+    value: statsData.notesCount,
+    label: t.statNotes,
+    color: "var(--color-notes)",
+    pulse: false,
+    action: null
+  }
+];
+
+// URLs dinámicas según idioma
+const projectsLink = lang === 'en' ? '/en/projects/' : '/es/projects/';
+const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="badge">{t.heroBadge}</span>
+    
+    <h1 class="hero-title">
+      {t.heroTitlePre} <span class="gradient-text">{t.heroTitleGradient}</span> {t.heroTitlePost}
+    </h1>
+    
+    <p class="hero-desc" set:html={t.heroDesc}></p>
+
+    <div class="stats-wrapper">
+      <div class="stats-label">{t.statsLabel}</div>
+      <div class="stats-container">
+        {stats.map(stat => (
+          stat.action ? (
+            <button class="stat-item interactive" data-action={stat.action}>
+              <div class="stat-value" style={`color: ${stat.color}`}>
+                {stat.value}
+                {stat.pulse && <span class="pulse-dot"></span>}
+              </div>
+              <div class="stat-name">{stat.label}</div>
+            </button>
+          ) : (
+            <div class="stat-item">
+              <div class="stat-value" style={`color: ${stat.color}`}>
+                {stat.value}
+              </div>
+              <div class="stat-name">{stat.label}</div>
+            </div>
+          )
+        ))}
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href={projectsLink} class="btn btn-primary">{t.btnProjects}</a>
+      <a href={aboutLink} class="btn btn-outline">{t.btnAbout}</a>
+    </div>
+  </div>
+
+  <dialog id="projects-modal" class="modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title">Projects</h3>
+        <button id="close-modal" class="close-btn">&times;</button>
+      </div>
+      <div id="modal-content" class="modal-grid"></div>
+      <div class="modal-footer">
+        <a href={projectsLink} class="btn-link">{t.modalLink}</a>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script define:vars={{ activeProjects, completedProjects, titleActive: t.modalActive, titleDone: t.modalDone }}>
+  const modal = document.getElementById('projects-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalContent = document.getElementById('modal-content');
+  const closeBtn = document.getElementById('close-modal');
+  const buttons = document.querySelectorAll('.interactive');
+
+  const renderProjects = (projects) => {
+    if (projects.length === 0) return '<p class="empty-msg" style="color:var(--muted); font-size:0.9em;">No projects found.</p>';
+    
+    return projects.slice(0, 5).map(p => `
+      <a href="${p.link}" class="mini-card" target="_blank">
+        <div class="mini-card-header">
+          <strong class="project-title">${p.title}</strong>
+          <span class="status-badge ${p.status}">${p.status === 'active' ? 'Active' : 'Done'}</span>
+        </div>
+        <p class="project-desc">${p.description}</p>
+        <div class="mini-tags">
+          ${p.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+        </div>
+      </a>
+    `).join('');
+  };
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.action;
+      if (action === 'openActive') {
+        modalTitle.innerText = titleActive; // Usamos la variable traducida
+        modalContent.innerHTML = renderProjects(activeProjects);
+        modal.showModal();
+      } else if (action === 'openCompleted') {
+        modalTitle.innerText = titleDone;   // Usamos la variable traducida
+        modalContent.innerHTML = renderProjects(completedProjects);
+        modal.showModal();
+      }
+    });
+  });
+
+  closeBtn?.addEventListener('click', () => modal.close());
+  modal?.addEventListener('click', (e) => {
+    const rect = modal.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || 
+        e.clientY < rect.top || e.clientY > rect.bottom) {
+      modal.close();
+    }
+  });
+</script>
+
+<style>
+  /* --- MISMOS ESTILOS QUE ANTES --- */
+  :root {
+    --color-active: #10b981;
+    --color-done: #3b82f6;
+    --color-freelance: #8b5cf6;
+    --color-notes: #f59e0b;
+  }
+  .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
+  .hero-content { display: flex; flex-direction: column; align-items: center; }
+  .hero::before {
+    content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 600px; height: 400px;
+    background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none;
+  }
+  .badge {
+    display: inline-block; padding: 6px 16px; border-radius: 99px;
+    font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+    background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.2);
+    margin-bottom: 24px;
+  }
+  .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+  .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-desc { font-size: 1.35rem; color: var(--muted); line-height: 1.6; margin: 0 auto 40px; max-width: 700px; animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(20px); }
+  .stats-wrapper { margin-bottom: 100px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(20px); }
+  .stats-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; }
+  .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); width: 100%; }
+  .stat-item { background: var(--bg); padding: 24px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s ease; border: none; width: 100%; font-family: inherit; cursor: default; }
+  .stat-item.interactive { cursor: pointer; }
+  .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
+  .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; position: relative; display: inline-flex; }
+  .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+  .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; margin-left: 6px; margin-top: 4px; animation: pulse 2s infinite; }
+  .hero-actions { display: flex; gap: 16px; justify-content: center; animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(20px); }
+  .btn { display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
+  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 500px; width: 90%; color: var(--text); }
+  .modal::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); }
+  .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+  .modal-header h3 { margin: 0; font-size: 1.4rem; }
+  .close-btn { background: none; border: none; font-size: 2rem; color: var(--muted); cursor: pointer; line-height: 0.5; padding: 0; }
+  .modal-grid { display: flex; flex-direction: column; gap: 12px; max-height: 50vh; overflow-y: auto; }
+  .mini-card { display: block; background: var(--code-bg); padding: 16px; border-radius: 12px; text-decoration: none; color: var(--text); border: 1px solid transparent; transition: all 0.2s; }
+  .mini-card:hover { border-color: var(--link); transform: scale(0.99); }
+  .mini-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .project-title { font-size: 1rem; }
+  .project-desc { font-size: 0.85rem; color: var(--muted); margin: 0 0 10px; line-height: 1.4; }
+  .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 700; }
+  .status-badge.active { background: rgba(16, 185, 129, 0.1); color: var(--color-active); }
+  .status-badge.completed { background: rgba(59, 130, 246, 0.1); color: var(--color-done); }
+  .mini-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag-pill { font-size: 0.7rem; background: rgba(127,127,127,0.1); padding: 2px 8px; border-radius: 4px; }
+  .modal-footer { margin-top: 20px; text-align: center; border-top: 1px solid var(--border); padding-top: 15px; }
+  .btn-link { color: var(--link); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  @keyframes pulse { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); opacity: 0; } }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .stats-container { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .stat-item { padding: 20px 10px; } .stat-value { font-size: 2rem; } }
+</style>
