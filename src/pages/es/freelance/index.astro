@@ -1,10 +1,25 @@
 ﻿---
 import Layout from '../../../layouts/Layout.astro';
+import FreelanceTimeline from '../../../components/FreelanceTimeline.astro';
+import { ui } from '../../../i18n/ui';
+
+const t = ui.es;
 ---
 
-<Layout title="Freelance · Juan Camilo" lang="es">
-    <a href="/es/">← Inicio</a>
-    <h1>Freelance</h1>
-    <p>Casos anonimizados: problema → entrega → herramientas → resultado.</p>
+<Layout title="Bitácora Freelance | Camilo Ramírez" lang="es">
+  <div class="page-container">
+    <header class="page-header">
+      <h1 class="page-title">{t.freelanceTitle}</h1>
+      <p class="page-subtitle">{t.freelanceSubtitle}</p>
+    </header>
+
+    <FreelanceTimeline lang="es" />
+  </div>
 </Layout>
 
+<style>
+  .page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .page-header { text-align: center; margin-bottom: 40px; }
+  .page-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .page-subtitle { font-size: 1.2rem; color: var(--muted); }
+</style>

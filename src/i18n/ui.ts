@@ -45,7 +45,13 @@ export const ui = {
         // Modal Titles
         modalActive: "Proyectos en Marcha 🚧",
         modalDone: "Últimos Finalizados ✅",
-        modalLink: "Ver todos los proyectos →"
+        modalLink: "Ver todos los proyectos →",
+
+        // Freelance
+        freelanceTitle: "Bitácora Freelance",
+        freelanceSubtitle: "Historial de soluciones académicas y desarrollos técnicos.",
+        freelancePrivate: "Código Privado / No disponible",
+        freelanceDownload: "Descargar Recurso"
     },
     en: {
         // --- 1. SIDEBAR & META ---
@@ -86,7 +92,13 @@ export const ui = {
         // Modal Titles
         modalActive: "Ongoing Projects 🚧",
         modalDone: "Recently Completed ✅",
-        modalLink: "View all repository →"
+        modalLink: "View all repository →",
+
+        // Freelance
+        freelanceTitle: "Freelance Log",
+        freelanceSubtitle: "History of academic solutions and technical developments.",
+        freelancePrivate: "Private Code / Not available",
+        freelanceDownload: "Download Resource"
     },
 } as const;
 

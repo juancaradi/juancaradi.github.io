@@ -1,42 +1,78 @@
 ﻿[
   {
-    "title": "Análisis Topológico (TDA)",
-    "description": "Estudio de la forma de datos de alta dimensión usando homología persistente.",
+    "title": {
+      "es": "Análisis Topológico (TDA)",
+      "en": "Topological Data Analysis (TDA)"
+    },
+    "description": {
+      "es": "Estudio de la forma de datos de alta dimensión usando homología persistente.",
+      "en": "Study of high-dimensional data shapes using persistent homology."
+    },
     "status": "active",
     "tags": ["Python", "TDA", "Math"],
     "link": "#"
   },
   {
-    "title": "Dashboard Financiero",
-    "description": "Visualización interactiva de mercados bursátiles con API en tiempo real.",
+    "title": {
+      "es": "Dashboard Financiero",
+      "en": "Financial Dashboard"
+    },
+    "description": {
+      "es": "Visualización interactiva de mercados bursátiles con API en tiempo real.",
+      "en": "Interactive stock market visualization using real-time APIs."
+    },
     "status": "active",
     "tags": ["Python", "Streamlit", "Pandas"],
     "link": "#"
   },
   {
-    "title": "Regresión Multivariable R",
-    "description": "Modelo estadístico para predicción de precios de vivienda con validación cruzada.",
+    "title": {
+      "es": "Regresión Multivariable R",
+      "en": "Multivariate Regression in R"
+    },
+    "description": {
+      "es": "Modelo estadístico para predicción de precios de vivienda con validación cruzada.",
+      "en": "Statistical model for housing price prediction using cross-validation."
+    },
     "status": "completed",
     "tags": ["R", "Statistics", "GLM"],
     "link": "#"
   },
   {
-    "title": "Teoría de Grafos Social",
-    "description": "Análisis de centralidad y comunidades en redes sociales simuladas.",
+    "title": {
+      "es": "Teoría de Grafos Social",
+      "en": "Social Graph Theory"
+    },
+    "description": {
+      "es": "Análisis de centralidad y comunidades en redes sociales simuladas.",
+      "en": "Centrality and community analysis in simulated social networks."
+    },
     "status": "completed",
     "tags": ["Python", "NetworkX"],
     "link": "#"
   },
   {
-    "title": "Bot de Automatización",
-    "description": "Script para limpieza automática de bases de datos SQL.",
+    "title": {
+      "es": "Bot de Automatización",
+      "en": "Automation Bot"
+    },
+    "description": {
+      "es": "Script para limpieza automática de bases de datos SQL.",
+      "en": "Script for automatic SQL database cleaning and maintenance."
+    },
     "status": "completed",
     "tags": ["SQL", "Python", "Automation"],
     "link": "#"
   },
   {
-    "title": "Taller de Cálculo Vectorial",
-    "description": "Repositorio de ejercicios resueltos y graficados en 3D.",
+    "title": {
+      "es": "Taller de Cálculo Vectorial",
+      "en": "Vector Calculus Workshop"
+    },
+    "description": {
+      "es": "Repositorio de ejercicios resueltos y graficados en 3D.",
+      "en": "Repository of solved exercises and 3D plotting visualizations."
+    },
     "status": "completed",
     "tags": ["Python", "Matplotlib", "Calculus"],
     "link": "#"

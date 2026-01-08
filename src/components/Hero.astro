@@ -1,24 +1,24 @@
 ---
 import statsData from '../data/stats.json';
 import projectsData from '../data/projects.json';
+import freelanceData from '../data/freelance.json'; // 1. Importamos Freelance
 import { ui, defaultLang } from '../i18n/ui';
 
-// Recibimos el idioma desde la página padre
+// 1. Recibimos el idioma
 const { lang = 'es' } = Astro.props;
-
-// Obtenemos las traducciones correspondientes
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
 
-// --- PROCESAMIENTO DE DATOS ---
+// 2. Filtramos datos
 const activeProjects = projectsData.filter(p => p.status === 'active');
 const completedProjects = projectsData.filter(p => p.status === 'completed');
+const totalFreelance = freelanceData.length; // Conteo real
 
-// Ahora las etiquetas (labels) vienen del diccionario 't'
+// 3. Configuración de Métricas
 const stats = [
   {
     value: activeProjects.length,
     label: t.statActive,
-    color: "var(--color-active)",
+    color: "var(--color-active)", 
     pulse: true,
     action: "openActive"
   },
@@ -30,11 +30,11 @@ const stats = [
     action: "openCompleted"
   },
   {
-    value: statsData.freelanceSolutions,
+    value: totalFreelance, // Valor dinámico
     label: t.statFreelance,
     color: "var(--color-freelance)",
     pulse: false,
-    action: null
+    action: "openFreelance" // Acción activada
   },
   {
     value: statsData.notesCount,
@@ -45,9 +45,9 @@ const stats = [
   }
 ];
 
-// URLs dinámicas según idioma
 const projectsLink = lang === 'en' ? '/en/projects/' : '/es/projects/';
 const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
+const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 ---
 
 <section class="hero">
@@ -93,51 +93,93 @@ const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
   <dialog id="projects-modal" class="modal">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 id="modal-title">Projects</h3>
+        <h3 id="modal-title" class="modal-title-text"></h3>
         <button id="close-modal" class="close-btn">&times;</button>
       </div>
       <div id="modal-content" class="modal-grid"></div>
       <div class="modal-footer">
-        <a href={projectsLink} class="btn-link">{t.modalLink}</a>
+        <a id="modal-footer-link" href="#" class="btn-link">{t.modalLink}</a>
       </div>
     </div>
   </dialog>
 </section>
 
-<script define:vars={{ activeProjects, completedProjects, titleActive: t.modalActive, titleDone: t.modalDone }}>
+<script define:vars={{ 
+  activeProjects, 
+  completedProjects, 
+  freelanceData,
+  titles: { active: t.modalActive, done: t.modalDone, freelance: t.modalFreelance },
+  currentLang: lang,
+  links: { projects: projectsLink, freelance: freelanceLink }
+}}>
   const modal = document.getElementById('projects-modal');
   const modalTitle = document.getElementById('modal-title');
   const modalContent = document.getElementById('modal-content');
+  const modalFooterLink = document.getElementById('modal-footer-link');
   const closeBtn = document.getElementById('close-modal');
   const buttons = document.querySelectorAll('.interactive');
 
-  const renderProjects = (projects) => {
-    if (projects.length === 0) return '<p class="empty-msg" style="color:var(--muted); font-size:0.9em;">No projects found.</p>';
+  // Renderizador Inteligente (Detecta si es Proyecto o Freelance)
+  const renderProjects = (items) => {
+    if (items.length === 0) return '<p class="empty-msg">No items found.</p>';
     
-    return projects.slice(0, 5).map(p => `
-      <a href="${p.link}" class="mini-card" target="_blank">
-        <div class="mini-card-header">
-          <strong class="project-title">${p.title}</strong>
-          <span class="status-badge ${p.status}">${p.status === 'active' ? 'Active' : 'Done'}</span>
+    // Si tiene propiedad 'subject', es un trabajo freelance
+    const isFreelance = items[0].hasOwnProperty('subject');
+
+    return items.slice(0, 5).map(item => {
+        let title, desc, tags, link;
+
+        if (isFreelance) {
+            // Lógica Freelance (Bilingüe)
+            title = `${item.subject[currentLang]} - ${item.type[currentLang]}`;
+            desc = item.description[currentLang];
+            // Convertimos resources a tags visuales
+            tags = item.resources.map(r => r.name); 
+            // Si tiene algún recurso con URL, usamos ese como link principal, si no '#'
+            const mainResource = item.resources.find(r => r.url);
+            link = mainResource ? mainResource.url : '#';
+        } else {
+            // Lógica Proyectos (Bilingüe)
+            title = item.title[currentLang];
+            desc = item.description[currentLang];
+            tags = item.tags;
+            link = item.link;
+        }
+
+        return `
+      <a href="${link}" class="project-card" target="_blank">
+        <div class="card-top">
+           <h4 class="card-title">${title}</h4>
+           <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
         </div>
-        <p class="project-desc">${p.description}</p>
-        <div class="mini-tags">
-          ${p.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+        <p class="card-desc">${desc}</p>
+        <div class="card-tags">
+          ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
         </div>
       </a>
-    `).join('');
+    `}).join('');
   };
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action;
+      
       if (action === 'openActive') {
-        modalTitle.innerText = titleActive; // Usamos la variable traducida
+        modalTitle.innerHTML = `${titles.active} <span class="status-indicator active"></span>`;
         modalContent.innerHTML = renderProjects(activeProjects);
+        if(modalFooterLink) modalFooterLink.href = links.projects;
         modal.showModal();
       } else if (action === 'openCompleted') {
-        modalTitle.innerText = titleDone;   // Usamos la variable traducida
+        modalTitle.innerHTML = `${titles.done} <span class="status-indicator done"></span>`;
         modalContent.innerHTML = renderProjects(completedProjects);
+        if(modalFooterLink) modalFooterLink.href = links.projects;
+        modal.showModal();
+      } else if (action === 'openFreelance') {
+        modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
+        // Invertimos para mostrar los más recientes primero
+        const recentFreelance = [...freelanceData].reverse();
+        modalContent.innerHTML = renderProjects(recentFreelance);
+        if(modalFooterLink) modalFooterLink.href = links.freelance;
         modal.showModal();
       }
     });
@@ -153,13 +195,44 @@ const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
   });
 </script>
 
+<style is:global>
+  /* --- TARJETAS PRO --- */
+  .project-card {
+    display: flex; flex-direction: column; gap: 8px;
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    text-decoration: none !important; color: var(--text) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; margin-bottom: 0;
+  }
+  .project-card:hover {
+    transform: translateY(-3px); background: var(--bg); border-color: var(--link);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+  }
+  .project-card:active { transform: scale(0.98); }
+  .card-top { display: flex; justify-content: space-between; align-items: center; }
+  .card-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--link) !important; }
+  .arrow-icon { opacity: 0.5; transition: transform 0.2s; color: var(--text); }
+  .project-card:hover .arrow-icon { opacity: 1; transform: translate(3px, -3px); color: var(--link); }
+  .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; }
+  .card-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .tech-tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; color: var(--text);
+    background-color: rgba(127, 127, 127, 0.15); padding: 3px 10px; border-radius: 99px;
+    border: 1px solid transparent; transition: all 0.2s; white-space: nowrap;
+  }
+  .project-card:hover .tech-tag {
+    background-color: rgba(9, 105, 218, 0.1); color: var(--link); border-color: rgba(9, 105, 218, 0.2);
+  }
+  
+  /* LUCES DE ESTADO */
+  .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 10px; }
+  .status-indicator.active { background-color: var(--color-active); box-shadow: 0 0 10px var(--color-active); animation: pulse 2s infinite; }
+  .status-indicator.done { background-color: var(--color-done); }
+  .status-indicator.freelance { background-color: var(--color-freelance); box-shadow: 0 0 10px var(--color-freelance); animation: pulse 2s infinite; }
+</style>
+
 <style>
-  /* --- MISMOS ESTILOS QUE ANTES --- */
   :root {
-    --color-active: #10b981;
-    --color-done: #3b82f6;
-    --color-freelance: #8b5cf6;
-    --color-notes: #f59e0b;
+    --color-active: #10b981; --color-done: #3b82f6; --color-freelance: #8b5cf6; --color-notes: #f59e0b;
   }
   .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
   .hero-content { display: flex; flex-direction: column; align-items: center; }
@@ -169,10 +242,8 @@ const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
     background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none;
   }
   .badge {
-    display: inline-block; padding: 6px 16px; border-radius: 99px;
-    font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
-    background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.2);
-    margin-bottom: 24px;
+    display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+    background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.2); margin-bottom: 24px;
   }
   .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
   .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -183,6 +254,7 @@ const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
   .stat-item { background: var(--bg); padding: 24px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s ease; border: none; width: 100%; font-family: inherit; cursor: default; }
   .stat-item.interactive { cursor: pointer; }
   .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
+  .stat-item.interactive:active { transform: translateY(0); }
   .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; position: relative; display: inline-flex; }
   .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
   .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; margin-left: 6px; margin-top: 4px; animation: pulse 2s infinite; }
@@ -192,25 +264,30 @@ const aboutLink = lang === 'en' ? '/en/about/' : '/es/about/';
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
   .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
-  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 500px; width: 90%; color: var(--text); }
-  .modal::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); }
-  .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-  .modal-header h3 { margin: 0; font-size: 1.4rem; }
-  .close-btn { background: none; border: none; font-size: 2rem; color: var(--muted); cursor: pointer; line-height: 0.5; padding: 0; }
-  .modal-grid { display: flex; flex-direction: column; gap: 12px; max-height: 50vh; overflow-y: auto; }
-  .mini-card { display: block; background: var(--code-bg); padding: 16px; border-radius: 12px; text-decoration: none; color: var(--text); border: 1px solid transparent; transition: all 0.2s; }
-  .mini-card:hover { border-color: var(--link); transform: scale(0.99); }
-  .mini-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .project-title { font-size: 1rem; }
-  .project-desc { font-size: 0.85rem; color: var(--muted); margin: 0 0 10px; line-height: 1.4; }
-  .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 700; }
-  .status-badge.active { background: rgba(16, 185, 129, 0.1); color: var(--color-active); }
-  .status-badge.completed { background: rgba(59, 130, 246, 0.1); color: var(--color-done); }
-  .mini-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag-pill { font-size: 0.7rem; background: rgba(127,127,127,0.1); padding: 2px 8px; border-radius: 4px; }
-  .modal-footer { margin-top: 20px; text-align: center; border-top: 1px solid var(--border); padding-top: 15px; }
-  .btn-link { color: var(--link); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  
+  /* Modal Estructura */
+  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); }
+  .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
+  .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
+  .modal-header { display: flex; align-items: center; justify-content: center; padding: 20px 24px; border-bottom: 1px solid var(--border); position: relative; background: var(--bg); }
+  .modal-title-text { margin: 0; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; }
+  .close-btn:hover { background: var(--border); color: var(--text); }
+  
+  /* SCROLLBAR PERSONALIZADO */
+  .modal-grid { 
+    padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; 
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  .modal-grid::-webkit-scrollbar { width: 6px; }
+  .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; }
+  .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; }
+  .modal-grid::-webkit-scrollbar-thumb:hover { background-color: var(--text); opacity: 0.8; }
+
+  .modal-footer { text-align: center; border-top: 1px solid var(--border); padding: 16px; background: var(--bg); }
+  .btn-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
+  .btn-link:hover { color: var(--link); }
+
   @keyframes pulse { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); opacity: 0; } }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .stats-container { grid-template-columns: 1fr 1fr; } }

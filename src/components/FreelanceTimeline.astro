@@ -1,0 +1,134 @@
+---
+import freelanceData from '../data/freelance.json';
+import { ui, defaultLang } from '../i18n/ui';
+
+const { lang = 'es' } = Astro.props;
+const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+
+// 1. Ordenar por fecha (El más reciente arriba)
+const sortedData = [...freelanceData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// 2. Banco de Iconos (SVGs optimizados)
+const icons = {
+  pdf: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>`,
+  python: `<path d="M12 2c-2 0-3 .5-4 1.5-.5.5-1 1.5-1 3h3v1h-5v1c0 2 1.5 3 3.5 3 .5 0 2.5 0 3-.5l.5-1.5h-1c-1 0-1.5-.5-1.5-1.5v-2h2c1 0 1.5.5 1.5 1.5v1h1v-3c0-1.5-1.5-2.5-3-2.5zm-3 2.5a.5.5 0 1 1 0 1 .5.5 0 0 1 0-1zm5 7c-2 0-3.5 1-3.5 3v3h-1v-1c0-1-.5-1.5-1.5-1.5h-2v2h1.5l.5 1.5c.5.5 2.5.5 3 .5 2 0 3.5-1 3.5-3v-1h5v-1h-3v-1c0-1-.5-2-1.5-3-.5-1-1.5-1.5-4-1.5zm-2.5 5a.5.5 0 1 1 0 1 .5.5 0 0 1 0-1z"/>`,
+  matlab: `<path d="M3 17l9-5 9 5-9-5V3l-9 14z"/>`, 
+  latex: `<path d="M4 4h16v16H4z M9 8l3 8l3-8"/>`,
+  geogebra: `<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>`,
+  wolfram: `<path d="M12 2l2.5 7h-5L12 2zm0 20l-2.5-7h5L12 22z"/>`,
+  excel: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8l8 8M16 8l-8 8"/>`,
+  default: `<circle cx="12" cy="12" r="8"/>`
+};
+
+const getIcon = (tool) => icons[tool] || icons.default;
+---
+
+<div class="timeline">
+  {sortedData.map((item) => (
+    <div class="timeline-item">
+      
+      <div class="timeline-date">
+        <span class="date-text">
+          {new Date(item.date).toLocaleDateString(lang, { month: 'short', day: 'numeric', year: 'numeric' })}
+        </span>
+      </div>
+
+      <div class="timeline-dot"></div>
+
+      <div class="timeline-content card-glass">
+        <div class="card-header">
+          <span class="badge-subject">{item.subject[lang]}</span>
+          <span class="badge-type">{item.type[lang]}</span>
+        </div>
+        
+        <h3 class="card-title">{item.title[lang]}</h3>
+        <p class="card-desc">{item.description[lang]}</p>
+
+        <div class="resources-list">
+          {item.resources.map(res => (
+            res.url ? (
+              /* LINK DE DESCARGA */
+              <a href={res.url} class={`resource-pill ${res.tool}`} target="_blank" rel="noopener noreferrer" title={t.freelanceDownload}>
+                <svg class="icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" set:html={getIcon(res.tool)}></svg>
+                <span>{res.name}</span>
+                <svg class="download-arrow" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            ) : (
+              /* SOLO INFORMATIVO */
+              <div class="resource-pill disabled" title={t.freelancePrivate}>
+                <svg class="icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" set:html={getIcon(res.tool)}></svg>
+                <span>{res.name}</span>
+                <svg class="lock-icon" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+            )
+          ))}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* --- LAYOUT DEL TIMELINE --- */
+  .timeline { position: relative; max-width: 800px; margin: 40px auto; padding-left: 20px; }
+  
+  /* La línea vertical */
+  .timeline::before { content: ''; position: absolute; left: 100px; top: 0; bottom: 0; width: 2px; background: var(--border); border-radius: 2px; }
+
+  .timeline-item { position: relative; margin-bottom: 40px; display: flex; align-items: flex-start; }
+
+  /* Fecha lateral */
+  .timeline-date { width: 80px; text-align: right; padding-right: 20px; flex-shrink: 0; color: var(--muted); font-size: 0.85rem; font-weight: 600; padding-top: 5px; }
+
+  /* Punto en la línea */
+  .timeline-dot { position: absolute; left: 95px; top: 8px; width: 12px; height: 12px; background: var(--link); border: 3px solid var(--bg); border-radius: 50%; z-index: 10; box-shadow: 0 0 0 2px var(--border); }
+
+  /* Tarjeta Glassmorphism */
+  .timeline-content { 
+    margin-left: 40px; flex-grow: 1; 
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 16px; 
+    padding: 20px; transition: all 0.3s ease; 
+  }
+  .timeline-content:hover { transform: translateY(-2px); border-color: var(--link); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+
+  /* --- DETALLES DE LA TARJETA --- */
+  .card-header { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  
+  .badge-subject { font-size: 0.75rem; font-weight: 700; color: var(--color-active); background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 99px; }
+  .badge-type { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; }
+  
+  .card-title { margin: 0 0 8px 0; font-size: 1.2rem; color: var(--text); }
+  .card-desc { font-size: 0.95rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+
+  /* --- LISTA DE RECURSOS --- */
+  .resources-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+  
+  .resource-pill { 
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; 
+    border-radius: 8px; font-size: 0.8rem; font-weight: 500; text-decoration: none; 
+    transition: all 0.2s; border: 1px solid transparent; 
+  }
+
+  /* Colores Específicos */
+  .resource-pill.pdf { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+  .resource-pill.python { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+  .resource-pill.matlab { background: rgba(234, 88, 12, 0.1); color: #ea580c; }
+  .resource-pill.latex { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+  .resource-pill.geogebra { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+  .resource-pill.wolfram { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+  .resource-pill.excel { background: rgba(16, 185, 129, 0.1); color: #059669; }
+  
+  /* Interacciones */
+  a.resource-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); filter: brightness(0.95); }
+  .resource-pill.disabled { background: var(--code-bg); color: var(--muted); border: 1px solid var(--border); cursor: default; opacity: 0.8; }
+  .resource-pill.disabled:hover { background: var(--border); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .timeline::before { left: 20px; } 
+    .timeline-dot { left: 15px; } 
+    .timeline-date { display: none; } /* Ocultamos fecha externa en móvil */
+    .timeline-content { margin-left: 40px; } 
+    .card-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+  }
+</style>

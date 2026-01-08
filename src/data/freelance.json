@@ -1,0 +1,73 @@
+﻿[
+  {
+    "id": 1,
+    "date": "2025-02-20",
+    "subject": { "es": "Cálculo Diferencial", "en": "Differential Calculus" },
+    "type": { "es": "Parcial", "en": "Exam" },
+    "title": { "es": "Optimización y Derivadas", "en": "Optimization and Derivatives" },
+    "description": {
+      "es": "Resolución de problemas de optimización aplicados a cinemática.",
+      "en": "Solving optimization problems applied to kinematics."
+    },
+    "resources": [
+      { "tool": "pdf", "name": "Solución", "url": "/freelance/differential-calculus/solucion.pdf" },
+      { "tool": "geogebra", "name": "Gráfica", "url": null }
+    ]
+  },
+  {
+    "id": 2,
+    "date": "2025-03-01",
+    "subject": { "es": "Álgebra Lineal", "en": "Linear Algebra" },
+    "type": { "es": "Trabajo", "en": "Assignment" },
+    "title": { "es": "Transformaciones Lineales", "en": "Linear Transformations" },
+    "description": {
+      "es": "Visualización de eigenvalores y vectores propios.",
+      "en": "Visualization of eigenvalues and eigenvectors."
+    },
+    "resources": [
+      { "tool": "matlab", "name": "Script .m", "url": "/freelance/linear-algebra/script.m" }
+    ]
+  },
+  {
+    "id": 3,
+    "date": "2025-03-10",
+    "subject": { "es": "Ecuaciones Diferenciales", "en": "Differential Equations" },
+    "type": { "es": "Taller", "en": "Workshop" },
+    "title": { "es": "Sistemas Masa-Resorte", "en": "Mass-Spring Systems" },
+    "description": {
+      "es": "Modelado de amortiguamiento usando métodos numéricos.",
+      "en": "Damping modeling using numerical methods."
+    },
+    "resources": [
+      { "tool": "python", "name": "Notebook", "url": "/freelance/differential-equations/simulacion.ipynb" }
+    ]
+  },
+  {
+    "id": 4,
+    "date": "2025-03-15",
+    "subject": { "es": "Estadística", "en": "Statistics" },
+    "type": { "es": "Trabajo", "en": "Project" },
+    "title": { "es": "Análisis de Regresión", "en": "Regression Analysis" },
+    "description": {
+      "es": "Modelo predictivo lineal simple con R.",
+      "en": "Simple linear predictive model using R."
+    },
+    "resources": [
+      { "tool": "default", "name": "Código R", "url": "/freelance/statistics/analisis.R" }
+    ]
+  },
+  {
+    "id": 5,
+    "date": "2025-03-20",
+    "subject": { "es": "Matemáticas Discretas", "en": "Discrete Mathematics" },
+    "type": { "es": "Parcial", "en": "Exam" },
+    "title": { "es": "Teoría de Grafos", "en": "Graph Theory" },
+    "description": {
+      "es": "Algoritmos de Dijkstra y caminos cortos.",
+      "en": "Dijkstra's algorithms and shortest paths."
+    },
+    "resources": [
+      { "tool": "pdf", "name": "Notas", "url": "/freelance/discrete-mathematics/notas.pdf" }
+    ]
+  }
+]
