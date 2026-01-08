@@ -433,11 +433,112 @@ const t = {
 	}
 	pre code { background: none; border: none; padding: 0; }
 
+/* 🔥 ESTILOS PARA MÓVIL (Compacto y Estilo App) 🔥 */
 	@media (max-width: 900px) {
-		.topbar-inner { flex-direction: column; align-items: flex-start; }
-		.shell { grid-template-columns: 1fr; }
-		.sidebar { position: static; }
-		.avatar { width: 150px; }
+		/* 1. Layout General: Una columna y menos espacio */
+		.shell {
+			grid-template-columns: 1fr;
+			gap: 20px; /* Reducido de 30px */
+			padding-top: 10px; /* Menos aire arriba */
+		}
+
+		/* 2. HEADER: Usamos GRID para control total del espacio */
+		.topbar-inner {
+			display: grid;
+			/* Definimos 2 áreas: Arriba (Marca + Acciones) y Abajo (Nav) */
+			grid-template-areas: 
+				"brand actions"
+				"nav   nav";
+			grid-template-columns: 1fr auto; /* El nombre ocupa lo que pueda, botones lo justo */
+			gap: 0; /* Cero espacio extra entre elementos */
+			padding: 10px var(--pad); /* Header más delgado */
+		}
+
+		/* Fila 1 Izquierda: El Nombre */
+		.topbar-left {
+			grid-area: brand;
+			justify-content: flex-start;
+			min-width: 0; /* Evita desbordamientos */
+		}
+
+		/* Ajuste visual del Título para móvil (Más compacto) */
+		.title-pill {
+			padding: 4px 10px; /* Burbuja más pequeña */
+			font-size: 0.9rem; /* Texto un pelín más chico */
+		}
+
+		/* Fila 1 Derecha: Los Botones */
+		.top-actions {
+			grid-area: actions;
+			margin-left: 10px;
+			gap: 8px; /* Botones un poco más juntos */
+		}
+		
+		/* Hacer botones un poco más pequeños en móvil */
+		.pill, .social-btn {
+			padding: 4px 8px;
+			height: 32px; /* Altura controlada */
+		}
+
+		/* Fila 2 Completa: La Navegación */
+		.topnav {
+			grid-area: nav;
+			width: 100%;
+			
+			/* Layout de la barra */
+			margin-top: 10px; /* Separación justa del título */
+			padding-top: 10px;
+			border-top: 1px solid var(--border); /* Línea divisoria elegante */
+			
+			/* Scroll Horizontal */
+			justify-content: flex-start;
+			overflow-x: auto;
+			white-space: nowrap;
+			-webkit-overflow-scrolling: touch; /* Scroll suave en iPhone */
+			
+			/* Ocultar barra scroll */
+			scrollbar-width: none;
+		}
+		.topnav::-webkit-scrollbar { display: none; }
+		
+		/* Ajuste de links del menú */
+		.topnav a {
+			font-size: 0.9rem;
+			padding: 4px 8px; /* Áreas de toque más cómodas */
+		}
+
+		/* 3. Sidebar (Perfil): Integrado y sutil */
+		.sidebar {
+			position: static;
+			border: none;
+			background: transparent;
+			padding: 0;
+			text-align: center;
+			margin-bottom: 0;
+		}
+
+		/* Avatar más pequeño para no comerse la pantalla */
+		.avatar {
+			width: 110px; /* Reducido de 170px */
+			margin-bottom: 10px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombrita para que resalte */
+		}
+
+		/* Ocultar elementos que sobran en móvil para ahorrar espacio */
+		.side-footer { display: none; } /* El copyright sobra arriba */
+		
+		/* Bio más compacta */
+		.bio {
+			font-size: 0.9em;
+			margin-bottom: 16px;
+			padding: 0 10px;
+		}
+		
+		/* Título de la página (Hero) ajustado */
+		h1.hero-title {
+			font-size: 2rem;
+			line-height: 1.2;
+		}
 	}
 
 	/* 🔥 TRANSICIONES SUAVES (Fix final) 🔥 */
