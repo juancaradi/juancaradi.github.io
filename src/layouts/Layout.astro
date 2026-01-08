@@ -265,7 +265,12 @@ const t = {
 		--icon-loc: #f87171;       /* Rojo pastel suave */
 	}
 
-	html, body { margin: 0; padding: 0; }
+	html, body { 
+		margin: 0; 
+		padding: 0;
+		/* Reserva el espacio del scrollbar siempre para evitar saltos */
+		scrollbar-gutter: stable;
+	}
 
 	body {
 		background: var(--bg);
@@ -370,15 +375,42 @@ const t = {
 				right: -12px; /* En la mitad del hueco */
 				top: 50%;
 				transform: translateY(-50%);
-				height: 14px;
-				width: 1px;
-				background: var(--border);
-				opacity: 0.6;
+				/* --- CAMBIOS AQUÍ --- */
+				height: 18px;             /* Antes 14px (Más altas) */
+				width: 2px;               /* Antes 1px (Más gruesas) */
+				background: var(--muted); /* Antes var(--border) (Color más oscuro) */
+				opacity: 0.4;             /* Antes 0.6 (Controlamos que no sea negro puro) */
+				border-radius: 4px;       /* Un toque redondeado suave */
 				transition: opacity 0.2s ease;
 			}
 
-			/* Ocultar separador al hacer hover */
-			.topnav a:hover::after { opacity: 0; }
+		/* --- EFECTO DE BARRAS INTELIGENTES (BRAND BLUE) 🟦 --- */
+
+			/* Aplica el estilo AZUL y GRUESO si:
+			1. :hover (El mouse está encima)
+			2. :focus-visible (Se navega con teclado)
+			3. .active (Es la página actual)
+			4. :has(+ ...) (Es vecino de uno de los anteriores)
+			*/
+
+			/* CASO A: La barra de mi DERECHA se activa */
+			.topnav a:hover::after,
+			.topnav a:focus-visible::after,
+			.topnav a.active::after {
+				background: var(--link);
+				width: 4px;
+				opacity: 1;
+			}
+
+			/* CASO B: La barra de mi IZQUIERDA se activa (Si mi vecino derecho está activo) */
+			/* Traducción: "Si mi vecino de la derecha tiene hover, O es la página activa..." */
+			.topnav a:has(+ a:hover)::after,
+			.topnav a:has(+ a:focus-visible)::after,
+			.topnav a:has(+ a.active)::after {
+				background: var(--link);
+				width: 4px;
+				opacity: 1;
+			}
 
 			/* 3. Efecto HOVER (Glow) */
 			.topnav a:hover {
