@@ -1,18 +1,179 @@
 ﻿---
 import Layout from '../../layouts/Layout.astro';
+
+// Datos de ejemplo traducidos (English)
+const skills = [
+  {
+    title: "Mathematics",
+    desc: "Graph Theory, TDA, and Abstract Algebra.",
+    icon: "∑"
+  },
+  {
+    title: "Data Science",
+    desc: "Statistical analysis, Python, R, and visualization.",
+    icon: "📊"
+  },
+  {
+    title: "Freelance",
+    desc: "Academic consulting and solution development.",
+    icon: "💼"
+  }
+];
 ---
 
-<Layout title="Home · Juan Camilo" lang="en">
-    <h1>Juan Camilo Ramírez Díaz</h1>
-    <p>
-        Personal projects (e.g., Colombia political spectrum TDA), freelance work, and undergraduate course notes.
-    </p>
+<Layout title="Camilo Ramírez | Mathematics & Data" lang="en">
+  <section class="hero">
+    <div class="hero-content">
+      <span class="badge">Available for projects</span>
+      <h1 class="hero-title">
+        Exploring <span class="gradient-text">abstract beauty</span> and its real-world application.
+      </h1>
+      <p class="hero-desc">
+        Hi, I'm <strong>Camilo Ramírez</strong>. A Mathematics student focused on 
+        bridging theory and practice through code and data analysis. 
+        Welcome to my digital garden of notes and projects.
+      </p>
 
-    <ul>
-        <li><a href="/en/projects/">Projects</a></li>
-        <li><a href="/en/freelance/">Freelance</a></li>
-        <li><a href="/en/notes/">Notes</a></li>
-        <li><a href="/en/about/">About</a></li>
-    </ul>
+      <div class="hero-actions">
+        <a href="/en/projects/" class="btn btn-primary">View Projects</a>
+        <a href="/en/about/" class="btn btn-outline">About Me</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="skills-grid">
+    {skills.map(skill => (
+      <div class="skill-card">
+        <div class="skill-icon">{skill.icon}</div>
+        <h3>{skill.title}</h3>
+        <p class="muted">{skill.desc}</p>
+      </div>
+    ))}
+  </section>
 </Layout>
 
+<style>
+  /* --- Hero Section --- */
+  .hero {
+    padding: 60px 0 40px;
+    max-width: 800px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--code-bg);
+    color: var(--link);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-size: 3rem; 
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  /* Texto con gradiente */
+  .gradient-text {
+    background: linear-gradient(45deg, var(--link), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1.25rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 90%;
+  }
+
+  .hero-desc strong {
+    color: var(--text);
+  }
+
+  /* --- Botones --- */
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+    border: 1px solid var(--text);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+  }
+
+  /* --- Skills Grid --- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .skill-card {
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    transition: border-color 0.3s ease;
+  }
+
+  .skill-card:hover {
+    border-color: var(--link);
+  }
+
+  .skill-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .skill-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+  }
+
+  .skill-card p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero-title { font-size: 2.2rem; }
+    .hero-desc { font-size: 1.1rem; }
+  }
+</style>
