@@ -1,82 +1,42 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import BaseHead from '../components/BaseHead.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import { ui, defaultLang } from '../i18n/ui';
 
 const { title = "Camilo Ramírez", lang = "es" } = Astro.props;
 
-// Base path por idioma
+// 1. Obtener textos desde nuestra nueva "Base de Datos" (ui.ts)
+// Si el idioma no existe, usa el por defecto.
+const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+
+// 2. Lógica de Rutas (Base path)
 const base = lang === "en" ? "/en" : "/es";
 
-// Switch de idioma conservando ruta cuando sea posible
+// 3. Switch de idioma inteligente
 const path = Astro.url.pathname;
 const swapped =
 	path.startsWith("/es/") ? path.replace("/es/", "/en/") :
 	path.startsWith("/en/") ? path.replace("/en/", "/es/") :
 	(lang === "en" ? "/es/" : "/en/");
 
-// --- Lógica para DETECTAR SECCIÓN ACTIVA ---
+// 4. Detectar sección activa
 const currentPath = Astro.url.pathname;
-const isActive = (href) => {
-	const normalize = (p) => p.replace(/\/$/, "");
+const isActive = (href: string) => {
+	const normalize = (p: string) => p.replace(/\/$/, "");
 	const h = normalize(href);
 	const c = normalize(currentPath);
 	if (h === normalize(base)) return c === h;
 	return c.startsWith(h);
-};
-
-// Textos (bilingüe)
-const t = {
-	name: "Juan Camilo Ramírez Díaz",
-	navLabel: lang === "en" ? "Primary navigation" : "Navegación principal",
-	projects: lang === "en" ? "Projects" : "Proyectos",
-	notes: lang === "en" ? "Notes" : "Notas",
-	about: lang === "en" ? "About" : "Acerca",
-	freelance: "Freelance",
-	switchTo: lang === "en" ? "Switch to Spanish" : "Cambiar a inglés",
-	toggleTheme: lang === "en" ? "Toggle theme" : "Cambiar tema",
-	footer: lang === "en" ? "Built with Astro + GitHub Pages" : "Hecho con Astro + GitHub Pages",
-	desc: lang === "en"
-		? "Projects, freelance work, and math course notes."
-		: "Proyectos, trabajo freelance y notas de matemáticas.",
-	bio: lang === "en"
-		? "Undergraduate Mathematics student, recently focused on Data Analysis (TDA) and Graph Theory. I also practice Taekwondo."
-		: "Estudiante de pregrado en Matemáticas. Recientemente me he enfocado en el Análisis de Datos (TDA) y la Teoría de Grafos. También practico Taekwondo.",
-	location: "Medellín, Colombia",
-	githubUrl: "https://github.com/",
-	linkedinUrl: "https://www.linkedin.com/",
-	email: "juancaradi@gmail.com",
 };
 ---
 
 <!doctype html>
 <html lang={lang}>
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<meta name="description" content={t.desc} />
-
-		<meta name="title" content={title} />
-		<meta name="description" content={t.desc} />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={t.desc} />
-		<meta property="og:image" content={new URL('/img/og-image.jpg', Astro.url)} />
-
+		<BaseHead title={title} description={t.desc} lang={lang} />
+		
 		<ClientRouter />
-
-		<script is:inline>
-			const root = document.documentElement;
-			const saved = localStorage.getItem("theme");
-			const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-			if (saved === "dark" || (!saved && prefersDark)) {
-				root.setAttribute("data-theme", "dark");
-			} else {
-				root.setAttribute("data-theme", "light");
-			}
-		</script>
 	</head>
 
 	<body>
@@ -112,16 +72,7 @@ const t = {
 						{lang === "en" ? "ES" : "EN"}
 					</a>
 
-					<button
-						id="theme-toggle"
-						class="pill"
-						type="button"
-						aria-label={t.toggleTheme}
-						title={t.toggleTheme}
-					>
-						<span class="icon sun">☀️</span>
-						<span class="icon moon">🌙</span>
-					</button>
+					<ThemeToggle label={t.toggleTheme} />
 				</div>
 			</div>
 		</header>
@@ -181,43 +132,11 @@ const t = {
 				<slot />
 			</main>
 		</div>
-
-		<script>
-			const applyTheme = () => {
-				const saved = localStorage.getItem("theme");
-				const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-				if (saved === "dark" || (!saved && prefersDark)) {
-					document.documentElement.setAttribute("data-theme", "dark");
-				} else {
-					document.documentElement.setAttribute("data-theme", "light");
-				}
-			};
-
-			const initButton = () => {
-				const btn = document.getElementById("theme-toggle");
-				if (btn) {
-					const newBtn = btn.cloneNode(true); 
-					if(btn.parentNode) btn.parentNode.replaceChild(newBtn, btn);
-
-					newBtn.addEventListener("click", () => {
-						const root = document.documentElement;
-						const current = root.getAttribute("data-theme");
-						const next = current === "dark" ? "light" : "dark";
-						root.setAttribute("data-theme", next);
-						localStorage.setItem("theme", next);
-					});
-				}
-			};
-
-			document.addEventListener('astro:after-swap', applyTheme);
-			document.addEventListener('astro:page-load', initButton);
-			
-			initButton();
-		</script>
 	</body>
 </html>
 
 <style>
+	/* VARIABLES GLOBALES */
 	:root {
 		/* Layout */
 		--maxw: 1100px;
@@ -263,17 +182,9 @@ const t = {
 		--icon-loc: #f87171;       
 	}
 
-	/* ---------------------------------------------------- */
-	/* 🔥 FIX SAFARI: Fondo en HTML para evitar destellos 🔥 */
-	/* ---------------------------------------------------- */
-	html {
-		background-color: var(--bg); 
-		margin: 0; padding: 0;
-		scrollbar-gutter: stable;
-	}
-
+	/* Estilos Base */
 	body {
-		background: transparent; /* Body transparente */
+		background: transparent; 
 		color: var(--text);
 		font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 		line-height: 1.55;
@@ -352,11 +263,11 @@ const t = {
 		box-shadow: inset 0 0 0 1px var(--border);
 	}
 
-	/* ---------- BOTONES DE ACCIÓN (NUEVO ESTILO GLASS) ---------- */
+	/* ---------- ACCIONES (IDIOMA Y TEMA) ---------- */
 	
 	.top-actions { display: flex; gap: 12px; align-items: center; }
 
-	/* Estilo Base */
+	/* Estilo Base para Pills (usado por idioma) */
 	.pill {
 		display: inline-flex; align-items: center; justify-content: center;
 		gap: 8px; padding: 6px 14px; height: 36px;
@@ -378,36 +289,8 @@ const t = {
 		box-shadow: 0 4px 12px var(--title-glow);
 	}
 	html[data-theme="dark"] .lang-pill { background: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.2); }
-
-	/* Botón Tema */
-	#theme-toggle {
-		background: var(--code-bg); border-color: var(--border); color: var(--muted);
-		width: 42px; padding: 0;
-	}
-	#theme-toggle .icon { transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-	
-	#theme-toggle:hover {
-		border-color: var(--text); color: var(--text); background: var(--bg);
-		transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-	}
-	#theme-toggle:active, .lang-pill:active { transform: scale(0.95); }
-
-	/* Iconos Tema */
-	.sun { font-size: 1.1rem; }
-	.moon { font-size: 1.1rem; }
-
-	html:not([data-theme="dark"]) #theme-toggle:hover .sun {
-		transform: rotate(90deg) scale(1.1); color: #f59e0b; filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.5));
-	}
-	html[data-theme="dark"] #theme-toggle:hover {
-		border-color: #a78bfa; box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
-	}
-	html[data-theme="dark"] #theme-toggle:hover .moon {
-		transform: rotate(-20deg) scale(1.1); color: #ddd6fe;
-	}
-
-	html[data-theme="dark"] .sun { display: none; }
-	html:not([data-theme="dark"]) .moon { display: none; }
+    
+    .lang-pill:active { transform: scale(0.95); }
 
 	/* Links Generales */
 	a, a:visited { color: var(--link); text-decoration: none; }

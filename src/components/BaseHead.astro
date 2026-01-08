@@ -1,0 +1,54 @@
+﻿---
+interface Props {
+	title: string;
+	description: string;
+	lang: string;
+}
+
+const { title, description, lang } = Astro.props;
+const ogImage = new URL('/img/og-image.jpg', Astro.url);
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+
+<script is:inline>
+	const applyTheme = () => {
+		const root = document.documentElement;
+		const saved = localStorage.getItem("theme");
+		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+		if (saved === "dark" || (!saved && prefersDark)) {
+			root.setAttribute("data-theme", "dark");
+		} else {
+			root.setAttribute("data-theme", "light");
+		}
+	};
+
+	// 1. Ejecutar inmediatamente al cargar
+	applyTheme();
+
+	// 2. IMPORTANTE: Ejecutar de nuevo cada vez que Astro cambie de página
+	document.addEventListener('astro:after-swap', applyTheme);
+</script>
+
+<style>
+	html {
+		background-color: #ffffff; /* Fallback light */
+	}
+	html[data-theme="dark"] {
+		background-color: #232323; /* Fallback dark */
+	}
+</style>

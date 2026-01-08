@@ -1,0 +1,87 @@
+﻿---
+interface Props {
+    label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<button
+    id="theme-toggle"
+    class="pill"
+    type="button"
+    aria-label={label}
+    title={label}
+>
+    <span class="icon sun">☀️</span>
+    <span class="icon moon">🌙</span>
+</button>
+
+<script>
+    const initButton = () => {
+        const btn = document.getElementById("theme-toggle");
+        if (btn) {
+            // Clonamos para limpiar eventos viejos al navegar
+            const newBtn = btn.cloneNode(true); 
+            if(btn.parentNode) btn.parentNode.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener("click", () => {
+                const root = document.documentElement;
+                const current = root.getAttribute("data-theme");
+                const next = current === "dark" ? "light" : "dark";
+                root.setAttribute("data-theme", next);
+                localStorage.setItem("theme", next);
+            });
+        }
+    };
+
+    document.addEventListener('astro:after-swap', initButton);
+    document.addEventListener('astro:page-load', initButton);
+    
+    // Ejecutar inicialización inmediata
+    initButton();
+</script>
+
+<style>
+    /* Estilos Específicos del Toggle */
+    #theme-toggle {
+        background: var(--code-bg); 
+        border: 1px solid var(--border); 
+        color: var(--muted);
+        width: 42px; 
+        padding: 0;
+        cursor: pointer;
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center;
+        border-radius: 12px;
+        height: 36px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    #theme-toggle .icon { transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+    
+    #theme-toggle:hover {
+        border-color: var(--text); color: var(--text); background: var(--bg);
+        transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #theme-toggle:active { transform: scale(0.95); }
+
+    /* Iconos Tema */
+    .sun { font-size: 1.1rem; }
+    .moon { font-size: 1.1rem; }
+
+    /* Animaciones */
+    :global(html:not([data-theme="dark"])) #theme-toggle:hover .sun {
+        transform: rotate(90deg) scale(1.1); color: #f59e0b; filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.5));
+    }
+    :global(html[data-theme="dark"]) #theme-toggle:hover {
+        border-color: #a78bfa; box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+    }
+    :global(html[data-theme="dark"]) #theme-toggle:hover .moon {
+        transform: rotate(-20deg) scale(1.1); color: #ddd6fe;
+    }
+
+    :global(html[data-theme="dark"]) .sun { display: none; }
+    :global(html:not([data-theme="dark"])) .moon { display: none; }
+</style>
