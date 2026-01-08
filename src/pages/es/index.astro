@@ -1,331 +1,463 @@
 ﻿---
-import Layout from '../../layouts/Layout.astro';
-import statsData from '../../data/stats.json';    
-import projectsData from '../../data/projects.json'; 
 
-const activeProjects = projectsData.filter(p => p.status === 'active');
-const completedProjects = projectsData.filter(p => p.status === 'completed');
+import Layout from '../../layouts/Layout.astro';
+
+import statsData from '../../data/stats.json'; // 🧠 Importando el cerebro de datos
+
+
 
 const stats = [
+
   {
-    value: activeProjects.length,
+
+    value: statsData.activeProjects,
+
     label: "Proyectos en Marcha",
+
     color: "var(--color-active)", 
-    pulse: true,
-    action: "openActive"
+
+    pulse: true
+
   },
+
   {
-    value: completedProjects.length,
+
+    value: statsData.completedProjects,
+
     label: "Proyectos Finalizados",
+
     color: "var(--color-done)",
-    pulse: false,
-    action: "openCompleted"
+
+    pulse: false
+
   },
+
   {
+
     value: statsData.freelanceSolutions,
+
     label: "Soluciones Freelance",
+
     color: "var(--color-freelance)",
-    pulse: false,
-    action: null
+
+    pulse: false
+
   },
+
   {
+
     value: statsData.notesCount,
+
     label: "Notas de Estudio",
+
     color: "var(--color-notes)",
-    pulse: false,
-    action: null
+
+    pulse: false
+
   }
+
 ];
+
 ---
 
+
+
 <Layout title="Camilo Ramírez | Matemáticas & Datos" lang="es">
+
   <section class="hero">
+
     <div class="hero-content">
+
       <span class="badge">Disponible para proyectos</span>
+
       
+
       <h1 class="hero-title">
+
         Explorando la <span class="gradient-text">belleza abstracta</span> y su aplicación real.
+
       </h1>
+
       
+
       <p class="hero-desc">
+
         Hola, soy <strong>Camilo Ramírez</strong>, estudiante de Matemáticas 
+
         dedicado a llevar la teoría a la práctica mediante código y análisis de datos. 
+
         Bienvenido a mi jardín digital de notas, proyectos y soluciones.
+
       </p>
 
+
+
       <div class="stats-wrapper">
-        <div class="stats-label">Métricas de Impacto (Click para ver)</div>
+
+        <div class="stats-label">Métricas de Impacto</div>
+
         <div class="stats-container">
+
           {stats.map(stat => (
-            stat.action ? (
-              <button class="stat-item interactive" data-action={stat.action}>
-                <div class="stat-value" style={`color: ${stat.color}`}>
-                  {stat.value}
-                  {stat.pulse && <span class="pulse-dot"></span>}
-                </div>
-                <div class="stat-name">{stat.label}</div>
-              </button>
-            ) : (
-              <div class="stat-item">
-                <div class="stat-value" style={`color: ${stat.color}`}>
-                  {stat.value}
-                </div>
-                <div class="stat-name">{stat.label}</div>
+
+            <div class="stat-item">
+
+              <div class="stat-value" style={`color: ${stat.color}`}>
+
+                {stat.value}
+
+                {stat.pulse && <span class="pulse-dot"></span>}
+
               </div>
-            )
+
+              <div class="stat-name">{stat.label}</div>
+
+            </div>
+
           ))}
+
         </div>
+
       </div>
+
+
 
       <div class="hero-actions">
-        <a href="/es/projects/" class="btn btn-primary">Ver Portafolio Completo</a>
+
+        <a href="/es/projects/" class="btn btn-primary">Ver Proyectos</a>
+
         <a href="/es/about/" class="btn btn-outline">Sobre mí</a>
+
       </div>
+
     </div>
+
   </section>
 
-  <dialog id="projects-modal" class="modal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="modal-title">Proyectos</h3>
-        <button id="close-modal" class="close-btn">&times;</button>
-      </div>
-      <div id="modal-content" class="modal-grid"></div>
-      <div class="modal-footer">
-        <a href="/es/projects/" class="btn-link">Ver todos los proyectos &rarr;</a>
-      </div>
-    </div>
-  </dialog>
 </Layout>
 
-<script define:vars={{ activeProjects, completedProjects }}>
-  const modal = document.getElementById('projects-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalContent = document.getElementById('modal-content');
-  const closeBtn = document.getElementById('close-modal');
-  const buttons = document.querySelectorAll('.interactive');
 
-  const renderProjects = (projects) => {
-    return projects.slice(0, 5).map(p => `
-      <a href="${p.link}" class="mini-card" target="_blank">
-        <div class="mini-card-header">
-          <strong class="project-title">${p.title}</strong>
-          <span class="status-badge ${p.status}">${p.status === 'active' ? 'En curso' : 'Listo'}</span>
-        </div>
-        <p class="project-desc">${p.description}</p>
-        <div class="mini-tags">
-          ${p.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
-        </div>
-        <div class="card-external-icon">↗</div>
-      </a>
-    `).join('');
-  };
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action;
-      if (action === 'openActive') {
-        modalTitle.innerText = "Proyectos en Marcha 🚧";
-        modalContent.innerHTML = renderProjects(activeProjects);
-        modal.showModal();
-      } else if (action === 'openCompleted') {
-        modalTitle.innerText = "Últimos Finalizados ✅";
-        modalContent.innerHTML = renderProjects(completedProjects);
-        modal.showModal();
-      }
-    });
-  });
-
-  closeBtn?.addEventListener('click', () => modal.close());
-  modal?.addEventListener('click', (e) => {
-    const rect = modal.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || 
-        e.clientY < rect.top || e.clientY > rect.bottom) {
-      modal.close();
-    }
-  });
-</script>
 
 <style>
+
+  /* --- COLORES DEL DASHBOARD --- */
+
   :root {
+
     --color-active: #10b981;
+
     --color-done: #3b82f6;
+
     --color-freelance: #8b5cf6;
+
     --color-notes: #f59e0b;
+
   }
+
+
+
+  /* --- FONDO CARTESIANO --- */
 
   :global(body) { position: relative; }
+
   :global(body::before) {
+
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;
+
     background-image: 
+
       linear-gradient(to right, rgba(128, 128, 128, 0.08) 1px, transparent 1px),
+
       linear-gradient(to bottom, rgba(128, 128, 128, 0.08) 1px, transparent 1px);
+
     background-size: 40px 40px;
+
     mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+
     -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+
   }
+
+
+
+  /* --- HERO LAYOUT --- */
 
   .hero {
+
     position: relative;
+
     padding: 80px 0 60px;
+
     max-width: 900px;
+
     margin: 0 auto;
+
     text-align: center;
-    /* Se eliminó el overflow: hidden para permitir sombras y bordes limpios */
+
+    /* overflow: hidden;  <--- AGREGA ESTO: Corta todo lo que se salga */
+
   }
 
-  .hero-content { display: flex; flex-direction: column; align-items: center; }
+
+
+  .hero-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+  }
+
+
+
+  /* Luz ambiental */
 
   .hero::before {
+
     content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 600px;
+
+    width: 100%;       /* <--- CAMBIO: Ocupa el 100% del contenedor */
+
+    max-width: 600px;  /* <--- CAMBIO: Pero nunca pases de 600px */
+
     height: 400px;
+
     background: radial-gradient(circle, var(--link) 0%, transparent 70%);
+
     opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none;
+
   }
+
+
 
   .badge {
+
     display: inline-block; padding: 6px 16px; border-radius: 99px;
+
     font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+
     background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.2);
+
     margin-bottom: 24px; backdrop-filter: blur(5px);
+
   }
+
+
 
   .hero-title {
+
     font-size: 4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
+
     margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px);
+
   }
+
+
 
   .gradient-text {
+
     background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%);
+
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+
   }
+
+
 
   .hero-desc {
+
     font-size: 1.35rem; color: var(--muted); line-height: 1.6; margin: 0 auto 40px; max-width: 700px;
+
     animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(20px);
+
   }
+
   .hero-desc strong { color: var(--text); }
 
+
+
+  /* --- STATS SECTION (AHORA EN EL MEDIO) --- */
+
   .stats-wrapper {
-    margin-bottom: 100px; 
+
+    margin-bottom: 100px; /* Espacio antes de los botones */
+
     width: 100%;
-    display: flex; flex-direction: column; align-items: center; gap: 16px;
-    animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(20px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 16px;
+
+    animation: fadeUp 0.8s ease-out 0.4s forwards;
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
   }
+
+
 
   .stats-label {
+
     font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em;
+
     color: var(--muted); font-weight: 600;
+
   }
+
+
 
   .stats-container {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-    background: var(--border); border: 1px solid var(--border);
-    border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 1px;
+
+    background: var(--border);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+
+    width: 100%;
+
   }
+
+
 
   .stat-item {
-    background: var(--bg); padding: 24px 20px; text-align: center;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: all 0.2s ease; border: none; width: 100%; height: 100%;
-    font-family: inherit; cursor: default;
+
+    background: var(--bg);
+
+    padding: 24px 20px;
+
+    text-align: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: background 0.2s ease;
+
   }
 
-  .stat-item.interactive { cursor: pointer; }
-  .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
-  .stat-item.interactive:active { transform: translateY(0); }
+  .stat-item:hover { background: var(--code-bg); }
+
+
 
   .stat-value {
+
     font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px;
+
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+
     position: relative; display: inline-flex; align-items: flex-start;
+
   }
+
+
 
   .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
 
+
+
   .pulse-dot {
+
     width: 8px; height: 8px; background-color: currentColor; border-radius: 50%;
+
     margin-left: 6px; margin-top: 4px; animation: pulse 2s infinite;
+
   }
 
-  .modal {
-    border: none; background: transparent; padding: 0; margin: auto;
-    max-width: 500px; width: 90%; color: var(--text);
-  }
-  .modal::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); }
-  
-  .modal-box {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 20px;
-    padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-  }
 
-  .modal-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
-  }
-  .modal-header h3 { margin: 0; font-size: 1.4rem; }
-  
-  .close-btn {
-    background: none; border: none; font-size: 2rem; color: var(--muted); cursor: pointer;
-    line-height: 0.5; padding: 0;
-  }
-  .close-btn:hover { color: var(--text); }
 
-  .modal-grid {
-    display: flex; flex-direction: column; gap: 12px;
-    max-height: 50vh; overflow-y: auto; padding-right: 5px;
-  }
-
-  .mini-card {
-    display: block; background: var(--code-bg); padding: 16px; border-radius: 12px;
-    text-decoration: none; color: var(--text); border: 1px solid transparent; transition: all 0.2s;
-  }
-  .mini-card:hover { border-color: var(--link); transform: scale(0.99); }
-  .mini-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .mini-card p { font-size: 0.85rem; color: var(--muted); margin: 0 0 10px; line-height: 1.4; }
-  
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  .status-dot.active { background: var(--color-active); box-shadow: 0 0 5px var(--color-active); }
-  .status-dot.completed { background: var(--color-done); }
-
-  .mini-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .mini-tags span { font-size: 0.7rem; background: rgba(127,127,127,0.1); padding: 2px 8px; border-radius: 4px; }
-
-  .modal-footer { margin-top: 20px; text-align: center; border-top: 1px solid var(--border); padding-top: 15px; }
-  .btn-link { color: var(--link); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  /* --- BOTONES (AHORA AL FINAL) --- */
 
   .hero-actions {
+
     display: flex; gap: 16px; justify-content: center;
-    animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(20px);
+
+    animation: fadeUp 0.8s ease-out 0.6s forwards; /* Aparecen de último */
+
+    opacity: 0; transform: translateY(20px);
+
   }
+
+
 
   .btn {
+
     display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px;
+
     font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.2s ease;
+
   }
+
   .btn-primary {
+
     background: var(--text); color: var(--bg); border: 1px solid var(--text);
+
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
   }
+
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+
   .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
 
+
+
   @keyframes pulse {
+
     0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+
     70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+
     100% { transform: scale(0.95); opacity: 0; }
+
   }
+
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
+
+
+  /* RESPONSIVE */
+
   @media (max-width: 768px) {
+
     .hero-title { font-size: 2.8rem; }
+
     .stats-container { grid-template-columns: 1fr 1fr; }
+
   }
+
   @media (max-width: 480px) {
+
     .stat-item { padding: 20px 10px; }
+
     .stat-value { font-size: 2rem; }
+
     .stat-name { font-size: 0.75rem; }
+
   }
+
 </style>
