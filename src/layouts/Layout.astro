@@ -13,15 +13,12 @@ const swapped =
 	path.startsWith("/en/") ? path.replace("/en/", "/es/") :
 	(lang === "en" ? "/es/" : "/en/");
 
-// --- 3. Lógica para DETECTAR SECCIÓN ACTIVA ---
+// --- Lógica para DETECTAR SECCIÓN ACTIVA ---
 const currentPath = Astro.url.pathname;
 const isActive = (href) => {
-	// Normalizamos quitando slash final para comparar fácil
 	const normalize = (p) => p.replace(/\/$/, "");
 	const h = normalize(href);
 	const c = normalize(currentPath);
-	
-	// Si es el home, debe ser exacta. Si no, basta con que empiece por ahí.
 	if (h === normalize(base)) return c === h;
 	return c.startsWith(h);
 };
@@ -59,6 +56,14 @@ const t = {
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={t.desc} />
+
+		<meta name="title" content={title} />
+		<meta name="description" content={t.desc} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={t.desc} />
+		<meta property="og:image" content={new URL('/img/og-image.jpg', Astro.url)} />
 
 		<ClientRouter />
 
@@ -103,7 +108,7 @@ const t = {
 				</nav>
 
 				<div class="top-actions">
-					<a class="pill" href={swapped} aria-label={t.switchTo}>
+					<a class="pill lang-pill" href={swapped} aria-label={t.switchTo}>
 						{lang === "en" ? "ES" : "EN"}
 					</a>
 
@@ -114,8 +119,8 @@ const t = {
 						aria-label={t.toggleTheme}
 						title={t.toggleTheme}
 					>
-						<span class="icon sun" aria-hidden="true">☀️</span>
-						<span class="icon moon" aria-hidden="true">🌙</span>
+						<span class="icon sun">☀️</span>
+						<span class="icon moon">🌙</span>
 					</button>
 				</div>
 			</div>
@@ -231,15 +236,15 @@ const t = {
 		/* Code */
 		--code-bg: rgba(127, 127, 127, 0.08);
 
-		/* Title Badge Vars (Light) */
+		/* Title Badge Vars */
 		--title-bg: rgba(9, 105, 218, 0.08);
 		--title-border: rgba(9, 105, 218, 0.22);
 		--title-glow: rgba(9, 105, 218, 0.5);
 
-		/* ✅ COLORES NUEVOS (Light) */
-		--brand-linkedin: #0077b5; /* Azul oficial */
-		--brand-github: #24292f;   /* Negro oficial GitHub */
-		--icon-loc: #dc2626;       /* Rojo "Tomato" (UI standard location) */
+		/* Colores Específicos */
+		--brand-linkedin: #0077b5; 
+		--brand-github: #24292f;   
+		--icon-loc: #dc2626;       
 	}
 
 	/* Dark Theme Colors */
@@ -248,47 +253,39 @@ const t = {
 		--text: #f2f2f2;
 		--muted: rgba(242, 242, 242, 0.72);
 		--border: rgba(255, 255, 255, 0.18);
-
-		/* Links */
 		--link: #58a6ff;
 		--link-hover: #79c0ff;
-
 		--code-bg: rgba(255, 255, 255, 0.10);
-
-		/* Title Badge Vars (Dark) */
 		--title-bg: rgba(88, 166, 255, 0.10);
 		--title-border: rgba(88, 166, 255, 0.22);
 		--title-glow: rgba(88, 166, 255, 0.6);
-
-		/* ✅ COLORES NUEVOS (Dark) */
-		--brand-github: #ffffff;   /* Blanco para GitHub en modo oscuro */
-		--icon-loc: #f87171;       /* Rojo pastel suave */
+		--brand-github: #ffffff;   
+		--icon-loc: #f87171;       
 	}
 
+	/* ---------------------------------------------------- */
+	/* 🔥 FIX SAFARI: Fondo en HTML para evitar destellos 🔥 */
+	/* ---------------------------------------------------- */
 	html {
-        /* Aplicamos el fondo AQUÍ para evitar el destello blanco */
 		background-color: var(--bg); 
-		margin: 0;
-		padding: 0;
+		margin: 0; padding: 0;
 		scrollbar-gutter: stable;
 	}
 
 	body {
-        /* El body hereda o mantiene transparencia, ya el html tiene el color */
-		background: transparent; 
+		background: transparent; /* Body transparente */
 		color: var(--text);
 		font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 		line-height: 1.55;
 		transition: background 0.15s ease, color 0.15s ease;
-        min-height: 100vh; /* Asegura que cubra toda la pantalla */
+		min-height: 100vh;
 	}
 
 	.muted { color: var(--muted); }
 
 	/* ---------- Topbar ---------- */
 	.topbar {
-		position: sticky;
-		top: 0; z-index: 50;
+		position: sticky; top: 0; z-index: 50;
 		background: var(--bg);
 		border-bottom: 1px solid var(--border);
 	}
@@ -298,142 +295,123 @@ const t = {
 		display: flex; align-items: center; justify-content: space-between; gap: 16px;
 	}
 
-	.topbar-left {
-		flex: 0 0 290px; display: flex; justify-content: center;
-	}
+	.topbar-left { flex: 0 0 290px; display: flex; justify-content: center; }
 
 	/* Site title */
-	.site-title {
-		display: inline-flex; align-items: center;
-		text-decoration: none; color: var(--text);
-	}
+	.site-title { display: inline-flex; align-items: center; text-decoration: none; color: var(--text); }
 	.site-title:hover { text-decoration: none; }
 
 	.title-pill {
-		display: inline-flex; align-items: baseline; gap: 0.2em;
-		padding: 6px 14px;
+		display: inline-flex; align-items: baseline; gap: 0.2em; padding: 6px 14px;
 		border-radius: 999px; border: 1px solid var(--title-border);
-		background: var(--title-bg);
-		box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+		background: var(--title-bg); box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 		transition: all 0.2s ease; 
 	}
 
-	.title-first, .title-last {
-		font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase;
-		line-height: 1; font-size: 1.05rem; transition: color 0.2s ease;
-	}
+	.title-first, .title-last { font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; line-height: 1; font-size: 1.05rem; transition: color 0.2s ease; }
 	.title-first { color: var(--link); }
 	.title-last { color: var(--text); }
 
-	/* Hover Title Effect */
 	.site-title:hover .title-pill {
 		background: var(--link); border-color: var(--link);
 		transform: translateY(-2px); box-shadow: 0 6px 15px var(--title-glow);
 	}
-	.site-title:hover .title-first, .site-title:hover .title-last {
-		color: var(--bg); 
+	.site-title:hover .title-first, .site-title:hover .title-last { color: var(--bg); }
+
+	.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+	/* Navigation */
+	.topnav { 
+		display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+		flex: 1; justify-content: center; padding-left: 90px; 
 	}
 
-	.sr-only {
-		position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-		overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+	.topnav a {
+		position: relative; padding: 8px 16px; border-radius: 12px;
+		color: var(--muted); font-weight: 500; text-decoration: none;
+		transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
 	}
 
-		/* Navigation */
-			.topnav { 
-				display: flex; 
-				gap: 24px; 
-				flex-wrap: wrap; 
-				align-items: center;
+	.topnav a:not(:last-child)::after {
+		content: ''; position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+		height: 18px; width: 2px; background: var(--muted); opacity: 0.4; border-radius: 4px; transition: opacity 0.2s ease;
+	}
 
-				/* 1. Ocupar el espacio disponible */
-				flex: 1;
-				
-				/* 2. Centrar el contenido */
-				justify-content: center;
-				
-				/* 3. EL TRUCO MATEMÁTICO DE EQUILIBRIO ⚖️ */
-				/* Agregamos a la IZQUIERDA el mismo peso que tienen los botones a la DERECHA */
-				padding-left: 90px; 
-			}
+	.topnav a:hover::after, .topnav a:focus-visible::after, .topnav a.active::after,
+	.topnav a:has(+ a:hover)::after, .topnav a:has(+ a:focus-visible)::after, .topnav a:has(+ a.active)::after {
+		background: var(--link); width: 4px; opacity: 1;
+	}
 
-			/* --- ESTILO DE NAVEGACIÓN PRO (Paso 1) --- */
-			
-			/* 1. El enlace base */
-			.topnav a {
-				position: relative; /* Necesario para ubicar los separadores */
-				padding: 8px 16px;
-				border-radius: 12px;
-				color: var(--muted);
-				font-weight: 500;
-				text-decoration: none;
-				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-				z-index: 1;
-			}
+	.topnav a:hover {
+		color: var(--link); background: var(--title-bg);
+		box-shadow: 0 0 15px var(--title-bg); transform: translateY(-1px);
+	}
 
-			/* 2. El Separador Vertical (Math Style) */
-			.topnav a:not(:last-child)::after {
-				content: '';
-				position: absolute;
-				right: -12px; /* En la mitad del hueco */
-				top: 50%;
-				transform: translateY(-50%);
-				/* --- CAMBIOS AQUÍ --- */
-				height: 18px;             /* Antes 14px (Más altas) */
-				width: 2px;               /* Antes 1px (Más gruesas) */
-				background: var(--muted); /* Antes var(--border) (Color más oscuro) */
-				opacity: 0.4;             /* Antes 0.6 (Controlamos que no sea negro puro) */
-				border-radius: 4px;       /* Un toque redondeado suave */
-				transition: opacity 0.2s ease;
-			}
+	.topnav a.active {
+		color: var(--text); font-weight: 700; background: var(--code-bg);
+		box-shadow: inset 0 0 0 1px var(--border);
+	}
 
-		/* --- EFECTO DE BARRAS INTELIGENTES (BRAND BLUE) 🟦 --- */
+	/* ---------- BOTONES DE ACCIÓN (NUEVO ESTILO GLASS) ---------- */
+	
+	.top-actions { display: flex; gap: 12px; align-items: center; }
 
-			/* Aplica el estilo AZUL y GRUESO si:
-			1. :hover (El mouse está encima)
-			2. :focus-visible (Se navega con teclado)
-			3. .active (Es la página actual)
-			4. :has(+ ...) (Es vecino de uno de los anteriores)
-			*/
+	/* Estilo Base */
+	.pill {
+		display: inline-flex; align-items: center; justify-content: center;
+		gap: 8px; padding: 6px 14px; height: 36px;
+		border-radius: 12px; border: 1px solid transparent;
+		font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
+		backdrop-filter: blur(4px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+		user-select: none; -webkit-tap-highlight-color: transparent;
+	}
 
-			/* CASO A: La barra de mi DERECHA se activa */
-			.topnav a:hover::after,
-			.topnav a:focus-visible::after,
-			.topnav a.active::after {
-				background: var(--link);
-				width: 4px;
-				opacity: 1;
-			}
+	/* Botón Idioma */
+	.lang-pill, .lang-pill:visited, .lang-pill:active {
+		background: rgba(9, 105, 218, 0.06); 
+		border-color: rgba(9, 105, 218, 0.15);
+		color: var(--link) !important;
+	}
+	.lang-pill:hover {
+		background: var(--link) !important; border-color: var(--link) !important;
+		color: var(--bg) !important; transform: translateY(-2px);
+		box-shadow: 0 4px 12px var(--title-glow);
+	}
+	html[data-theme="dark"] .lang-pill { background: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.2); }
 
-			/* CASO B: La barra de mi IZQUIERDA se activa (Si mi vecino derecho está activo) */
-			/* Traducción: "Si mi vecino de la derecha tiene hover, O es la página activa..." */
-			.topnav a:has(+ a:hover)::after,
-			.topnav a:has(+ a:focus-visible)::after,
-			.topnav a:has(+ a.active)::after {
-				background: var(--link);
-				width: 4px;
-				opacity: 1;
-			}
+	/* Botón Tema */
+	#theme-toggle {
+		background: var(--code-bg); border-color: var(--border); color: var(--muted);
+		width: 42px; padding: 0;
+	}
+	#theme-toggle .icon { transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+	
+	#theme-toggle:hover {
+		border-color: var(--text); color: var(--text); background: var(--bg);
+		transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+	}
+	#theme-toggle:active, .lang-pill:active { transform: scale(0.95); }
 
-			/* 3. Efecto HOVER (Glow) */
-			.topnav a:hover {
-				color: var(--link);
-				background: var(--title-bg);
-				box-shadow: 0 0 15px var(--title-bg);
-				transform: translateY(-1px);
-				text-decoration: none;
-			}
+	/* Iconos Tema */
+	.sun { font-size: 1.1rem; }
+	.moon { font-size: 1.1rem; }
 
-			/* 4. Estado ACTIVO */
-			.topnav a.active {
-				color: var(--text);
-				font-weight: 700;
-				background: var(--code-bg);
-				box-shadow: inset 0 0 0 1px var(--border);
-				text-decoration: none;
-			}
+	html:not([data-theme="dark"]) #theme-toggle:hover .sun {
+		transform: rotate(90deg) scale(1.1); color: #f59e0b; filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.5));
+	}
+	html[data-theme="dark"] #theme-toggle:hover {
+		border-color: #a78bfa; box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+	}
+	html[data-theme="dark"] #theme-toggle:hover .moon {
+		transform: rotate(-20deg) scale(1.1); color: #ddd6fe;
+	}
 
-	.top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+	html[data-theme="dark"] .sun { display: none; }
+	html:not([data-theme="dark"]) .moon { display: none; }
+
+	/* Links Generales */
+	a, a:visited { color: var(--link); text-decoration: none; }
+	a:hover { color: var(--link-hover); text-decoration: underline; }
 
 	/* ---------- Layout Shell ---------- */
 	.shell {
@@ -449,222 +427,79 @@ const t = {
 	}
 	.content { min-width: 0; }
 
-	.avatar {
-		display: inline-block; width: 170px; border-radius: 999px;
-		overflow: hidden; border: 1px solid var(--border);
-	}
+	.avatar { display: inline-block; width: 170px; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
 	.avatar img { display: block; width: 100%; height: auto; }
 
 	.identity { margin-top: 14px; text-align: center; width: 100%; }
 	.name { font-weight: 750; font-size: 18px; letter-spacing: -0.01em; }
 	.bio { margin: 8px 0 10px; font-size: 0.95em; line-height: 1.45; }
 
-	/* Metadata (Location) */
 	.meta { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 14px; align-items: center; }
 	.meta-item { display: inline-flex; gap: 4px; align-items: center; font-size: 0.92em; }
-	
-	/* ✅ CORRECCIÓN COLOR UBICACIÓN */
 	.meta-ico { display: inline-flex; align-items: center; justify-content: center; }
-	.location-icon { color: var(--icon-loc); } /* Aplica color rojo UI */
+	.location-icon { color: var(--icon-loc); }
 	.meta-ico .ico { display: block; }
 
-	/* Social Buttons */
 	.social { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
 	.social-btn {
-		width: 36px; height: 36px;
-		display: inline-flex; align-items: center; justify-content: center;
-		border: 1px solid var(--border); border-radius: 12px;
-		background: transparent; text-decoration: none; color: var(--text);
+		width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+		border: 1px solid var(--border); border-radius: 12px; background: transparent; text-decoration: none; color: var(--text);
 	}
 	.social-btn:hover { border-color: var(--link-hover); }
-	
-	/* ✅ COLORES SOCIALES NATIVOS */
 	.social-btn.linkedin { color: var(--brand-linkedin); }
 	.social-btn.github { color: var(--brand-github); }
-
 	.octicon { display: block; }
 	.li { font-weight: 800; font-size: 14px; }
 
-	/* Toggle Icons */
-	.pill {
-		display: inline-flex; align-items: center; justify-content: center;
-		gap: 6px; padding: 6px 10px;
-		border: 1px solid var(--border); border-radius: 999px;
-		background: transparent; cursor: pointer; color: var(--text);
-		font-size: 0.92em; text-decoration: none;
-	}
-	.pill:hover { border-color: var(--link-hover); color: var(--text); }
-	
-	/* ✅ TOGGLE THEME COLORS */
-	/* Sol: Amarillo natural */
-	.sun { font-size: 14px; filter: none; line-height: 1; } 
-	/* Luna: Blanco brillante (filtro para asegurar blancura) */
-	.moon { font-size: 14px; filter: grayscale(1) brightness(10); line-height: 1; }
-
-	html[data-theme="dark"] .sun { display: none; }
-	html:not([data-theme="dark"]) .moon { display: none; }
-
-	a, a:visited { color: var(--link); text-decoration: none; }
-	a:hover { color: var(--link-hover); text-decoration: underline; }
-
-	.side-footer {
-		margin-top: 16px; padding-top: 12px;
-		border-top: 1px solid var(--border);
-		font-size: 0.9em; text-align: center; width: 100%;
-	}
+	.side-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.9em; text-align: center; width: 100%; }
 
 	h1 { font-size: 34px; letter-spacing: -0.02em; margin: 0.2em 0 0.4em; }
 	h2 { font-size: 24px; letter-spacing: -0.01em; margin: 1.2em 0 0.4em; }
 	p { margin: 0.4em 0 1em; }
 
-	code {
-		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Cascadia Code", monospace;
-		font-size: 0.95em; padding: 0.15em 0.35em;
-		background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
-	}
-	pre {
-		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Cascadia Code", monospace;
-		background: var(--code-bg); border: 1px solid var(--border);
-		border-radius: 14px; padding: 14px 16px; overflow-x: auto;
-	}
+	code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.95em; padding: 0.15em 0.35em; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; }
+	pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; overflow-x: auto; }
 	pre code { background: none; border: none; padding: 0; }
 
-/* 🔥 ESTILOS PARA MÓVIL (Compacto y Estilo App) 🔥 */
+	/* 🔥 ESTILOS PARA MÓVIL 🔥 */
 	@media (max-width: 900px) {
-		/* 1. Layout General: Una columna y menos espacio */
-		.shell {
-			grid-template-columns: 1fr;
-			gap: 20px; /* Reducido de 30px */
-			padding-top: 10px; /* Menos aire arriba */
-		}
+		.shell { grid-template-columns: 1fr; gap: 20px; padding-top: 10px; }
 
-		/* 2. HEADER: Usamos GRID para control total del espacio */
 		.topbar-inner {
-			display: grid;
-			/* Definimos 2 áreas: Arriba (Marca + Acciones) y Abajo (Nav) */
-			grid-template-areas: 
-				"brand actions"
-				"nav   nav";
-			grid-template-columns: 1fr auto; /* El nombre ocupa lo que pueda, botones lo justo */
-			gap: 0; /* Cero espacio extra entre elementos */
-			padding: 10px var(--pad); /* Header más delgado */
+			display: grid; grid-template-areas: "brand actions" "nav nav";
+			grid-template-columns: 1fr auto; gap: 0; padding: 10px var(--pad);
 		}
 
-		/* Fila 1 Izquierda: El Nombre */
-		.topbar-left {
-			grid-area: brand;
-			justify-content: flex-start;
-			min-width: 0; /* Evita desbordamientos */
-		}
+		.topbar-left { grid-area: brand; justify-content: flex-start; min-width: 0; }
+		.title-pill { padding: 4px 10px; font-size: 0.9rem; }
 
-		/* Ajuste visual del Título para móvil (Más compacto) */
-		.title-pill {
-			padding: 4px 10px; /* Burbuja más pequeña */
-			font-size: 0.9rem; /* Texto un pelín más chico */
-		}
+		.top-actions { grid-area: actions; margin-left: 10px; gap: 8px; }
+		.pill, .social-btn { padding: 4px 8px; height: 32px; }
 
-		/* Fila 1 Derecha: Los Botones */
-		.top-actions {
-			grid-area: actions;
-			margin-left: 10px;
-			gap: 8px; /* Botones un poco más juntos */
-		}
-		
-		/* Hacer botones un poco más pequeños en móvil */
-		.pill, .social-btn {
-			padding: 4px 8px;
-			height: 32px; /* Altura controlada */
-		}
-
-		/* Fila 2 Completa: La Navegación */
+		/* Fix Menú Móvil */
 		.topnav {
-			grid-area: nav;
-			width: 100%;
-			
-			/* Layout de la barra */
-			margin-top: 10px;
-			padding-top: 10px;
-			border-top: 1px solid var(--border);
-			
-			/* RESETEAMOS EL TRUCO DE ESCRITORIO */
-			padding-left: 0;
-			justify-content: flex-start; 
-			
-			/* --- CORRECCIÓN AQUÍ --- */
-			display: flex;        /* Aseguramos que sea flex */
-			flex-wrap: nowrap;    /* IMPORTANTE: Prohibido bajar de línea */
-			gap: 8px;             /* Menos espacio entre botones (antes heredaba 24px) */
-			
-			/* Scroll Horizontal */
-			overflow-x: auto;
-			white-space: nowrap;
-			-webkit-overflow-scrolling: touch;
-			
-			/* Ocultar barra scroll */
-			scrollbar-width: none;
+			grid-area: nav; width: 100%; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+			padding-left: 0; justify-content: flex-start;
+			display: flex; flex-wrap: nowrap; gap: 8px;
+			overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 		}
 		.topnav::-webkit-scrollbar { display: none; }
 		
-		/* --- AJUSTE DE LINKS EN MÓVIL --- */
 		.topnav a {
-			font-size: 0.9rem;
-			padding: 6px 10px; /* Ajustado: Un poco más de aire horizontal, equilibrado vertical */
-			background: transparent !important;
-			box-shadow: none !important;
-			color: var(--muted);
-			border-radius: 6px;
-			white-space: nowrap; /* Asegura que el texto "Acerca de" no se parta */
-            flex-shrink: 0;      /* Asegura que no se aplasten los botones */
+			font-size: 0.9rem; padding: 6px 10px; background: transparent !important; box-shadow: none !important;
+			color: var(--muted); border-radius: 6px; white-space: nowrap; flex-shrink: 0;
 		}
-
-		/* IMPORTANTE: Eliminar las barras verticales en móvil */
+		.topnav a.active { background: var(--code-bg) !important; color: var(--text); font-weight: 600; }
 		.topnav a::after { display: none; }
 
-		/* 3. Sidebar (Perfil): Integrado y sutil */
-		.sidebar {
-			position: static;
-			border: none;
-			background: transparent;
-			padding: 0;
-			text-align: center;
-			margin-bottom: 0;
-		}
-
-		/* Avatar más pequeño para no comerse la pantalla */
-		.avatar {
-			width: 110px; /* Reducido de 170px */
-			margin-bottom: 10px;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombrita para que resalte */
-		}
-
-		/* Ocultar elementos que sobran en móvil para ahorrar espacio */
-		.side-footer { display: none; } /* El copyright sobra arriba */
-		
-		/* Bio más compacta */
-		.bio {
-			font-size: 0.9em;
-			margin-bottom: 16px;
-			padding: 0 10px;
-		}
-		
-		/* Título de la página (Hero) ajustado */
-		h1.hero-title {
-			font-size: 2rem;
-			line-height: 1.2;
-		}
+		.sidebar { position: static; border: none; background: transparent; padding: 0; text-align: center; margin-bottom: 0; }
+		.avatar { width: 110px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+		.side-footer { display: none; }
+		.bio { font-size: 0.9em; margin-bottom: 16px; padding: 0 10px; }
+		h1.hero-title { font-size: 2rem; line-height: 1.2; }
 	}
 
-	/* 🔥 TRANSICIONES SUAVES (Fix final) 🔥 */
-	::view-transition-group(root) {
-		animation-duration: 0.6s;
-		animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-	}
-
-	::view-transition-old(root) {
-		animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
-	}
-	
-	::view-transition-new(root) {
-		animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
-	}
+	::view-transition-group(root) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+	::view-transition-old(root) { animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-out; }
+	::view-transition-new(root) { animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in; }
 </style>
