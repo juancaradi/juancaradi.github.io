@@ -331,11 +331,23 @@ const t = {
 		overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 	}
 
-	/* Navigation */
-	.topnav { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-	.topnav a.active {
-		font-weight: 700; text-decoration: underline; text-underline-offset: 4px; color: var(--text);
-	}
+		/* Navigation */
+			.topnav { 
+				display: flex; 
+				gap: 24px; 
+				flex-wrap: wrap; 
+				align-items: center;
+
+				/* 1. Ocupar el espacio disponible */
+				flex: 1;
+				
+				/* 2. Centrar el contenido */
+				justify-content: center;
+				
+				/* 3. EL TRUCO MATEMÁTICO DE EQUILIBRIO ⚖️ */
+				/* Agregamos a la IZQUIERDA el mismo peso que tienen los botones a la DERECHA */
+				padding-left: 90px; 
+			}
 
 	.top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
@@ -481,24 +493,27 @@ const t = {
 		}
 
 		/* Fila 2 Completa: La Navegación */
-		.topnav {
-			grid-area: nav;
-			width: 100%;
-			
-			/* Layout de la barra */
-			margin-top: 10px; /* Separación justa del título */
-			padding-top: 10px;
-			border-top: 1px solid var(--border); /* Línea divisoria elegante */
-			
-			/* Scroll Horizontal */
-			justify-content: flex-start;
-			overflow-x: auto;
-			white-space: nowrap;
-			-webkit-overflow-scrolling: touch; /* Scroll suave en iPhone */
-			
-			/* Ocultar barra scroll */
-			scrollbar-width: none;
-		}
+				.topnav {
+					grid-area: nav;
+					width: 100%;
+					
+					/* Layout de la barra */
+					margin-top: 10px;
+					padding-top: 10px;
+					border-top: 1px solid var(--border);
+					
+					/* RESETEAMOS EL TRUCO DE ESCRITORIO */
+					padding-left: 0;   /* <--- ¡Muy importante! */
+					justify-content: flex-start; /* En móvil se ve mejor alineado al inicio */
+					
+					/* Scroll Horizontal */
+					overflow-x: auto;
+					white-space: nowrap;
+					-webkit-overflow-scrolling: touch;
+					
+					/* Ocultar barra scroll */
+					scrollbar-width: none;
+				}
 		.topnav::-webkit-scrollbar { display: none; }
 		
 		/* Ajuste de links del menú */

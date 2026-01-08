@@ -53,72 +53,136 @@ const skills = [
 </Layout>
 
 <style>
-  /* --- Hero Section --- */
+  /* --- 1. FONDO CARTESIANO CORREGIDO --- */
+  /* Usamos un pseudo-elemento para que NO afecte al contenido (sidebar/textos) */
+  :global(body) {
+    position: relative;
+    /* Aseguramos el color base */
+  }
+
+  :global(body::before) {
+    content: '';
+    position: fixed; /* Se queda fijo al hacer scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Se va bien al fondo */
+    pointer-events: none; /* No interfiere con clicks */
+    
+    /* El Grid Matemático */
+    background-image: 
+      linear-gradient(to right, rgba(128, 128, 128, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128, 128, 128, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    
+    /* La máscara ahora solo desvanece las líneas del grid, no tu foto */
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  }
+
+  /* --- HERO SECTION --- */
   .hero {
-    padding: 60px 0 40px;
-    max-width: 800px;
+    position: relative;
+    padding: 100px 0 60px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* Luz ambiental detrás del título */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(circle, var(--link) 0%, transparent 70%);
+    opacity: 0.12; 
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
   }
 
   .badge {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 6px 16px;
     border-radius: 99px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    background: var(--code-bg);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(139, 92, 246, 0.1);
     color: var(--link);
-    border: 1px solid var(--border);
-    margin-bottom: 16px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    margin-bottom: 24px;
+    backdrop-filter: blur(5px);
   }
 
   .hero-title {
-    font-size: 3rem;
+    font-size: 4rem;
+    font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin-bottom: 24px;
+    animation: fadeUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  /* Texto con gradiente */
   .gradient-text {
-    background: linear-gradient(45deg, var(--link), #8b5cf6);
+    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .hero-desc {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     color: var(--muted);
     line-height: 1.6;
-    margin-bottom: 32px;
-    max-width: 90%;
+    margin: 0 auto 40px;
+    max-width: 700px;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  .hero-desc strong {
-    color: var(--text);
-  }
+  .hero-desc strong { color: var(--text); }
 
-  /* --- Botones --- */
   .hero-actions {
     display: flex;
     gap: 16px;
-    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
+  /* --- BOTONES --- */
   .btn {
     display: inline-flex;
     align-items: center;
-    padding: 10px 24px;
-    border-radius: 8px;
+    padding: 12px 32px;
+    border-radius: 12px;
     font-weight: 600;
+    font-size: 1rem;
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
   }
 
   .btn-primary {
     background: var(--text);
     color: var(--bg);
     border: 1px solid var(--text);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
   }
 
   .btn-outline {
@@ -126,54 +190,48 @@ const skills = [
     color: var(--text);
     border: 1px solid var(--border);
   }
-
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-decoration: none;
+  
+  .btn-outline:hover {
+    background: var(--code-bg);
+    border-color: var(--text);
   }
 
-  /* --- Skills Grid --- */
+  /* --- CARDS --- */
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 24px;
-    margin-top: 60px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
+    margin-top: 80px;
   }
 
   .skill-card {
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(128,128,128, 0.1);
     background: var(--code-bg);
-    transition: border-color 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    animation: fadeUp 1s ease-out 0.6s forwards;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .skill-card:hover {
+    transform: translateY(-5px);
     border-color: var(--link);
+    background: linear-gradient(to bottom right, var(--code-bg), rgba(139, 92, 246, 0.05));
   }
 
-  .skill-icon {
-    font-size: 2rem;
-    margin-bottom: 12px;
+  .skill-icon { font-size: 2.5rem; margin-bottom: 16px; }
+  .skill-card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+  .skill-card p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  .skill-card h3 {
-    margin: 0 0 8px;
-    font-size: 1.1rem;
-  }
-
-  .skill-card p {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  /* Responsive */
   @media (max-width: 600px) {
-    .hero-title { font-size: 2.2rem; }
+    .hero-title { font-size: 2.8rem; }
     .hero-desc { font-size: 1.1rem; }
+    .hero { padding-top: 60px; }
   }
 </style>
