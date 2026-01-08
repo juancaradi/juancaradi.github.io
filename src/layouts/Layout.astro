@@ -349,6 +349,55 @@ const t = {
 				padding-left: 90px; 
 			}
 
+			/* --- ESTILO DE NAVEGACIÓN PRO (Paso 1) --- */
+			
+			/* 1. El enlace base */
+			.topnav a {
+				position: relative; /* Necesario para ubicar los separadores */
+				padding: 8px 16px;
+				border-radius: 12px;
+				color: var(--muted);
+				font-weight: 500;
+				text-decoration: none;
+				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+				z-index: 1;
+			}
+
+			/* 2. El Separador Vertical (Math Style) */
+			.topnav a:not(:last-child)::after {
+				content: '';
+				position: absolute;
+				right: -12px; /* En la mitad del hueco */
+				top: 50%;
+				transform: translateY(-50%);
+				height: 14px;
+				width: 1px;
+				background: var(--border);
+				opacity: 0.6;
+				transition: opacity 0.2s ease;
+			}
+
+			/* Ocultar separador al hacer hover */
+			.topnav a:hover::after { opacity: 0; }
+
+			/* 3. Efecto HOVER (Glow) */
+			.topnav a:hover {
+				color: var(--link);
+				background: var(--title-bg);
+				box-shadow: 0 0 15px var(--title-bg);
+				transform: translateY(-1px);
+				text-decoration: none;
+			}
+
+			/* 4. Estado ACTIVO */
+			.topnav a.active {
+				color: var(--text);
+				font-weight: 700;
+				background: var(--code-bg);
+				box-shadow: inset 0 0 0 1px var(--border);
+				text-decoration: none;
+			}
+
 	.top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
 	/* ---------- Layout Shell ---------- */
@@ -516,11 +565,25 @@ const t = {
 				}
 		.topnav::-webkit-scrollbar { display: none; }
 		
-		/* Ajuste de links del menú */
+/* --- AJUSTE DE LINKS EN MÓVIL (Paso 2) --- */
 		.topnav a {
 			font-size: 0.9rem;
-			padding: 4px 8px; /* Áreas de toque más cómodas */
+			padding: 4px 8px;  /* Áreas de toque más cómodas */
+			background: transparent !important; /* Sin fondos raros */
+			box-shadow: none !important; /* Sin brillos */
+			color: var(--muted);
+			border-radius: 6px;
 		}
+		
+		/* En móvil, el activo es simple */
+		.topnav a.active {
+			background: var(--code-bg) !important;
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		/* IMPORTANTE: Eliminar las barras verticales en móvil */
+		.topnav a::after { display: none; }
 
 		/* 3. Sidebar (Perfil): Integrado y sutil */
 		.sidebar {
