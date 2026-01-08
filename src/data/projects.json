@@ -1,0 +1,44 @@
+﻿[
+  {
+    "title": "Análisis Topológico (TDA)",
+    "description": "Estudio de la forma de datos de alta dimensión usando homología persistente.",
+    "status": "active",
+    "tags": ["Python", "TDA", "Math"],
+    "link": "#"
+  },
+  {
+    "title": "Dashboard Financiero",
+    "description": "Visualización interactiva de mercados bursátiles con API en tiempo real.",
+    "status": "active",
+    "tags": ["Python", "Streamlit", "Pandas"],
+    "link": "#"
+  },
+  {
+    "title": "Regresión Multivariable R",
+    "description": "Modelo estadístico para predicción de precios de vivienda con validación cruzada.",
+    "status": "completed",
+    "tags": ["R", "Statistics", "GLM"],
+    "link": "#"
+  },
+  {
+    "title": "Teoría de Grafos Social",
+    "description": "Análisis de centralidad y comunidades en redes sociales simuladas.",
+    "status": "completed",
+    "tags": ["Python", "NetworkX"],
+    "link": "#"
+  },
+  {
+    "title": "Bot de Automatización",
+    "description": "Script para limpieza automática de bases de datos SQL.",
+    "status": "completed",
+    "tags": ["SQL", "Python", "Automation"],
+    "link": "#"
+  },
+  {
+    "title": "Taller de Cálculo Vectorial",
+    "description": "Repositorio de ejercicios resueltos y graficados en 3D.",
+    "status": "completed",
+    "tags": ["Python", "Matplotlib", "Calculus"],
+    "link": "#"
+  }
+]
