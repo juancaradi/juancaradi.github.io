@@ -2,9 +2,204 @@
 import Layout from '../../../layouts/Layout.astro';
 ---
 
-<Layout title="Acerca · Juan Camilo" lang="es">
-    <a href="/es/">← Inicio</a>
-    <h1>Acerca</h1>
-    <p>Bio corta, enlaces, y cómo contactarte.</p>
+<Layout title="Sobre mí | Camilo Ramírez" lang="es">
+  
+  <div class="about-container">
+    <header class="about-header">
+      <h1 class="page-title">
+        Más allá del <span class="gradient-text">código</span>.
+      </h1>
+      <p class="lead">
+        Matemático en formación, entusiasta de los datos y cinturón en proceso.
+        Busco el orden en el caos abstracto y soluciones en el mundo real.
+      </p>
+    </header>
+
+    <section class="bio-section">
+      <div class="bio-text">
+        <h2>Mi Camino</h2>
+        <p>
+          Mi viaje comenzó con una fascinación por las estructuras abstractas. Como estudiante de 
+          <strong>Matemáticas</strong>, he dedicado mis días a entender conceptos como la 
+          <em>Topología Algebraica</em> y la <em>Teoría de Representaciones</em>.
+        </p>
+        <p>
+          Sin embargo, me di cuenta de que esa belleza teórica tiene un potencial inmenso cuando 
+          se aterriza. Por eso decidí especializarme en <strong>Ciencia de Datos y Estadística</strong>, 
+          utilizando herramientas como Python y R para convertir teoremas en modelos predictivos 
+          y análisis visuales.
+        </p>
+        <p>
+          Actualmente, divido mi tiempo entre mis estudios universitarios, proyectos de análisis 
+          de datos y mi trabajo freelance, donde ayudo a otros a superar sus propias barreras académicas.
+        </p>
+      </div>
+    </section>
+
+    <section class="interests-grid">
+      <div class="interest-card academic">
+        <div class="icon">📐</div>
+        <h3>Foco Académico</h3>
+        <p>
+          Me apasiona la intersección entre el álgebra abstracta y los grafos. 
+          Recientemente estoy explorando el <strong>Análisis Topológico de Datos (TDA)</strong> 
+          para entender la "forma" de los grandes conjuntos de datos.
+        </p>
+      </div>
+
+      <div class="interest-card personal">
+        <div class="icon">🥋</div>
+        <h3>Disciplina y Mente</h3>
+        <p>
+          No todo son números. Practico <strong>Taekwondo</strong>, lo que me mantiene enfocado 
+          y me enseña que la constancia supera al talento. La disciplina del <strong>dojang</strong> la aplico 
+          directamente al depurar código.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <p>¿Te interesa mi perfil para una colaboración o tutoría?</p>
+      <div class="cta-buttons">
+        <a href="/cv-camilo-ramirez.pdf" class="btn btn-primary" target="_blank">Descargar CV</a>
+        <a href="mailto:juancaradi@gmail.com" class="btn btn-outline">Envíame un correo</a>
+      </div>
+    </section>
+
+  </div>
 </Layout>
 
+<style>
+  /* --- LAYOUT GENERAL --- */
+  .about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+
+  /* --- HEADER --- */
+  .about-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .page-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* --- BIO TEXT --- */
+  .bio-section {
+    margin-bottom: 60px;
+  }
+
+  .bio-text h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .bio-text p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  
+  .bio-text strong { color: var(--text); font-weight: 600; }
+  .bio-text em { color: var(--link); font-style: normal; }
+
+  /* --- INTERESTS GRID --- */
+  .interests-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+
+  .interest-card {
+    padding: 30px;
+    border-radius: 20px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease;
+  }
+
+  .interest-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--link);
+  }
+
+  .interest-card .icon { font-size: 2.5rem; margin-bottom: 16px; }
+  .interest-card h3 { margin: 0 0 10px; font-size: 1.2rem; }
+  .interest-card p { margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--muted); }
+
+  /* --- CTA SECTION --- */
+  .cta-section {
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: linear-gradient(to right, rgba(128,128,128,0.05), transparent);
+    border: 1px solid var(--border);
+  }
+
+  .cta-section p {
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+    border: 1px solid var(--text);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
+
+  @media (max-width: 700px) {
+    .page-title { font-size: 2.5rem; }
+    .interests-grid { grid-template-columns: 1fr; }
+  }
+</style>
