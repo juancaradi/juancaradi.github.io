@@ -1,7 +1,6 @@
 ---
 import freelanceData from '../data/freelance.json';
 import { ui, defaultLang } from '../i18n/ui';
-// 👇 Importamos el gestor de colores maestro
 import { getSubjectColor } from '../utils/subjectColors'; 
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
 const { lang = 'es', year } = Astro.props;
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
 
-// 1. Filtrar datos del año y ordenar por fecha (más reciente primero)
+// 1. Filtrar datos del año
 const yearData = freelanceData
   .filter(item => {
     if (!item.date) return false;
@@ -21,11 +20,9 @@ const yearData = freelanceData
   })
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-// 2. AGRUPAR POR MESES
-// La lógica aquí respeta el nombre EXACTO de la materia.
-// Si el JSON dice "Cálculo Diferencial", se guarda así. No se mezcla con "Integral".
+// 2. Agrupar por meses
 const groupedByMonth = yearData.reduce((acc, item) => {
-  const monthKey = item.date.slice(0, 7); // "2026-02"
+  const monthKey = item.date.slice(0, 7); 
   
   if (!acc[monthKey]) {
     const dateObj = new Date(`${monthKey}-15`);
@@ -35,13 +32,11 @@ const groupedByMonth = yearData.reduce((acc, item) => {
     acc[monthKey] = {
       name: capitalizedMonth,
       items: [],
-      subjects: new Set() // Aquí se guardan los nombres únicos de materias
+      subjects: new Set() 
     };
   }
   
   acc[monthKey].items.push(item);
-  
-  // Guardamos la materia exacta para generar los filtros después
   if (item.subject && item.subject[lang]) {
     acc[monthKey].subjects.add(item.subject[lang]);
   }
@@ -57,7 +52,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
     
     {sortedMonths.map((monthKey) => {
       const group = groupedByMonth[monthKey];
-      // Convertimos el Set a Array y ordenamos alfabéticamente
       const subjectsList = Array.from(group.subjects).sort();
       
       return (
@@ -66,7 +60,8 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
           <button class="month-trigger" aria-expanded="false">
             <div class="trigger-info">
               <span class="month-name">{group.name}</span>
-              <span class="month-count">{group.items.length} proyectos</span>
+              {/* ✨ "proyectos" traducido */}
+              <span class="month-count">{group.items.length}&nbsp;{t['freelance.projectsCount']}</span>
             </div>
             <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
@@ -74,13 +69,13 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
           {/* CONTENIDO DESPLEGABLE */}
           <div class="month-content">
             
-            {/* 🔽 BARRA DE FILTROS (Píldoras) 🔽 */}
+            {/* 🔽 BARRA DE FILTROS 🔽 */}
             {subjectsList.length > 0 && (
               <div class="filter-bar">
-                <button class="filter-pill active" data-filter="all">Todos</button>
+                {/* ✨ "Todos" traducido */}
+                <button class="filter-pill active" data-filter="all">{t['freelance.filterAll']}</button>
                 
                 {subjectsList.map(sub => {
-                  // Obtenemos el color ESPECÍFICO para "Cálculo Diferencial", "Integral", etc.
                   const color = getSubjectColor(sub);
                   return (
                     <button 
@@ -98,7 +93,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
             <div class="timeline-wrapper">
               
               {group.items.map((item) => {
-                // Color específico para el Badge de la tarjeta
                 const subColor = getSubjectColor(item.subject?.[lang]);
                 
                 return (
@@ -107,21 +101,13 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
                     
                     <div class="timeline-card card-glass">
                       <div class="card-header">
-                        
-                        {/* BADGE DE MATERIA: Fondo suave (10%) y Borde/Texto sólido */}
                         <span 
                           class="badge-subject"
-                          style={`
-                            background: rgba(${subColor}, 0.1); 
-                            color: rgb(${subColor}); 
-                            border: 1px solid rgba(${subColor}, 0.25);
-                          `}
+                          style={`background: rgba(${subColor}, 0.1); color: rgb(${subColor}); border: 1px solid rgba(${subColor}, 0.25);`}
                         >
                           {item.subject?.[lang]}
                         </span>
-
                         <span class="badge-type">{item.type?.[lang]}</span>
-                        
                         <span class="date-inline">
                           {new Date(item.date).toLocaleDateString(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' })}
                         </span>
@@ -158,25 +144,21 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
 
   </div>
 ) : (
-  <div class="empty-state">No hay registros para este año.</div>
+  <div class="empty-state">{t['freelance.noRecords']}</div>
 )}
 
 <script is:inline>
+  // ... (MISMO SCRIPT DE INTERACCIÓN QUE YA TENÍAMOS - No cambia) ...
   function setupInteractions() {
-    // 1. ACORDEÓN (Despliegue de Meses)
     const triggers = document.querySelectorAll('.month-trigger');
     triggers.forEach(trigger => {
-      // Clonar nodo para limpiar eventos viejos
       const newTrigger = trigger.cloneNode(true);
       trigger.parentNode.replaceChild(newTrigger, trigger);
-
       newTrigger.addEventListener('click', (e) => {
         const button = e.currentTarget; 
         const parent = button.parentElement;
         const content = parent.querySelector('.month-content');
-        
         button.classList.toggle('active');
-        
         if (content.style.maxHeight) {
           content.style.maxHeight = null; 
           button.setAttribute('aria-expanded', 'false');
@@ -187,125 +169,76 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
       });
     });
 
-    // 2. FILTROS DINÁMICOS (Píldoras de Materia)
     const filterPills = document.querySelectorAll('.filter-pill');
-    
     filterPills.forEach(pill => {
       pill.addEventListener('click', (e) => {
         const btn = e.target;
         const filterValue = btn.getAttribute('data-filter');
         const monthContent = btn.closest('.month-content');
         const timelineWrapper = monthContent.querySelector('.timeline-wrapper');
-        
-        // A. Resetear estilos de todos los hermanos
         const siblings = monthContent.querySelectorAll('.filter-pill');
         siblings.forEach(s => {
           s.classList.remove('active');
-          // Si es un botón dinámico, le quitamos el color de fondo al desactivarlo
           if (s.classList.contains('dynamic-pill')) {
             s.style.backgroundColor = 'transparent';
             s.style.color = 'var(--muted)';
             s.style.borderColor = 'var(--border)';
           }
         });
-
-        // B. Activar el botón clickeado
         btn.classList.add('active');
-        
-        // Si es dinámico, aplicamos su color específico definido en CSS var
         if (btn.classList.contains('dynamic-pill')) {
           const color = btn.style.getPropertyValue('--pill-color');
           btn.style.backgroundColor = `rgb(${color})`;
-          btn.style.color = '#fff'; // Texto blanco para contraste
+          btn.style.color = '#fff';
           btn.style.borderColor = `rgb(${color})`;
         }
-
-        // C. Ocultar/Mostrar tarjetas según data-subject
         const items = timelineWrapper.querySelectorAll('.timeline-item');
         items.forEach(item => {
           const itemSubject = item.getAttribute('data-subject');
-          // Comparación exacta: "Cálculo Diferencial" === "Cálculo Diferencial"
           if (filterValue === 'all' || itemSubject === filterValue) {
             item.style.display = 'flex';
           } else {
             item.style.display = 'none';
           }
         });
-
-        // D. Recalcular altura del acordeón para que se ajuste
         monthContent.style.maxHeight = monthContent.scrollHeight + "px";
       });
     });
   }
-
-  // Ejecutar al inicio y en navegaciones
   setupInteractions();
   document.addEventListener('astro:after-swap', setupInteractions);
 </script>
 
-
 <style>
-  /* --- ESTILOS GENERALES DEL ACORDEÓN --- */
+  /* ... (MISMO CSS QUE YA TENÍAMOS - No cambia) ... */
   .timeline-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-
   .month-accordion { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--code-bg); transition: border-color 0.3s; }
   .month-accordion:hover { border-color: var(--muted); }
-
-  .month-trigger {
-    width: 100%; display: flex; justify-content: space-between; align-items: center;
-    padding: 20px; background: transparent; border: none; cursor: pointer;
-    color: var(--text); transition: background 0.2s;
-  }
+  .month-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px; background: transparent; border: none; cursor: pointer; color: var(--text); transition: background 0.2s; }
   .month-trigger:hover { background: rgba(255,255,255, 0.02); }
-  
   .trigger-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
   .month-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
   .month-count { font-size: 0.85rem; color: var(--muted); }
-
   .chevron { transition: transform 0.3s ease; color: var(--muted); }
   .month-trigger.active .chevron { transform: rotate(180deg); color: var(--link); }
-
   .month-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: rgba(0,0,0,0.1); }
-  
-  /* --- BARRA DE FILTROS --- */
-  .filter-bar { 
-    display: flex; gap: 8px; flex-wrap: wrap; padding: 15px 20px 0 20px; 
-    border-bottom: 1px dashed var(--border); padding-bottom: 15px;
-  }
-  
-  .filter-pill {
-    background: transparent; border: 1px solid var(--border); color: var(--muted);
-    padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
-    transition: all 0.2s;
-  }
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 15px 20px 0 20px; border-bottom: 1px dashed var(--border); padding-bottom: 15px; }
+  .filter-pill { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
   .filter-pill:hover { border-color: var(--link); color: var(--text); }
-  
-  /* Botón 'Todos' activo (Color por defecto) */
   .filter-pill[data-filter="all"].active { background: var(--link); color: white; border-color: var(--link); }
-
   .timeline-wrapper { padding: 30px 20px 10px 20px; position: relative; }
-  /* Línea vertical */
   .timeline-wrapper::before { content: ''; position: absolute; left: 44px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
-
-  /* --- ITEMS --- */
   .timeline-item { position: relative; margin-bottom: 30px; display: flex; padding-left: 60px; }
   .timeline-dot { position: absolute; left: 39px; top: 20px; width: 12px; height: 12px; background: var(--link); border: 3px solid var(--code-bg); border-radius: 50%; z-index: 10; }
   .timeline-card { flex-grow: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-  
   .card-header { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
   .date-inline { margin-left: auto; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
-  
-  /* Badge Dinámico (Estilos base, el color lo pone JS/Inline) */
   .badge-subject { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
-  
   .badge-type { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; }
   .card-title { margin: 0 0 8px 0; font-size: 1.1rem; color: var(--text); }
   .card-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-
   .resources-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
   .resource-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; }
-  
-  /* Resources Colors (Tools) */
   .resource-pill.python { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); }
   .resource-pill.r { background: rgba(39, 109, 195, 0.1); color: #276dc3; border-color: rgba(39, 109, 195, 0.2); }
   .resource-pill.excel { background: rgba(33, 115, 70, 0.1); color: #217346; border-color: rgba(33, 115, 70, 0.2); }
@@ -316,7 +249,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
   .resource-pill.sql { background: rgba(242, 145, 17, 0.1); color: #f29111; border-color: rgba(242, 145, 17, 0.2); }
   .resource-pill.default { background: var(--border); color: var(--muted); }
   .resource-pill.disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
-
   @media (max-width: 600px) {
     .timeline-item { padding-left: 20px; }
     .timeline-dot, .timeline-wrapper::before { display: none; }

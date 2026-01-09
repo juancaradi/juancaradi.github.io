@@ -58,8 +58,21 @@ export const ui = {
         // --- 6. PROJECTS PAGE (NUEVO) ---
         projectsTitlePre: "Proyectos",
         projectsTitleGradient: "Destacados",
-        projectsDesc: "Una colección de mis trabajos aplicando matemáticas puras y computación para resolver problemas reales."
+        projectsDesc: "Una colección de mis trabajos aplicando matemáticas puras y computación para resolver problemas reales.",
+
+        // --- FREELANCE DASHBOARD & TIMELINE ---
+        'freelance.impact': 'Impacto',
+        'freelance.completed': 'Proyectos Finalizados',
+        'freelance.topSubjects': 'Materias más solicitadas',
+        'freelance.serviceTypes': 'Tipos de Servicio',
+        'freelance.monthly': 'Actividad Mensual',
+        'freelance.noData': 'No se encontraron datos para el año',
+        'freelance.filterAll': 'Todos',
+        'freelance.projectsCount': 'proyectos',
+        'freelance.noRecords': 'No hay registros para este año.'
     },
+
+    
     en: {
         // --- 1. SIDEBAR & META ---
         name: "Juan Camilo Ramírez Díaz",
@@ -112,7 +125,18 @@ export const ui = {
         // --- 6. PROJECTS PAGE (NEW) ---
         projectsTitlePre: "Featured",
         projectsTitleGradient: "Projects",
-        projectsDesc: "A collection of my work applying pure mathematics and computing to solve real-world problems."
+        projectsDesc: "A collection of my work applying pure mathematics and computing to solve real-world problems.",
+
+        // --- FREELANCE DASHBOARD & TIMELINE ---
+        'freelance.impact': 'Impact',
+        'freelance.completed': 'Completed Projects',
+        'freelance.topSubjects': 'Most Requested Subjects',
+        'freelance.serviceTypes': 'Service Types',
+        'freelance.monthly': 'Monthly Activity',
+        'freelance.noData': 'No data found for year',
+        'freelance.filterAll': 'All',
+        'freelance.projectsCount': 'projects',
+        'freelance.noRecords': 'No records found for this year.'
     },
 } as const;
 
