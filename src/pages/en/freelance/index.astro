@@ -46,19 +46,49 @@ const t = ui.en;
 </script>
 
 <style>
-  /* Mismos estilos que en ES */
   .page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  
+  /* Header alineado con Projects */
   .page-header { text-align: center; margin-bottom: 40px; }
-  .page-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 16px; color: var(--text); }
-  .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .page-subtitle { font-size: 1.15rem; color: var(--muted); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+  
+  .page-title { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    margin-bottom: 16px; 
+    letter-spacing: -0.02em; 
+    color: var(--text); 
+    line-height: 1.1; 
+  }
+  
+  .gradient-text { 
+    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    background-clip: text;
+  }
+  
+  .page-subtitle { 
+    font-size: 1.2rem; /* Subido a 1.2rem para igualar Projects */
+    color: var(--muted); 
+    max-width: 700px; 
+    margin: 0 auto; 
+    line-height: 1.6; 
+  }
 
+  /* Selector de Año */
   .year-selector { display: inline-flex; background: var(--code-bg); padding: 5px; border-radius: 12px; margin-top: 30px; border: 1px solid var(--border); }
   .year-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 8px; color: var(--muted); font-weight: 600; cursor: pointer; transition: all 0.3s; }
   .year-btn:hover { color: var(--text); }
   .year-btn.active { background: var(--link); color: white; shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
 
+  /* Utilidades */
   .hidden { display: none; }
   .year-view { animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- RESPONSIVE STANDARDIZED (768px) --- */
+  @media (max-width: 768px) {
+    .page-title { font-size: 2rem; }
+    .page-subtitle { font-size: 1.1rem; }
+  }
 </style>

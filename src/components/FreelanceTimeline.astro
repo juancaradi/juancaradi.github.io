@@ -60,7 +60,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
           <button class="month-trigger" aria-expanded="false">
             <div class="trigger-info">
               <span class="month-name">{group.name}</span>
-              {/* ✨ "proyectos" traducido */}
               <span class="month-count">{group.items.length}&nbsp;{t['freelance.projectsCount']}</span>
             </div>
             <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -72,7 +71,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
             {/* 🔽 BARRA DE FILTROS 🔽 */}
             {subjectsList.length > 0 && (
               <div class="filter-bar">
-                {/* ✨ "Todos" traducido */}
                 <button class="filter-pill active" data-filter="all">{t['freelance.filterAll']}</button>
                 
                 {subjectsList.map(sub => {
@@ -148,7 +146,6 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
 )}
 
 <script is:inline>
-  // ... (MISMO SCRIPT DE INTERACCIÓN QUE YA TENÍAMOS - No cambia) ...
   function setupInteractions() {
     const triggers = document.querySelectorAll('.month-trigger');
     triggers.forEach(trigger => {
@@ -179,11 +176,7 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
         const siblings = monthContent.querySelectorAll('.filter-pill');
         siblings.forEach(s => {
           s.classList.remove('active');
-          if (s.classList.contains('dynamic-pill')) {
-            s.style.backgroundColor = 'transparent';
-            s.style.color = 'var(--muted)';
-            s.style.borderColor = 'var(--border)';
-          }
+          s.classList.contains('dynamic-pill') && (s.style.backgroundColor = 'transparent', s.style.color = 'var(--muted)', s.style.borderColor = 'var(--border)');
         });
         btn.classList.add('active');
         if (btn.classList.contains('dynamic-pill')) {
@@ -195,11 +188,7 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
         const items = timelineWrapper.querySelectorAll('.timeline-item');
         items.forEach(item => {
           const itemSubject = item.getAttribute('data-subject');
-          if (filterValue === 'all' || itemSubject === filterValue) {
-            item.style.display = 'flex';
-          } else {
-            item.style.display = 'none';
-          }
+          (filterValue === 'all' || itemSubject === filterValue) ? item.style.display = 'flex' : item.style.display = 'none';
         });
         monthContent.style.maxHeight = monthContent.scrollHeight + "px";
       });
@@ -210,14 +199,16 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
 </script>
 
 <style>
-  /* ... (MISMO CSS QUE YA TENÍAMOS - No cambia) ... */
   .timeline-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
   .month-accordion { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--code-bg); transition: border-color 0.3s; }
   .month-accordion:hover { border-color: var(--muted); }
   .month-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px; background: transparent; border: none; cursor: pointer; color: var(--text); transition: background 0.2s; }
   .month-trigger:hover { background: rgba(255,255,255, 0.02); }
   .trigger-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-  .month-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+  
+  /* ✨ CAMBIO: 1.3rem para dominar la sección */
+  .month-name { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+  
   .month-count { font-size: 0.85rem; color: var(--muted); }
   .chevron { transition: transform 0.3s ease; color: var(--muted); }
   .month-trigger.active .chevron { transform: rotate(180deg); color: var(--link); }
@@ -235,7 +226,10 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
   .date-inline { margin-left: auto; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
   .badge-subject { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
   .badge-type { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; }
-  .card-title { margin: 0 0 8px 0; font-size: 1.1rem; color: var(--text); }
+  
+  /* ✨ CAMBIO: 1.25rem para igualar a Proyectos Destacados */
+  .card-title { margin: 0 0 8px 0; font-size: 1.25rem; color: var(--text); font-weight: 700; }
+  
   .card-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
   .resources-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
   .resource-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; }
@@ -249,7 +243,9 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
   .resource-pill.sql { background: rgba(242, 145, 17, 0.1); color: #f29111; border-color: rgba(242, 145, 17, 0.2); }
   .resource-pill.default { background: var(--border); color: var(--muted); }
   .resource-pill.disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
-  @media (max-width: 600px) {
+  
+  /* ✨ CAMBIO: Estandarizado a 768px (antes 600px) */
+  @media (max-width: 768px) {
     .timeline-item { padding-left: 20px; }
     .timeline-dot, .timeline-wrapper::before { display: none; }
   }
