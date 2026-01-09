@@ -1,64 +1,23 @@
 ﻿---
-import Layout from '../../../layouts/Layout.astro';
-import FreelanceTimeline from '../../../components/FreelanceTimeline.astro';
-import FreelanceDashboard from '../../../components/FreelanceDashboard.astro';
-import { ui } from '../../../i18n/ui';
-
-const lang = 'en';
-const t = ui.en;
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
 ---
 
-<Layout title="Freelance Log | Camilo Ramírez" lang="en">
-  <div class="page-container">
-    <header class="page-header">
-      <h1 class="page-title">
-        {t.freelanceTitlePre} <span class="gradient-text">{t.freelanceTitleGradient}</span>
-      </h1>
-      <p class="page-subtitle">{t.freelanceSubtitle}</p>
-
-      {/* 🎛️ SELECTOR DE AÑO */}
-      <div class="year-selector">
-        <button id="btn-2026" class="year-btn active" onclick="switchYear('2026')">2026</button>
-        <button id="btn-2025" class="year-btn" onclick="switchYear('2025')">2025</button>
-      </div>
-    </header>
-
-    {/* 📺 VISTA 2026: TIMELINE */}
-    <div id="view-2026" class="year-view">
-      <FreelanceTimeline lang="en" year={2026} />
-    </div>
-
-    {/* 📊 VISTA 2025: DASHBOARD */}
-    <div id="view-2025" class="year-view hidden">
-      <FreelanceDashboard year={2025} lang="en" />
-    </div>
-
-  </div>
+<Layout title="Camilo Ramírez | Mathematics & Data" lang="en">
+  <Hero lang="en" />
 </Layout>
 
-<script is:inline>
-  function switchYear(year) {
-    document.querySelectorAll('.year-view').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.year-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(`view-${year}`).classList.remove('hidden');
-    document.getElementById(`btn-${year}`).classList.add('active');
-  }
-</script>
-
 <style>
-  /* Mismos estilos que en ES */
-  .page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-  .page-header { text-align: center; margin-bottom: 40px; }
-  .page-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 16px; color: var(--text); }
-  .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .page-subtitle { font-size: 1.15rem; color: var(--muted); max-width: 700px; margin: 0 auto; line-height: 1.6; }
-
-  .year-selector { display: inline-flex; background: var(--code-bg); padding: 5px; border-radius: 12px; margin-top: 30px; border: 1px solid var(--border); }
-  .year-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 8px; color: var(--muted); font-weight: 600; cursor: pointer; transition: all 0.3s; }
-  .year-btn:hover { color: var(--text); }
-  .year-btn.active { background: var(--link); color: white; shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-
-  .hidden { display: none; }
-  .year-view { animation: fadeIn 0.4s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  /* --- FONDO CARTESIANO --- */
+  /* Copiamos el mismo estilo visual para consistencia */
+  :global(body) { position: relative; }
+  :global(body::before) {
+    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;
+    background-image: 
+      linear-gradient(to right, rgba(128, 128, 128, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128, 128, 128, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  }
 </style>
