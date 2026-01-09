@@ -1,73 +1,4160 @@
-﻿[
+[
   {
     "id": 1,
     "date": "2025-02-20",
-    "subject": { "es": "Cálculo Diferencial", "en": "Differential Calculus" },
-    "type": { "es": "Parcial", "en": "Exam" },
-    "title": { "es": "Optimización y Derivadas", "en": "Optimization and Derivatives" },
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
     "description": {
-      "es": "Resolución de problemas de optimización aplicados a cinemática.",
-      "en": "Solving optimization problems applied to kinematics."
+      "es": "Descripción...",
+      "en": "Description..."
     },
     "resources": [
-      { "tool": "pdf", "name": "Solución", "url": "/freelance/differential-calculus/solucion.pdf" },
-      { "tool": "geogebra", "name": "Gráfica", "url": null }
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
     ]
   },
   {
     "id": 2,
-    "date": "2025-03-01",
-    "subject": { "es": "Álgebra Lineal", "en": "Linear Algebra" },
-    "type": { "es": "Trabajo", "en": "Assignment" },
-    "title": { "es": "Transformaciones Lineales", "en": "Linear Transformations" },
+    "date": "2025-02-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
     "description": {
-      "es": "Visualización de eigenvalores y vectores propios.",
-      "en": "Visualization of eigenvalues and eigenvectors."
+      "es": "Descripción...",
+      "en": "Description..."
     },
     "resources": [
-      { "tool": "matlab", "name": "Script .m", "url": "/freelance/linear-algebra/script.m" }
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
     ]
   },
   {
     "id": 3,
-    "date": "2025-03-10",
-    "subject": { "es": "Ecuaciones Diferenciales", "en": "Differential Equations" },
-    "type": { "es": "Taller", "en": "Workshop" },
-    "title": { "es": "Sistemas Masa-Resorte", "en": "Mass-Spring Systems" },
+    "date": "2025-02-15",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
     "description": {
-      "es": "Modelado de amortiguamiento usando métodos numéricos.",
-      "en": "Damping modeling using numerical methods."
+      "es": "Descripción...",
+      "en": "Description..."
     },
     "resources": [
-      { "tool": "python", "name": "Notebook", "url": "/freelance/differential-equations/simulacion.ipynb" }
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
     ]
   },
   {
     "id": 4,
-    "date": "2025-03-15",
-    "subject": { "es": "Estadística", "en": "Statistics" },
-    "type": { "es": "Trabajo", "en": "Project" },
-    "title": { "es": "Análisis de Regresión", "en": "Regression Analysis" },
+    "date": "2025-02-16",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
     "description": {
-      "es": "Modelo predictivo lineal simple con R.",
-      "en": "Simple linear predictive model using R."
+      "es": "Descripción...",
+      "en": "Description..."
     },
     "resources": [
-      { "tool": "default", "name": "Código R", "url": "/freelance/statistics/analisis.R" }
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
     ]
   },
   {
     "id": 5,
-    "date": "2025-03-20",
-    "subject": { "es": "Matemáticas Discretas", "en": "Discrete Mathematics" },
-    "type": { "es": "Parcial", "en": "Exam" },
-    "title": { "es": "Teoría de Grafos", "en": "Graph Theory" },
+    "date": "2025-02-18",
+    "subject": {
+      "es": "Otros",
+      "en": "Others"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
     "description": {
-      "es": "Algoritmos de Dijkstra y caminos cortos.",
-      "en": "Dijkstra's algorithms and shortest paths."
+      "es": "Descripción...",
+      "en": "Description..."
     },
     "resources": [
-      { "tool": "pdf", "name": "Notas", "url": "/freelance/discrete-mathematics/notas.pdf" }
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "date": "2025-02-21",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "date": "2025-02-27",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "date": "2025-03-06",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "date": "2025-03-08",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "date": "2025-03-11",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "date": "2025-03-08",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "date": "2025-03-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "date": "2025-03-16",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "date": "2025-03-30",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "date": "2025-03-31",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "date": "2025-04-01",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "date": "2025-04-02",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "date": "2025-04-03",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "date": "2025-04-04",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "date": "2025-04-04",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "date": "2025-04-05",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "date": "2025-04-05",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "date": "2025-04-08",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "date": "2025-04-06",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "date": "2025-04-10",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "date": "2025-04-14",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "date": "2025-04-28",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "date": "2025-04-22",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "date": "2025-04-28",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "date": "2025-04-30",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "date": "2025-05-02",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "date": "2025-05-05",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "date": "2025-05-04",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "date": "2025-05-01",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "date": "2025-05-02",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "date": "2025-05-03",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "date": "2025-05-12",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "date": "2025-05-04",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "date": "2025-05-10",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "date": "2025-05-17",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "date": "2025-05-23",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "date": "2025-05-24",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "date": "2025-05-28",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "date": "2025-05-26",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "date": "2025-05-29",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "date": "2025-05-27",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "date": "2025-05-31",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "date": "2025-09-01",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "date": "2025-09-01",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "date": "2025-09-01",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "date": "2025-09-01",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "date": "2025-09-03",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "date": "2025-09-09",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "date": "2025-09-09",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "date": "2025-09-05",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "date": "2025-09-03",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "date": "2025-09-06",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "date": "2025-09-06",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "date": "2025-09-08",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "date": "2025-09-10",
+    "subject": {
+      "es": "Matemáticas Discretas",
+      "en": "Discrete Mathematics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "date": "2025-09-14",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "date": "2025-09-13",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "date": "2025-09-21",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "date": "2025-09-21",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "date": "2025-09-22",
+    "subject": {
+      "es": "Matemáticas Discretas",
+      "en": "Discrete Mathematics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "date": "2025-09-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "date": "2025-09-22",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "date": "2025-09-27",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "date": "2025-09-30",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "date": "2025-09-24",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "date": "2025-09-28",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "date": "2025-09-30",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "date": "2025-09-29",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 74,
+    "date": "2025-09-22",
+    "subject": {
+      "es": "Matemáticas Discretas",
+      "en": "Discrete Mathematics"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 75,
+    "date": "2025-10-04",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 76,
+    "date": "2025-10-04",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "date": "2025-10-05",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "date": "2025-10-04",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "date": "2025-10-11",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "date": "2025-10-10",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 81,
+    "date": "2025-10-10",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 82,
+    "date": "2025-10-13",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 83,
+    "date": "2025-10-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 84,
+    "date": "2025-10-08",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 85,
+    "date": "2025-10-15",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 86,
+    "date": "2025-10-15",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 87,
+    "date": "2025-10-16",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 88,
+    "date": "2025-10-17",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 89,
+    "date": "2025-10-17",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 90,
+    "date": "2025-10-18",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 91,
+    "date": "2025-10-19",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 92,
+    "date": "2025-10-20",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 93,
+    "date": "2025-10-20",
+    "subject": {
+      "es": "Matemáticas Discretas",
+      "en": "Discrete Mathematics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 94,
+    "date": "2025-10-22",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 95,
+    "date": "2025-10-24",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 96,
+    "date": "2025-10-25",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 97,
+    "date": "2025-10-25",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 98,
+    "date": "2025-10-25",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "date": "2025-10-26",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 100,
+    "date": "2025-10-26",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 101,
+    "date": "2025-10-28",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "date": "2025-10-30",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 103,
+    "date": "2025-10-30",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 104,
+    "date": "2025-10-30",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 105,
+    "date": "2025-11-03",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "date": "2025-11-16",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 107,
+    "date": "2025-11-05",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 108,
+    "date": "2025-11-10",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 109,
+    "date": "2025-11-07",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 110,
+    "date": "2025-11-07",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 111,
+    "date": "2025-11-07",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 112,
+    "date": "2025-11-06",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 113,
+    "date": "2025-11-14",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 114,
+    "date": "2025-11-17",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 115,
+    "date": "2025-11-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 116,
+    "date": "2025-11-12",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 117,
+    "date": "2025-11-14",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 118,
+    "date": "2025-11-15",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 119,
+    "date": "2025-11-12",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 120,
+    "date": "2025-11-13",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 121,
+    "date": "2025-11-14",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 122,
+    "date": "2025-11-18",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 123,
+    "date": "2025-11-23",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 124,
+    "date": "2025-11-18",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 125,
+    "date": "2025-11-21",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 126,
+    "date": "2025-11-27",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 127,
+    "date": "2025-11-23",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 128,
+    "date": "2025-11-20",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 129,
+    "date": "2025-11-20",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 130,
+    "date": "2025-11-21",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 131,
+    "date": "2025-11-24",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 132,
+    "date": "2025-11-27",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 133,
+    "date": "2025-11-24",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 134,
+    "date": "2025-11-24",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 135,
+    "date": "2025-11-28",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 136,
+    "date": "2025-11-25",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 137,
+    "date": "2025-11-26",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 138,
+    "date": "2025-11-25",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 139,
+    "date": "2025-11-26",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 140,
+    "date": "2025-11-26",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 141,
+    "date": "2025-11-29",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 142,
+    "date": "2025-11-27",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 143,
+    "date": "2025-11-28",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 145,
+    "date": "2025-11-29",
+    "subject": {
+      "es": "Ecuaciones Diferenciales",
+      "en": "Differential Equations"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 146,
+    "date": "2025-11-27",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 147,
+    "date": "2025-11-30",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 148,
+    "date": "2025-11-29",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 149,
+    "date": "2025-12-01",
+    "subject": {
+      "es": "Cálculo Integral",
+      "en": "Integral Calculus"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 150,
+    "date": "2025-12-02",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 151,
+    "date": "2025-12-05",
+    "subject": {
+      "es": "Álgebra Lineal",
+      "en": "Linear Algebra"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 152,
+    "date": "2025-12-06",
+    "subject": {
+      "es": "Cálculo Vectorial",
+      "en": "Vector Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 153,
+    "date": "2025-12-09",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 154,
+    "date": "2025-12-13",
+    "subject": {
+      "es": "Matemáticas Discretas",
+      "en": "Discrete Mathematics"
+    },
+    "type": {
+      "es": "Parcial",
+      "en": "Exam"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
+    ]
+  },
+  {
+    "id": 155,
+    "date": "2026-01-03",
+    "subject": {
+      "es": "Estadística",
+      "en": "Statistics"
+    },
+    "type": {
+      "es": "Trabajo",
+      "en": "Assignment"
+    },
+    "title": {
+      "es": "Título pendiente",
+      "en": "Pending title"
+    },
+    "description": {
+      "es": "Descripción...",
+      "en": "Description..."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "Nombre",
+        "url": null
+      }
     ]
   }
 ]

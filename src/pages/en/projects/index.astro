@@ -1,10 +1,69 @@
 ﻿---
 import Layout from '../../../layouts/Layout.astro';
+import projectsData from '../../../data/projects.json';
+import { ui } from '../../../i18n/ui';
+
+const lang = 'en';
+const t = ui.en;
+const projects = projectsData;
 ---
 
-<Layout title="Projects · Juan Camilo" lang="en">
-    <a href="/en/">← Home</a>
-    <h1>Projects</h1>
-    <p>Here you'll publish projects with links, write-ups, and results.</p>
+<Layout title="Projects | Camilo Ramírez" lang="en">
+  
+  <header class="page-header">
+    <h1 class="page-title">
+      {t.projectsTitlePre} <span class="gradient-text">{t.projectsTitleGradient}</span>
+    </h1>
+    <p class="page-desc">
+      {t.projectsDesc}
+    </p>
+  </header>
+
+  <section class="projects-grid">
+    {projects.map(project => (
+      <a href={project.link || '#'} class="project-card" target="_blank">
+        <div class="card-content">
+          <h3>{project.title[lang]}</h3>
+          <p>{project.description[lang]}</p>
+          
+          <div class="tags">
+            {project.tags.map(tag => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        </div>
+        
+        <div class="card-arrow">→</div>
+        <div class={`status-dot ${project.status}`} title={project.status}></div>
+      </a>
+    ))}
+  </section>
+
 </Layout>
 
+<style>
+  /* Mismos estilos que la versión ES para consistencia */
+  .page-header { text-align: center; padding: 60px 0 40px; max-width: 800px; margin: 0 auto; }
+  .page-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; color: var(--text); }
+  .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .page-desc { font-size: 1.2rem; color: var(--muted); line-height: 1.6; max-width: 600px; margin: 0 auto; }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-top: 20px; padding-bottom: 60px; }
+
+  .project-card { display: flex; flex-direction: column; justify-content: space-between; padding: 24px; border-radius: 16px; background: var(--code-bg); border: 1px solid var(--border); text-decoration: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; min-height: 220px; }
+  .project-card:hover { transform: translateY(-4px); border-color: var(--link); background: var(--bg); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+  .card-content h3 { margin: 0 0 10px; font-size: 1.25rem; color: var(--link); font-weight: 700; }
+  .card-content p { margin: 0 0 20px; font-size: 0.95rem; color: var(--muted); line-height: 1.5; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+  .tag { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: rgba(127, 127, 127, 0.1); color: var(--text); border: 1px solid var(--border); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  
+  .card-arrow { position: absolute; top: 24px; right: 24px; font-size: 1.5rem; line-height: 1; color: var(--muted); opacity: 0; transform: translateX(-10px) rotate(-45deg); transition: all 0.2s ease; }
+  .project-card:hover .card-arrow { opacity: 1; transform: translateX(0) rotate(-45deg); color: var(--link); }
+
+  .status-dot { position: absolute; bottom: 24px; right: 24px; width: 8px; height: 8px; border-radius: 50%; }
+  .status-dot.active { background-color: var(--color-active); box-shadow: 0 0 8px var(--color-active); }
+  .status-dot.completed { background-color: var(--color-done); }
+
+  @media (max-width: 600px) { .page-title { font-size: 2rem; } }
+</style>

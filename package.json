@@ -6,9 +6,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "update": "node scripts/update_freelance.js"
   },
   "dependencies": {
-    "astro": "^5.16.7"
+    "astro": "^5.16.7",
+    "papaparse": "^5.5.3",
+    "simple-icons": "^16.4.0"
   }
 }

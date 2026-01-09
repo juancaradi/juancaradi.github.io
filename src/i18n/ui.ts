@@ -7,7 +7,7 @@ export const defaultLang = 'es';
 
 export const ui = {
     es: {
-        // --- 1. SIDEBAR & META (Lo que faltaba) ---
+        // --- 1. SIDEBAR & META ---
         name: "Juan Camilo Ramírez Díaz",
         bio: "Estudiante de pregrado en Matemáticas. Recientemente me he enfocado en el Análisis de Datos (TDA) y la Teoría de Grafos. También practico Taekwondo.",
         location: "Medellín, Colombia",
@@ -45,13 +45,20 @@ export const ui = {
         // Modal Titles
         modalActive: "Proyectos en Marcha 🚧",
         modalDone: "Últimos Finalizados ✅",
+        modalFreelance: "Soluciones Recientes 🚀", // Faltaba este
         modalLink: "Ver todos los proyectos →",
 
-        // Freelance
-        freelanceTitle: "Bitácora Freelance",
-        freelanceSubtitle: "Historial de soluciones académicas y desarrollos técnicos.",
+        // --- 5. FREELANCE PAGE ---
+        freelanceTitlePre: "Bitácora",
+        freelanceTitleGradient: "Freelance",
+        freelanceSubtitle: "Como consultor académico, ofrezco soporte especializado en Matemáticas, Estadística y Programación. Esta bitácora funciona como un repositorio público de los retos que he resuelto, donde podrás encontrar y descargar el material técnico (código, PDFs y análisis) como recurso de estudio.",
         freelancePrivate: "Código Privado / No disponible",
-        freelanceDownload: "Descargar Recurso"
+        freelanceDownload: "Descargar Recurso",
+
+        // --- 6. PROJECTS PAGE (NUEVO) ---
+        projectsTitlePre: "Proyectos",
+        projectsTitleGradient: "Destacados",
+        projectsDesc: "Una colección de mis trabajos aplicando matemáticas puras y computación para resolver problemas reales."
     },
     en: {
         // --- 1. SIDEBAR & META ---
@@ -92,13 +99,20 @@ export const ui = {
         // Modal Titles
         modalActive: "Ongoing Projects 🚧",
         modalDone: "Recently Completed ✅",
+        modalFreelance: "Recent Solutions 🚀", // Faltaba este
         modalLink: "View all repository →",
 
-        // Freelance
-        freelanceTitle: "Freelance Log",
-        freelanceSubtitle: "History of academic solutions and technical developments.",
+        // --- 5. FREELANCE PAGE ---
+        freelanceTitlePre: "Freelance",
+        freelanceTitleGradient: "Log",
+        freelanceSubtitle: "As an academic consultant, I provide specialized support in Mathematics, Statistics, and Programming. This log serves as a public repository of the challenges I have solved, where you can find and download technical material (code, PDFs, and analysis) as a study resource.",
         freelancePrivate: "Private Code / Not available",
-        freelanceDownload: "Download Resource"
+        freelanceDownload: "Download Resource",
+
+        // --- 6. PROJECTS PAGE (NEW) ---
+        projectsTitlePre: "Featured",
+        projectsTitleGradient: "Projects",
+        projectsDesc: "A collection of my work applying pure mathematics and computing to solve real-world problems."
     },
 } as const;
 
