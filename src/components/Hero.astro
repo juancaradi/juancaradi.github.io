@@ -1,19 +1,16 @@
 ---
 import statsData from '../data/stats.json';
 import projectsData from '../data/projects.json';
-import freelanceData from '../data/freelance.json'; // 1. Importamos Freelance
+import freelanceData from '../data/freelance.json';
 import { ui, defaultLang } from '../i18n/ui';
 
-// 1. Recibimos el idioma
 const { lang = 'es' } = Astro.props;
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
 
-// 2. Filtramos datos
 const activeProjects = projectsData.filter(p => p.status === 'active');
 const completedProjects = projectsData.filter(p => p.status === 'completed');
-const totalFreelance = freelanceData.length; // Conteo real
+const totalFreelance = freelanceData.length;
 
-// 3. Configuración de Métricas
 const stats = [
   {
     value: activeProjects.length,
@@ -30,18 +27,18 @@ const stats = [
     action: "openCompleted"
   },
   {
-    value: totalFreelance, // Valor dinámico
+    value: totalFreelance,
     label: t.statFreelance,
     color: "var(--color-freelance)",
     pulse: false,
-    action: "openFreelance" // Acción activada
+    action: "openFreelance"
   },
   {
     value: statsData.notesCount,
     label: t.statNotes,
     color: "var(--color-notes)",
     pulse: false,
-    action: null
+    action: null // Este no tiene acción, pero será un botón igual
   }
 ];
 
@@ -64,22 +61,18 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
       <div class="stats-label">{t.statsLabel}</div>
       <div class="stats-container">
         {stats.map(stat => (
-          stat.action ? (
-            <button class="stat-item interactive" data-action={stat.action}>
-              <div class="stat-value" style={`color: ${stat.color}`}>
-                {stat.value}
-                {stat.pulse && <span class="pulse-dot"></span>}
-              </div>
-              <div class="stat-name">{stat.label}</div>
-            </button>
-          ) : (
-            <div class="stat-item">
-              <div class="stat-value" style={`color: ${stat.color}`}>
-                {stat.value}
-              </div>
-              <div class="stat-name">{stat.label}</div>
+          /* 🔥 SOLUCIÓN: TODOS SON BOTONES AHORA */
+          <button 
+            class={`stat-item ${stat.action ? 'interactive' : ''}`} 
+            data-action={stat.action}
+            tabindex={stat.action ? "0" : "-1"} /* Accesibilidad: Notas no es focuseable */
+          >
+            <div class="stat-value" style={`color: ${stat.color}`}>
+              {stat.value}
+              {stat.pulse && <span class="pulse-dot"></span>}
             </div>
-          )
+            <div class="stat-name">{stat.label}</div>
+          </button>
         ))}
       </div>
     </div>
@@ -117,29 +110,21 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   const modalContent = document.getElementById('modal-content');
   const modalFooterLink = document.getElementById('modal-footer-link');
   const closeBtn = document.getElementById('close-modal');
-  const buttons = document.querySelectorAll('.interactive');
+  const buttons = document.querySelectorAll('.interactive'); // Solo seleccionamos los que tienen acción
 
-  // Renderizador Inteligente (Detecta si es Proyecto o Freelance)
   const renderProjects = (items) => {
     if (items.length === 0) return '<p class="empty-msg">No items found.</p>';
-    
-    // Si tiene propiedad 'subject', es un trabajo freelance
     const isFreelance = items[0].hasOwnProperty('subject');
 
     return items.slice(0, 5).map(item => {
         let title, desc, tags, link;
-
         if (isFreelance) {
-            // Lógica Freelance (Bilingüe)
             title = `${item.subject[currentLang]} - ${item.type[currentLang]}`;
             desc = item.description[currentLang];
-            // Convertimos resources a tags visuales
             tags = item.resources.map(r => r.name); 
-            // Si tiene algún recurso con URL, usamos ese como link principal, si no '#'
             const mainResource = item.resources.find(r => r.url);
             link = mainResource ? mainResource.url : '#';
         } else {
-            // Lógica Proyectos (Bilingüe)
             title = item.title[currentLang];
             desc = item.description[currentLang];
             tags = item.tags;
@@ -163,6 +148,7 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action;
+      if (!action) return; // Seguridad extra
       
       if (action === 'openActive') {
         modalTitle.innerHTML = `${titles.active} <span class="status-indicator active"></span>`;
@@ -176,7 +162,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
         modal.showModal();
       } else if (action === 'openFreelance') {
         modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
-        // Invertimos para mostrar los más recientes primero
         const recentFreelance = [...freelanceData].reverse();
         modalContent.innerHTML = renderProjects(recentFreelance);
         if(modalFooterLink) modalFooterLink.href = links.freelance;
@@ -196,17 +181,8 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 </script>
 
 <style is:global>
-  /* --- TARJETAS PRO --- */
-  .project-card {
-    display: flex; flex-direction: column; gap: 8px;
-    background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
-    text-decoration: none !important; color: var(--text) !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; margin-bottom: 0;
-  }
-  .project-card:hover {
-    transform: translateY(-3px); background: var(--bg); border-color: var(--link);
-    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
-  }
+  .project-card { display: flex; flex-direction: column; gap: 8px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-decoration: none !important; color: var(--text) !important; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; margin-bottom: 0; }
+  .project-card:hover { transform: translateY(-3px); background: var(--bg); border-color: var(--link); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
   .project-card:active { transform: scale(0.98); }
   .card-top { display: flex; justify-content: space-between; align-items: center; }
   .card-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--link) !important; }
@@ -214,16 +190,8 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .project-card:hover .arrow-icon { opacity: 1; transform: translate(3px, -3px); color: var(--link); }
   .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; }
   .card-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .tech-tag {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; color: var(--text);
-    background-color: rgba(127, 127, 127, 0.15); padding: 3px 10px; border-radius: 99px;
-    border: 1px solid transparent; transition: all 0.2s; white-space: nowrap;
-  }
-  .project-card:hover .tech-tag {
-    background-color: rgba(9, 105, 218, 0.1); color: var(--link); border-color: rgba(9, 105, 218, 0.2);
-  }
-  
-  /* LUCES DE ESTADO */
+  .tech-tag { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; color: var(--text); background-color: rgba(127, 127, 127, 0.15); padding: 3px 10px; border-radius: 99px; border: 1px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .project-card:hover .tech-tag { background-color: rgba(9, 105, 218, 0.1); color: var(--link); border-color: rgba(9, 105, 218, 0.2); }
   .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 10px; }
   .status-indicator.active { background-color: var(--color-active); box-shadow: 0 0 10px var(--color-active); animation: pulse 2s infinite; }
   .status-indicator.done { background-color: var(--color-done); }
@@ -231,33 +199,55 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 </style>
 
 <style>
-  :root {
-    --color-active: #10b981; --color-done: #3b82f6; --color-freelance: #8b5cf6; --color-notes: #f59e0b;
-  }
+  :root { --color-active: #10b981; --color-done: #3b82f6; --color-freelance: #8b5cf6; --color-notes: #f59e0b; }
   .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
   .hero-content { display: flex; flex-direction: column; align-items: center; }
-  .hero::before {
-    content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 600px; height: 400px;
-    background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none;
-  }
-  .badge {
-    display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
-    background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.2); margin-bottom: 24px;
-  }
+  .hero::before { content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; height: 400px; background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none; }
+  
+  .badge { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; background: rgba(139, 92, 246, 0.15); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.5); margin-bottom: 24px; box-shadow: 0 0 15px rgba(139, 92, 246, 0.35); animation: glowBadge 2s ease-in-out infinite alternate; }
+
   .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
   .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .hero-desc { font-size: 1.35rem; color: var(--muted); line-height: 1.6; margin: 0 auto 40px; max-width: 700px; animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(20px); }
+  
   .stats-wrapper { margin-bottom: 100px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(20px); }
-  .stats-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; }
+  .stats-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; text-align: center; }
+  
   .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); width: 100%; }
-  .stat-item { background: var(--bg); padding: 24px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s ease; border: none; width: 100%; font-family: inherit; cursor: default; }
+
+  /* 🔥 CSS BLINDADO PARA BOTONES */
+  .stat-item { 
+    background: var(--bg); 
+    padding: 24px 10px; 
+    
+    /* Centrado Flexbox */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
+    
+    /* RESET TOTAL DE BOTÓN */
+    width: 100%; 
+    height: 100%; 
+    border: none; 
+    margin: 0;
+    appearance: none; /* Clave para Safari/iOS */
+    outline: none;
+    font-family: inherit; 
+    cursor: default; /* Por defecto no parece clickeable */
+    transition: all 0.2s ease;
+  }
+
+  /* Solo los interactivos cambian el cursor */
   .stat-item.interactive { cursor: pointer; }
   .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
   .stat-item.interactive:active { transform: translateY(0); }
-  .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; position: relative; display: inline-flex; }
-  .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
-  .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; margin-left: 6px; margin-top: 4px; animation: pulse 2s infinite; }
+
+  .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; line-height: 1.2; max-width: 90%; }
+  .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; animation: pulse 2s infinite; }
+
   .hero-actions { display: flex; gap: 16px; justify-content: center; animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(20px); }
   .btn { display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
   .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
@@ -265,7 +255,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
   .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
   
-  /* Modal Estructura */
   .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); }
   .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
   .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
@@ -274,11 +263,7 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; }
   .close-btn:hover { background: var(--border); color: var(--text); }
   
-  /* SCROLLBAR PERSONALIZADO */
-  .modal-grid { 
-    padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; 
-    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
-  }
+  .modal-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
   .modal-grid::-webkit-scrollbar { width: 6px; }
   .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; }
   .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; }
@@ -290,6 +275,8 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 
   @keyframes pulse { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); opacity: 0; } }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes glowBadge { from { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); } to { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); border-color: rgba(139, 92, 246, 0.7); } }
+
   @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .stats-container { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 480px) { .stat-item { padding: 20px 10px; } .stat-value { font-size: 2rem; } }
+  @media (max-width: 480px) { .stat-item { padding: 20px 5px; } .stat-value { font-size: 2rem; } }
 </style>
