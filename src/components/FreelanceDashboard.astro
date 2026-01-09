@@ -1,5 +1,6 @@
 ---
 import { getYearStats } from '../utils/statistics';
+import { getSubjectColor } from '../utils/subjectColors'; // 👈 IMPORTANTE
 
 interface Props {
   year: number;
@@ -21,24 +22,29 @@ const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep
       <p class="kpi-desc">Proyectos Finalizados</p>
     </div>
 
-    {/* 2. Gráfica de Barras (Top Materias) */}
+    {/* 2. Gráfica de Barras (Top Materias - CON COLORES REALES) */}
     <div class="chart-card card-glass" style="grid-column: span 2;">
       <h3 class="chart-title">Materias más solicitadas</h3>
       <div class="bars-container">
-        {stats.topSubjects.slice(0, 5).map((sub, index) => (
-          <div class="bar-row">
-            <div class="bar-info">
-              <span class="bar-label">{sub.name}</span>
-              <span class="bar-value">{sub.count} ({sub.percentage}%)</span>
+        {stats.topSubjects.slice(0, 5).map((sub) => {
+          // Obtenemos el color oficial
+          const color = getSubjectColor(sub.name);
+          
+          return (
+            <div class="bar-row">
+              <div class="bar-info">
+                <span class="bar-label">{sub.name}</span>
+                <span class="bar-value">{sub.count} ({sub.percentage}%)</span>
+              </div>
+              <div class="progress-bg">
+                <div 
+                  class="progress-fill" 
+                  style={`width: ${sub.percentage}%; background-color: rgb(${color}); box-shadow: 0 0 10px rgba(${color}, 0.4);`}
+                ></div>
+              </div>
             </div>
-            <div class="progress-bg">
-              <div 
-                class={`progress-fill rank-${index}`} 
-                style={`width: ${sub.percentage}%`}
-              ></div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
 
@@ -99,8 +105,7 @@ const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep
   .bars-container { display: flex; flex-direction: column; gap: 12px; }
   .bar-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--text); }
   .progress-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 4px; }
-  .rank-0 { background: #3b82f6; } .rank-1 { background: #8b5cf6; } .rank-2 { background: #ec4899; } .rank-3 { background: #10b981; } .rank-4 { background: var(--muted); }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
 
   /* TYPES */
   .types-list { display: flex; flex-direction: column; gap: 15px; }
