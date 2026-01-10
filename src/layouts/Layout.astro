@@ -1,4 +1,5 @@
 ---
+// src/layouts/Layout.astro
 import { ClientRouter } from 'astro:transitions';
 import BaseHead from '../components/BaseHead.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
@@ -7,7 +8,6 @@ import { ui, defaultLang } from '../i18n/ui';
 const { title = "Camilo Ramírez", lang = "es" } = Astro.props;
 
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
-
 const base = lang === "en" ? "/en" : "/es";
 
 const path = Astro.url.pathname;
@@ -39,10 +39,10 @@ const isActive = (href: string) => {
       const pinBg = () => {
         const body = document.body;
 
-        // Tomamos el color real ya resuelto por CSS vars
+        // Color real resuelto por CSS vars
         const bg = getComputedStyle(root).getPropertyValue('--bg').trim() || '#232323';
 
-        // “Pin” duro para que el canvas detrás de view-transitions nunca sea blanco
+        // Pin duro: evita canvas blanco detrás del view-transition
         root.style.backgroundColor = bg;
         if (body) body.style.backgroundColor = bg;
 
@@ -54,7 +54,7 @@ const isActive = (href: string) => {
 
         root.classList.remove('is-swapping');
 
-        // Quitamos el pin para que vuelva a gobernar CSS normal
+        // Suelta el pin: vuelve a gobernar el CSS normal
         root.style.backgroundColor = '';
         if (body) body.style.backgroundColor = '';
       };
@@ -254,7 +254,6 @@ body {
   line-height: 1.55;
   min-height: 100vh;
 
-  /* Mantén la suavidad normal... */
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -262,6 +261,15 @@ body {
 html.is-swapping,
 html.is-swapping body {
   transition: none !important;
+}
+
+/* ✅ Apaga blur/vidrios durante swap (iOS killer-fix) */
+html.is-swapping .pill,
+html.is-swapping .title-pill,
+html.is-swapping .topbar,
+html.is-swapping .sidebar {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .muted { color: var(--muted); }
@@ -346,7 +354,11 @@ html.is-swapping body {
   gap: 8px; padding: 6px 14px; height: 36px;
   border-radius: 12px; border: 1px solid transparent;
   font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
-  backdrop-filter: blur(4px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* 🔎 PRUEBA: comenta esto para ver si el flash se va (iOS sospechoso #1) */
+  /* backdrop-filter: blur(4px); */
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   user-select: none; -webkit-tap-highlight-color: transparent;
 }
 
