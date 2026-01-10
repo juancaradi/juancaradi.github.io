@@ -14,22 +14,23 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- ✅ Orden correcto -->
+<!-- ✅ Importante: declara ambos -->
 <meta name="color-scheme" content="light dark" />
-
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
-
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={ogImage} />
 
 <!-- ✅ Theme-color dinámico (iOS address bar) -->
 <meta name="theme-color" content="#ffffff" data-dynamic-theme-color />
 
+<!-- ✅ 0) Fondo sólido desde el primer frame (NO transparente) -->
+<style>
+  html, body { background-color: #ffffff; }
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #232323; }
+  }
+  html[data-theme="dark"], body[data-theme="dark"] { background-color: #232323; }
+  html[data-theme="light"], body[data-theme="light"] { background-color: #ffffff; }
+</style>
+
+<!-- ✅ 1) Aplica tema lo más temprano posible -->
 <script is:inline>
   (() => {
     const root = document.documentElement;
@@ -40,7 +41,7 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
       meta.setAttribute('content', theme === 'dark' ? '#232323' : '#ffffff');
     };
 
-    const applyTheme = () => {
+    const resolveTheme = () => {
       let saved = null;
       try { saved = localStorage.getItem("theme"); } catch (_) {}
 
@@ -48,32 +49,42 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-      const next = (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
+      return (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
+    };
+
+    const applyTheme = () => {
+      const next = resolveTheme();
 
       if (root.getAttribute("data-theme") !== next) {
         root.setAttribute("data-theme", next);
       }
+
+      // ✅ Anti-white-flash: pinta el fondo del root YA
+      root.style.backgroundColor = next === "dark" ? "#232323" : "#ffffff";
+
       setThemeColor(next);
     };
 
-    // 1) inmediato
+    // 1) inmediato (primer paint)
     applyTheme();
 
     // 2) en swaps
     document.addEventListener('astro:after-swap', applyTheme);
+
+    // 3) durante transición: “pinnea” el fondo para que no asome blanco
+    document.addEventListener('astro:before-swap', () => {
+      const cur = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      root.style.backgroundColor = cur === "dark" ? "#232323" : "#ffffff";
+    });
   })();
 </script>
 
-<style>
-  /* ✅ NO forzar blanco: deja que el browser use color-scheme y el CSS global */
-  html { background: transparent; }
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
 
-  /* ✅ Anti-flash real: si el sistema prefiere dark, el primer frame ya es oscuro */
-  @media (prefers-color-scheme: dark) {
-    html { background-color: #232323; }
-  }
-
-  /* ✅ Si ya quedó data-theme, gana eso (consistente con tus variables globales) */
-  html[data-theme="dark"] { background-color: #232323; }
-  html[data-theme="light"] { background-color: #ffffff; }
-</style>
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
