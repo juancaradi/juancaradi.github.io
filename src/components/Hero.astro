@@ -12,34 +12,10 @@ const completedProjects = projectsData.filter(p => p.status === 'completed');
 const totalFreelance = freelanceData.length;
 
 const stats = [
-  {
-    value: activeProjects.length,
-    label: t.statActive,
-    color: "var(--color-active)", 
-    pulse: true,
-    action: "openActive"
-  },
-  {
-    value: completedProjects.length,
-    label: t.statDone,
-    color: "var(--color-done)",
-    pulse: false,
-    action: "openCompleted"
-  },
-  {
-    value: totalFreelance,
-    label: t.statFreelance,
-    color: "var(--color-freelance)",
-    pulse: false,
-    action: "openFreelance"
-  },
-  {
-    value: statsData.notesCount,
-    label: t.statNotes,
-    color: "var(--color-notes)",
-    pulse: false,
-    action: null 
-  }
+  { value: activeProjects.length, label: t.statActive, color: "var(--color-active)", pulse: true, action: "openActive" },
+  { value: completedProjects.length, label: t.statDone, color: "var(--color-done)", pulse: false, action: "openCompleted" },
+  { value: totalFreelance, label: t.statFreelance, color: "var(--color-freelance)", pulse: false, action: "openFreelance" },
+  { value: statsData.notesCount, label: t.statNotes, color: "var(--color-notes)", pulse: false, action: null }
 ];
 
 const projectsLink = lang === 'en' ? '/en/projects/' : '/es/projects/';
@@ -50,22 +26,14 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 <section class="hero">
   <div class="hero-content">
     <span class="badge">{t.heroBadge}</span>
-    
-    <h1 class="hero-title">
-      {t.heroTitlePre} <span class="gradient-text">{t.heroTitleGradient}</span> {t.heroTitlePost}
-    </h1>
-    
+    <h1 class="hero-title">{t.heroTitlePre} <span class="gradient-text">{t.heroTitleGradient}</span> {t.heroTitlePost}</h1>
     <p class="hero-desc" set:html={t.heroDesc}></p>
 
     <div class="stats-wrapper">
       <div class="stats-label">{t.statsLabel}</div>
       <div class="stats-container">
         {stats.map(stat => (
-          <button 
-            class={`stat-item ${stat.action ? 'interactive' : ''}`} 
-            data-action={stat.action}
-            tabindex={stat.action ? "0" : "-1"}
-          >
+          <button class={`stat-item ${stat.action ? 'interactive' : ''}`} data-action={stat.action} tabindex={stat.action ? "0" : "-1"}>
             <div class="stat-value" style={`color: ${stat.color}`}>
               {stat.value}
               {stat.pulse && <span class="pulse-dot"></span>}
@@ -86,7 +54,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
     <div class="modal-box">
       <div class="modal-header">
         <h3 id="modal-title" class="modal-title-text"></h3>
-        {/* CORRECCIÓN: Agregado aria-label desde ui.ts */}
         <button id="close-modal" class="close-btn" aria-label={t.btnClose}>&times;</button>
       </div>
       <div id="modal-content" class="modal-grid"></div>
@@ -98,15 +65,12 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 </section>
 
 <script define:vars={{ 
-  activeProjects, 
-  completedProjects, 
-  freelanceData,
+  activeProjects, completedProjects, freelanceData,
   titles: { active: t.modalActive, done: t.modalDone, freelance: t.modalFreelance },
   currentLang: lang,
   links: { projects: projectsLink, freelance: freelanceLink },
   emptyMsg: t.searchNoResults
 }}>
-  // Función de inicialización encapsulada
   const initHero = () => {
       const modal = document.getElementById('projects-modal');
       if (!modal) return; 
@@ -117,34 +81,49 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
       const closeBtn = document.getElementById('close-modal');
       const buttons = document.querySelectorAll('.interactive');
 
-      // Helper de renderizado
+      // Icono de flechita diagonal (External Link)
+      const ICON_EXT = `<svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
+
       const renderProjects = (items) => {
           if (items.length === 0) return `<p class="empty-msg">${emptyMsg || 'No items found'}</p>`;
           
           const isFreelance = items[0].hasOwnProperty('subject');
 
           return items.slice(0, 5).map(item => {
-              let title, desc, tags, link;
+              let title, desc, tags, link, metaHtml = '';
+
               if (isFreelance) {
-                  title = `${item.subject[currentLang]} - ${item.type[currentLang]}`;
+                  // --- CASO FREELANCE ---
+                  // 1. Título real del JSON (¡Esto arregla el cambio de idioma!)
+                  title = item.title[currentLang]; 
                   desc = item.description[currentLang];
+                  
+                  // 2. Pills: Solo nombres de herramientas
                   tags = item.resources.map(r => r.name); 
-                  const mainResource = item.resources.find(r => r.url);
-                  link = mainResource ? mainResource.url : '#';
+                  
+                  // 3. Link: Apunta a la sección general de Freelance
+                  link = links.freelance; 
+                  
+                  // 4. Metadatos: Materia • Tipo | Fecha
+                  const metaText = `${item.subject[currentLang]} • ${item.type[currentLang]}`;
+                  metaHtml = `<div class="card-meta">${metaText} <span class="meta-separator">|</span> ${item.date}</div>`;
+
               } else {
+                  // --- CASO PROYECTOS NORMALES ---
                   title = item.title[currentLang];
                   desc = item.description[currentLang];
                   tags = item.tags;
                   link = item.link;
               }
 
+              // Renderizado de la Card
               return `
               <a href="${link}" class="project-card" target="_blank">
                 <div class="card-top">
                    <h4 class="card-title">${title}</h4>
-                   <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                   ${ICON_EXT}
                 </div>
-                <p class="card-desc">${desc}</p>
+                ${metaHtml} <p class="card-desc">${desc}</p>
                 <div class="card-tags">
                   ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
                 </div>
@@ -152,7 +131,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
           }).join('');
       };
 
-      // Limpieza y asignación de eventos a botones
       buttons.forEach(oldBtn => {
           const btn = oldBtn.cloneNode(true);
           oldBtn.parentNode.replaceChild(btn, oldBtn);
@@ -165,30 +143,21 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
                   modalTitle.innerHTML = `${titles.active} <span class="status-indicator active"></span>`;
                   modalContent.innerHTML = renderProjects(activeProjects);
                   if(modalFooterLink) modalFooterLink.href = links.projects;
-                  modal.showModal();
               } else if (action === 'openCompleted') {
                   modalTitle.innerHTML = `${titles.done} <span class="status-indicator done"></span>`;
                   modalContent.innerHTML = renderProjects(completedProjects);
                   if(modalFooterLink) modalFooterLink.href = links.projects;
-                  modal.showModal();
               } else if (action === 'openFreelance') {
                   modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
-                  
-                  // 🔥 CORRECCIÓN: Filtrar solo año actual 🔥
                   const currentYear = new Date().getFullYear();
-                  
-                  // Filtramos freelanceData: parseamos la fecha y comparamos año
+                  // Filtrar por año actual
                   const recentFreelance = freelanceData
-                    .filter(item => {
-                        const itemYear = parseInt(item.date.split('-')[0]);
-                        return itemYear === currentYear;
-                    })
-                    .reverse(); // Los más recientes primero
-
+                    .filter(item => parseInt(item.date.split('-')[0]) === currentYear)
+                    .reverse(); 
                   modalContent.innerHTML = renderProjects(recentFreelance);
                   if(modalFooterLink) modalFooterLink.href = links.freelance;
-                  modal.showModal();
               }
+              modal.showModal();
           });
       });
 
@@ -197,16 +166,11 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
           closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
           newCloseBtn.addEventListener('click', () => modal.close());
       }
-
       modal.onclick = (e) => {
           const rect = modal.getBoundingClientRect();
-          if (e.clientX < rect.left || e.clientX > rect.right || 
-              e.clientY < rect.top || e.clientY > rect.bottom) {
-              modal.close();
-          }
+          if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) modal.close();
       };
   };
-
   document.addEventListener('astro:page-load', initHero);
 </script>
 
@@ -214,14 +178,32 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .project-card { display: flex; flex-direction: column; gap: 8px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-decoration: none !important; color: var(--text) !important; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; margin-bottom: 0; }
   .project-card:hover { transform: translateY(-3px); background: var(--bg); border-color: var(--link); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
   .project-card:active { transform: scale(0.98); }
-  .card-top { display: flex; justify-content: space-between; align-items: center; }
-  .card-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--link) !important; }
-  .arrow-icon { opacity: 0.5; transition: transform 0.2s; color: var(--text); }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--link) !important; line-height: 1.3; }
+  .arrow-icon { opacity: 0.5; transition: transform 0.2s; color: var(--text); flex-shrink: 0; margin-left: 8px; margin-top: 2px; }
   .project-card:hover .arrow-icon { opacity: 1; transform: translate(3px, -3px); color: var(--link); }
-  .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; text-align: justify; }
+  
+  /* --- ESTILOS NUEVOS PARA METADATOS --- */
+  .card-meta { 
+    font-size: 0.75rem; 
+    color: var(--muted); 
+    margin-top: 4px; 
+    font-weight: 500; 
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    
+    /* 🔥 EL CAMBIO ESTÁ AQUÍ 🔥 */
+    text-align: left; 
+    width: 100%;
+  }
+  .meta-separator { margin: 0 6px; opacity: 0.4; }
+
+  .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; text-align: justify; margin-top: 6px; }
+  
   .card-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
   .tech-tag { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; color: var(--text); background-color: rgba(127, 127, 127, 0.15); padding: 3px 10px; border-radius: 99px; border: 1px solid transparent; transition: all 0.2s; white-space: nowrap; }
   .project-card:hover .tech-tag { background-color: rgba(9, 105, 218, 0.1); color: var(--link); border-color: rgba(9, 105, 218, 0.2); }
+
   .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 10px; }
   .status-indicator.active { background-color: var(--color-active); box-shadow: 0 0 10px var(--color-active); animation: pulse 2s infinite; }
   .status-indicator.done { background-color: var(--color-done); }
@@ -233,76 +215,33 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
   .hero-content { display: flex; flex-direction: column; align-items: center; }
   .hero::before { content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; height: 400px; background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.15; filter: blur(80px); z-index: -1; pointer-events: none; }
-  
   .badge { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; background: rgba(139, 92, 246, 0.15); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.5); margin-bottom: 24px; box-shadow: 0 0 15px rgba(139, 92, 246, 0.35); animation: glowBadge 2s ease-in-out infinite alternate; }
-
   .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
   .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .hero-desc { font-size: 1.35rem; color: var(--muted); line-height: 1.6; margin: 0 auto 40px; max-width: 700px; animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(20px); }
-  
   .stats-wrapper { margin-bottom: 100px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(20px); }
   .stats-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; text-align: center; }
-  
   .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); width: 100%; }
-
-  .stat-item { 
-    background: var(--bg); 
-    padding: 24px 10px; 
-    
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center;
-    
-    width: 100%; 
-    height: 100%; 
-    border: none; 
-    margin: 0;
-    appearance: none;
-    outline: none;
-    font-family: inherit; 
-    cursor: default;
-    transition: all 0.2s ease;
-  }
-
-  .stat-item.interactive { cursor: pointer; }
-  .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
-  .stat-item.interactive:active { transform: translateY(0); }
-
+  .stat-item { background: var(--bg); padding: 24px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; height: 100%; border: none; margin: 0; appearance: none; outline: none; font-family: inherit; cursor: default; transition: all 0.2s ease; }
+  .stat-item.interactive { cursor: pointer; } .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); } .stat-item.interactive:active { transform: translateY(0); }
   .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; line-height: 1.2; max-width: 90%; }
   .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; animation: pulse 2s infinite; }
-
   .hero-actions { display: flex; gap: 16px; justify-content: center; animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(20px); }
   .btn { display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
-  
-  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); }
-  .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
+  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); } .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); } .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
+  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); } .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
   .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
   .modal-header { display: flex; align-items: center; justify-content: center; padding: 20px 24px; border-bottom: 1px solid var(--border); position: relative; background: var(--bg); }
   .modal-title-text { margin: 0; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-  .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; }
-  .close-btn:hover { background: var(--border); color: var(--text); }
-  
-  .modal-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-  .modal-grid::-webkit-scrollbar { width: 6px; }
-  .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; }
-  .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; }
-  .modal-grid::-webkit-scrollbar-thumb:hover { background-color: var(--text); opacity: 0.8; }
-
+  .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; } .close-btn:hover { background: var(--border); color: var(--text); }
+  .modal-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; } .modal-grid::-webkit-scrollbar { width: 6px; } .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; } .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; } .modal-grid::-webkit-scrollbar-thumb:hover { background-color: var(--text); opacity: 0.8; }
   .modal-footer { text-align: center; border-top: 1px solid var(--border); padding: 16px; background: var(--bg); }
-  .btn-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
-  .btn-link:hover { color: var(--link); }
-
+  .btn-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; } .btn-link:hover { color: var(--link); }
   @keyframes pulse { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); opacity: 0; } }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   @keyframes glowBadge { from { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); } to { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); border-color: rgba(139, 92, 246, 0.7); } }
-
   @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .stats-container { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .stat-item { padding: 20px 5px; } .stat-value { font-size: 2rem; } }
 </style>
