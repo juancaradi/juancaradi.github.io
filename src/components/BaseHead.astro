@@ -1,5 +1,4 @@
 ﻿---
-// src/components/BaseHead.astro
 interface Props {
   title: string;
   description: string;
@@ -31,6 +30,7 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 <!-- ✅ Theme-color dinámico (iOS address bar) -->
 <meta name="theme-color" content="#ffffff" data-dynamic-theme-color />
 
+<!-- ✅ Tema: aplica lo antes posible -->
 <script is:inline>
   (() => {
     const root = document.documentElement;
@@ -41,7 +41,7 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
       meta.setAttribute('content', theme === 'dark' ? '#232323' : '#ffffff');
     };
 
-    const resolveTheme = () => {
+    const applyTheme = () => {
       let saved = null;
       try { saved = localStorage.getItem("theme"); } catch (_) {}
 
@@ -49,55 +49,32 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-      return (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
-    };
-
-    const applyTheme = () => {
-      const isSwapping = root.classList.contains('is-swapping');
-
-      // ✅ DURANTE SWAP: NO cambies el tema (evita micro-frame blanco en iOS)
-      if (isSwapping) {
-        const cur = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-        root.style.backgroundColor = cur === "dark" ? "#232323" : "#ffffff";
-        setThemeColor(cur);
-        return;
-      }
-
-      const next = resolveTheme();
+      const next = (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
 
       if (root.getAttribute("data-theme") !== next) {
         root.setAttribute("data-theme", next);
       }
-
-      // ✅ Fondo “pintado” desde el primer frame (extra blindaje)
-      root.style.backgroundColor = next === "dark" ? "#232323" : "#ffffff";
       setThemeColor(next);
     };
 
-    // 1) inmediato
+    // 1) inmediato (primer frame)
     applyTheme();
 
-    // 2) en swaps
+    // 2) si hay swaps en browsers no-iOS
     document.addEventListener('astro:after-swap', applyTheme);
-
-    // 3) si cambia el sistema (auto), refresca (opcional pero útil)
-    try {
-      const mq = window.matchMedia("(prefers-color-scheme: dark)");
-      if (mq && mq.addEventListener) mq.addEventListener("change", applyTheme);
-    } catch (_) {}
   })();
 </script>
 
 <style>
-  /* ✅ NO forzar blanco: deja que el browser use color-scheme y el CSS global */
+  /* ✅ NO forzar blanco: deja que el CSS global mande */
   html { background: transparent; }
 
-  /* ✅ Anti-flash real: si el sistema prefiere dark, el primer frame ya es oscuro */
+  /* ✅ primer frame oscuro si el sistema es dark */
   @media (prefers-color-scheme: dark) {
     html { background-color: #232323; }
   }
 
-  /* ✅ Si ya quedó data-theme, gana eso */
+  /* ✅ si ya hay data-theme, manda eso */
   html[data-theme="dark"] { background-color: #232323; }
   html[data-theme="light"] { background-color: #ffffff; }
 </style>

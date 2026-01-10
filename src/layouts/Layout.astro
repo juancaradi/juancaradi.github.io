@@ -31,21 +31,60 @@ const isActive = (href: string) => {
 <head>
   <BaseHead title={title} description={t.desc} lang={lang} />
 
-  <!-- ✅ Detecta iOS Safari y marca html.is-ios-safari -->
+  <!-- ✅ FIX definitivo iOS Safari: deshabilita SPA swaps (full reload en navegación interna) -->
   <script is:inline>
     (() => {
       const ua = navigator.userAgent;
-
       const isIOS = /iP(hone|ad|od)/.test(ua);
       const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
 
-      if (isIOS && isSafari) {
-        document.documentElement.classList.add('is-ios-safari');
-      }
+      if (!(isIOS && isSafari)) return;
+
+      const root = document.documentElement;
+      root.classList.add("is-ios-safari");
+
+      // 1) Intenta matar el router de Astro si aparece
+      const killRouter = () => {
+        const r = document.querySelector("astro-client-router");
+        if (r) r.remove();
+      };
+      killRouter();
+      document.addEventListener("astro:page-load", killRouter);
+      document.addEventListener("astro:after-swap", killRouter);
+
+      // 2) Fuerza full reload para navegación interna
+      document.addEventListener(
+        "click",
+        (e) => {
+          const a = e.target?.closest?.("a");
+          if (!a) return;
+
+          // Solo links normales
+          if (a.target === "_blank") return;
+          if (a.hasAttribute("download")) return;
+
+          const href = a.getAttribute("href") || "";
+          if (!href) return;
+          if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("#")) return;
+
+          // External? no tocar
+          try {
+            const url = new URL(href, location.href);
+            if (url.origin !== location.origin) return;
+
+            // Si ya estás ahí, no recargues
+            if (url.href === location.href) return;
+
+            e.preventDefault();
+            location.href = url.href;
+          } catch (_) {}
+        },
+        { capture: true }
+      );
     })();
   </script>
 
-  <!-- ✅ BLINDADO anti-flash: pin del fondo antes del swap -->
+  <!-- ✅ BLINDADO anti-flash: pin del fondo antes del swap (sirve en browsers buenos) -->
   <script is:inline>
     (() => {
       const root = document.documentElement;
@@ -53,10 +92,8 @@ const isActive = (href: string) => {
       const pinBg = () => {
         const body = document.body;
 
-        // Color real resuelto por CSS vars
         const bg = getComputedStyle(root).getPropertyValue('--bg').trim() || '#232323';
 
-        // Pin duro: evita canvas blanco detrás del view-transition
         root.style.backgroundColor = bg;
         if (body) body.style.backgroundColor = bg;
 
@@ -68,7 +105,6 @@ const isActive = (href: string) => {
 
         root.classList.remove('is-swapping');
 
-        // Suelta el pin: vuelve a gobernar el CSS normal
         root.style.backgroundColor = '';
         if (body) body.style.backgroundColor = '';
       };
@@ -79,19 +115,13 @@ const isActive = (href: string) => {
     })();
   </script>
 
+  <!-- ✅ PRUEBA 100% (comenta/descomenta):
+       - Si lo dejas comentado y el flash desaparece en iPhone Safari, ERA Astro transitions.
+       - Si lo descomentas, en iPhone Safari igual NO habrá swaps por el fix de arriba (full reload),
+         y en Chrome/Android/Desktop sí tendrás transitions.
+  -->
+  <!-- <ClientRouter /> -->
   <ClientRouter />
-  {/*
-    ✅ NUCLEAR (solo si aún falla): desactiva ClientRouter en iOS Safari.
-    Si lo activas, NO uses <ClientRouter /> arriba.
-    <script is:inline>
-      (() => {
-        if (document.documentElement.classList.contains('is-ios-safari')) {
-          const el = document.querySelector('astro-client-router');
-          if (el) el.remove();
-        }
-      })();
-    </script>
-  */}
 
   <!-- KaTeX -->
   <link
@@ -113,7 +143,7 @@ const isActive = (href: string) => {
     integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
     crossorigin="anonymous"></script>
 
-  <!-- ✅ Render KaTeX en swaps sin duplicar agresivamente -->
+  <!-- ✅ Render KaTeX en swaps -->
   <script is:inline>
     (() => {
       const renderMath = () => {
@@ -225,7 +255,7 @@ const isActive = (href: string) => {
 </html>
 
 <style>
-/* ✅ Nunca fuerces light por defecto: deja a ambos existir */
+/* ✅ Nunca fuerces light por defecto */
 html {
   background: var(--bg);
   color-scheme: light dark;
@@ -272,24 +302,23 @@ html[data-theme="dark"] {
   --icon-loc: #f87171;
 }
 
-/* Estilos Base */
+/* Base */
 body {
   background: var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   line-height: 1.55;
   min-height: 100vh;
-
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* ...pero durante swaps se apaga para evitar flashes */
+/* Swaps: apaga transiciones */
 html.is-swapping,
 html.is-swapping body {
   transition: none !important;
 }
 
-/* ✅ Apaga blur/vidrios durante swap (iOS killer-fix) */
+/* Swaps: apaga blur/vidrio */
 html.is-swapping .pill,
 html.is-swapping .title-pill,
 html.is-swapping .topbar,
@@ -298,9 +327,25 @@ html.is-swapping .sidebar {
   -webkit-backdrop-filter: none !important;
 }
 
+/* ✅ iOS Safari: evita compositing raro (killer-fix) */
+html.is-ios-safari .topbar,
+html.is-ios-safari .sidebar,
+html.is-ios-safari .title-pill,
+html.is-ios-safari .pill {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+html.is-ios-safari,
+html.is-ios-safari body {
+  background: var(--bg) !important;
+}
+
 .muted { color: var(--muted); }
 
-/* ---------- Topbar ---------- */
+/* Topbar */
 .topbar {
   position: sticky; top: 0; z-index: 50;
   background: var(--bg);
@@ -372,7 +417,7 @@ html.is-swapping .sidebar {
   box-shadow: inset 0 0 0 1px var(--border);
 }
 
-/* ---------- ACCIONES (IDIOMA Y TEMA) ---------- */
+/* Actions */
 .top-actions { display: flex; gap: 12px; align-items: center; }
 
 .pill {
@@ -381,7 +426,7 @@ html.is-swapping .sidebar {
   border-radius: 12px; border: 1px solid transparent;
   font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
 
-  /* 🔎 PRUEBA: comenta esto para ver si el flash se va (iOS sospechoso #1) */
+  /* ✅ Si quieres aislar prueba #1, comenta esto */
   backdrop-filter: blur(4px);
 
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -404,7 +449,7 @@ html[data-theme="dark"] .lang-pill { background: rgba(88, 166, 255, 0.1); border
 a, a:visited { color: var(--link); text-decoration: none; }
 a:hover { color: var(--link-hover); text-decoration: underline; }
 
-/* ---------- Layout Shell ---------- */
+/* Shell */
 .shell {
   max-width: var(--maxw); margin: 0 auto; padding: var(--pad);
   display: grid; grid-template-columns: 290px 1fr; gap: 28px; align-items: start;
@@ -452,7 +497,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; overflow-x: auto; }
 pre code { background: none; border: none; padding: 0; }
 
-/* 🔥 Mobile */
+/* Mobile */
 @media (max-width: 900px) {
   .shell { grid-template-columns: 1fr; gap: 20px; padding-top: 10px; }
 
@@ -489,7 +534,7 @@ pre code { background: none; border: none; padding: 0; }
   h1.hero-title { font-size: 2rem; line-height: 1.2; }
 }
 
-/* View Transitions (blindado por tema) */
+/* View Transitions */
 ::view-transition-group(root) {
   animation-duration: 0.6s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -514,18 +559,5 @@ html[data-theme="light"]::view-transition-group(root) {
 
 ::view-transition-new(root) {
   animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
-}
-
-/* ✅ KILLER FIX REAL: iPhone Safari = sin View Transitions (evita flash blanco) */
-html.is-ios-safari::view-transition-old(root),
-html.is-ios-safari::view-transition-new(root),
-html.is-ios-safari::view-transition-group(root) {
-  animation: none !important;
-}
-
-/* ✅ Asegura fondo sólido en iOS Safari */
-html.is-ios-safari,
-html.is-ios-safari body {
-  background: var(--bg) !important;
 }
 </style>
