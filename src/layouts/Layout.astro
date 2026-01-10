@@ -425,13 +425,21 @@ pre code { background: none; border: none; padding: 0; }
 ::view-transition-group(root) {
   animation-duration: 0.6s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* 🔥 EL FIX: Forzamos un fondo sólido detrás de la animación */
+  background-color: var(--bg);
+  /* Opcional: Aísla el renderizado para que Safari no se confunda con capas inferiores */
+  isolation: isolate; 
 }
+
 ::view-transition-old(root) {
   animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+  /* Ya tenías esto, está bien, déjalo */
   background: var(--bg);
 }
+
 ::view-transition-new(root) {
   animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
+  /* Ya tenías esto, está bien, déjalo */
   background: var(--bg);
 }
 </style>
