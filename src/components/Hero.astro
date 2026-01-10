@@ -109,7 +109,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   // Función de inicialización encapsulada
   const initHero = () => {
       const modal = document.getElementById('projects-modal');
-      // Si no hay modal (ej: estamos en otra página y el script quedó vivo), salimos.
       if (!modal) return; 
 
       const modalTitle = document.getElementById('modal-title');
@@ -153,7 +152,7 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
           }).join('');
       };
 
-      // Limpiamos eventos antiguos clonando los botones (Truco Ninja para evitar duplicados)
+      // Limpieza y asignación de eventos a botones
       buttons.forEach(oldBtn => {
           const btn = oldBtn.cloneNode(true);
           oldBtn.parentNode.replaceChild(btn, oldBtn);
@@ -174,7 +173,18 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
                   modal.showModal();
               } else if (action === 'openFreelance') {
                   modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
-                  const recentFreelance = [...freelanceData].reverse();
+                  
+                  // 🔥 CORRECCIÓN: Filtrar solo año actual 🔥
+                  const currentYear = new Date().getFullYear();
+                  
+                  // Filtramos freelanceData: parseamos la fecha y comparamos año
+                  const recentFreelance = freelanceData
+                    .filter(item => {
+                        const itemYear = parseInt(item.date.split('-')[0]);
+                        return itemYear === currentYear;
+                    })
+                    .reverse(); // Los más recientes primero
+
                   modalContent.innerHTML = renderProjects(recentFreelance);
                   if(modalFooterLink) modalFooterLink.href = links.freelance;
                   modal.showModal();
@@ -182,7 +192,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
           });
       });
 
-      // Eventos del modal (Limpieza y reasignación)
       if(closeBtn) {
           const newCloseBtn = closeBtn.cloneNode(true);
           closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
@@ -198,7 +207,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
       };
   };
 
-  // 🔥 Ejecutar en carga inicial Y en cada navegación subsiguiente
   document.addEventListener('astro:page-load', initHero);
 </script>
 
@@ -210,7 +218,7 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   .card-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--link) !important; }
   .arrow-icon { opacity: 0.5; transition: transform 0.2s; color: var(--text); }
   .project-card:hover .arrow-icon { opacity: 1; transform: translate(3px, -3px); color: var(--link); }
-  .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; }
+  .card-desc { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.5; text-align: justify; }
   .card-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
   .tech-tag { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; color: var(--text); background-color: rgba(127, 127, 127, 0.15); padding: 3px 10px; border-radius: 99px; border: 1px solid transparent; transition: all 0.2s; white-space: nowrap; }
   .project-card:hover .tech-tag { background-color: rgba(9, 105, 218, 0.1); color: var(--link); border-color: rgba(9, 105, 218, 0.2); }
