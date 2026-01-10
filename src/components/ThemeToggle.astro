@@ -31,15 +31,26 @@ const { label } = Astro.props;
 
       btn.addEventListener("click", () => {
         const root = document.documentElement;
+        const body = document.body;
+
         const current = root.getAttribute("data-theme");
         const next = current === "dark" ? "light" : "dark";
-        root.setAttribute("data-theme", next);
 
+        // ✅ 1) Aplica tema
+        root.setAttribute("data-theme", next);
         try { localStorage.setItem("theme", next); } catch (_) {}
 
-        // Si existe meta theme-color, sincroniza
+        // ✅ 2) Pin inmediato del fondo (iOS Safari: evita frame blanco)
+        const bg = next === "dark" ? "#232323" : "#ffffff";
+        root.style.backgroundColor = bg;
+        if (body) body.style.backgroundColor = bg;
+
+        // ✅ 3) Theme-color iOS address bar
         const meta = document.querySelector('meta[data-dynamic-theme-color]');
-        if (meta) meta.setAttribute('content', next === 'dark' ? '#232323' : '#ffffff');
+        if (meta) meta.setAttribute('content', bg);
+
+        // ✅ 4) (Opcional) fuerza el esquema
+        // root.style.colorScheme = next;
       }, { signal: ac.signal });
     };
 

@@ -31,6 +31,20 @@ const isActive = (href: string) => {
 <head>
   <BaseHead title={title} description={t.desc} lang={lang} />
 
+  <!-- ✅ Detecta iOS Safari y marca html.is-ios-safari -->
+  <script is:inline>
+    (() => {
+      const ua = navigator.userAgent;
+
+      const isIOS = /iP(hone|ad|od)/.test(ua);
+      const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+
+      if (isIOS && isSafari) {
+        document.documentElement.classList.add('is-ios-safari');
+      }
+    })();
+  </script>
+
   <!-- ✅ BLINDADO anti-flash: pin del fondo antes del swap -->
   <script is:inline>
     (() => {
@@ -66,6 +80,18 @@ const isActive = (href: string) => {
   </script>
 
   <ClientRouter />
+  {/*
+    ✅ NUCLEAR (solo si aún falla): desactiva ClientRouter en iOS Safari.
+    Si lo activas, NO uses <ClientRouter /> arriba.
+    <script is:inline>
+      (() => {
+        if (document.documentElement.classList.contains('is-ios-safari')) {
+          const el = document.querySelector('astro-client-router');
+          if (el) el.remove();
+        }
+      })();
+    </script>
+  */}
 
   <!-- KaTeX -->
   <link
@@ -356,7 +382,7 @@ html.is-swapping .sidebar {
   font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
 
   /* 🔎 PRUEBA: comenta esto para ver si el flash se va (iOS sospechoso #1) */
-  /* backdrop-filter: blur(4px); */
+  backdrop-filter: blur(4px);
 
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   user-select: none; -webkit-tap-highlight-color: transparent;
@@ -488,5 +514,18 @@ html[data-theme="light"]::view-transition-group(root) {
 
 ::view-transition-new(root) {
   animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
+}
+
+/* ✅ KILLER FIX REAL: iPhone Safari = sin View Transitions (evita flash blanco) */
+html.is-ios-safari::view-transition-old(root),
+html.is-ios-safari::view-transition-new(root),
+html.is-ios-safari::view-transition-group(root) {
+  animation: none !important;
+}
+
+/* ✅ Asegura fondo sólido en iOS Safari */
+html.is-ios-safari,
+html.is-ios-safari body {
+  background: var(--bg) !important;
 }
 </style>
