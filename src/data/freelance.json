@@ -3861,7 +3861,7 @@
     ]
   },
   {
-    "id": 145,
+    "id": 144,
     "date": "2025-11-29",
     "subject": {
       "es": "Ecuaciones Diferenciales",
@@ -3888,7 +3888,7 @@
     ]
   },
   {
-    "id": 146,
+    "id": 145,
     "date": "2025-11-27",
     "subject": {
       "es": "Cálculo Diferencial",
@@ -3915,7 +3915,7 @@
     ]
   },
   {
-    "id": 147,
+    "id": 146,
     "date": "2025-11-30",
     "subject": {
       "es": "Cálculo Vectorial",
@@ -3942,7 +3942,7 @@
     ]
   },
   {
-    "id": 148,
+    "id": 147,
     "date": "2025-11-29",
     "subject": {
       "es": "Estadística",
@@ -3969,7 +3969,7 @@
     ]
   },
   {
-    "id": 149,
+    "id": 148,
     "date": "2025-12-01",
     "subject": {
       "es": "Cálculo Integral",
@@ -3996,7 +3996,7 @@
     ]
   },
   {
-    "id": 150,
+    "id": 149,
     "date": "2025-12-02",
     "subject": {
       "es": "Cálculo Vectorial",
@@ -4023,7 +4023,7 @@
     ]
   },
   {
-    "id": 151,
+    "id": 150,
     "date": "2025-12-05",
     "subject": {
       "es": "Álgebra Lineal",
@@ -4050,7 +4050,7 @@
     ]
   },
   {
-    "id": 152,
+    "id": 151,
     "date": "2025-12-06",
     "subject": {
       "es": "Cálculo Vectorial",
@@ -4077,7 +4077,7 @@
     ]
   },
   {
-    "id": 153,
+    "id": 152,
     "date": "2025-12-09",
     "subject": {
       "es": "Cálculo Diferencial",
@@ -4104,7 +4104,7 @@
     ]
   },
   {
-    "id": 154,
+    "id": 153,
     "date": "2025-12-13",
     "subject": {
       "es": "Matemáticas Discretas",
@@ -4131,7 +4131,7 @@
     ]
   },
   {
-    "id": 155,
+    "id": 154,
     "date": "2026-01-03",
     "subject": {
       "es": "Estadística",
@@ -4142,78 +4142,23 @@
       "en": "Assignment"
     },
     "title": {
-      "es": "Título pendiente",
-      "en": "Pending title"
+      "es": "Medidas de Dispersión",
+      "en": "Measures of Spread"
     },
     "description": {
-      "es": "Descripción...",
-      "en": "Description..."
+      "es": "Simulación en Excel para el cálculo y análisis de medidas de dispersión (rango, desviación estándar, coeficiente de variación), asimetría y curtosis aplicadas a variables demográficas (edad, estatura, peso)",
+      "en": "Excel simulation calculating and analyzing measures of dispersion (range, standard deviation, coefficient of variation), skewness, and kurtosis applied to demographic variables (age, height, weight)."
     },
     "resources": [
       {
-        "tool": "pdf",
-        "name": "Nombre",
-        "url": null
-      }
-    ]
-  },
-
-
-
-
-
-    {
-    "id": 156,
-    "date": "2026-02-03",
-    "subject": {
-      "es": "Estadística",
-      "en": "Statistics"
-    },
-    "type": {
-      "es": "Trabajo",
-      "en": "Assignment"
-    },
-    "title": {
-      "es": "Título pendiente",
-      "en": "Pending title"
-    },
-    "description": {
-      "es": "Descripción...",
-      "en": "Description..."
-    },
-    "resources": [
+        "tool": "excel",
+        "name": "Excel",
+        "url": "/freelance/statistics/154_13150_sol.xlsx"
+      },
       {
         "tool": "pdf",
-        "name": "Nombre",
-        "url": null
-      }
-    ]
-  },
-
-  {
-    "id": 156,
-    "date": "2026-02-03",
-    "subject": {
-      "es": "Cálculo Vectorial",
-      "en": "Calculus"
-    },
-    "type": {
-      "es": "Trabajo",
-      "en": "Assignment"
-    },
-    "title": {
-      "es": "Título pendiente",
-      "en": "Pending title"
-    },
-    "description": {
-      "es": "Descripción...",
-      "en": "Description..."
-    },
-    "resources": [
-      {
-        "tool": "pdf",
-        "name": "Nombre",
-        "url": null
+        "name": "PDF",
+        "url": "/freelance/statistics/154_13150_asg.pdf"
       }
     ]
   }

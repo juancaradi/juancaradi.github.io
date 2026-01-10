@@ -65,9 +65,11 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 </section>
 
 <script define:vars={{ 
-  activeProjects, completedProjects, freelanceData,
+  activeProjects, 
+  completedProjects, 
+  freelanceData,
   titles: { active: t.modalActive, done: t.modalDone, freelance: t.modalFreelance },
-  currentLang: lang,
+  /* Ya no dependemos ciegamente de esta variable para el renderizado interno */
   links: { projects: projectsLink, freelance: freelanceLink },
   emptyMsg: t.searchNoResults
 }}>
@@ -81,7 +83,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
       const closeBtn = document.getElementById('close-modal');
       const buttons = document.querySelectorAll('.interactive');
 
-      // Icono de flechita diagonal (External Link)
       const ICON_EXT = `<svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
 
       const renderProjects = (items) => {
@@ -89,41 +90,37 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
           
           const isFreelance = items[0].hasOwnProperty('subject');
 
+          // 🔥 SOLUCIÓN AQUÍ: Leemos el idioma actual directamente del DOM en tiempo real
+          const activeLang = document.documentElement.lang || 'es';
+
           return items.slice(0, 5).map(item => {
               let title, desc, tags, link, metaHtml = '';
 
               if (isFreelance) {
-                  // --- CASO FREELANCE ---
-                  // 1. Título real del JSON (¡Esto arregla el cambio de idioma!)
-                  title = item.title[currentLang]; 
-                  desc = item.description[currentLang];
-                  
-                  // 2. Pills: Solo nombres de herramientas
+                  // Usamos activeLang en lugar de currentLang
+                  title = item.title[activeLang]; 
+                  desc = item.description[activeLang];
                   tags = item.resources.map(r => r.name); 
-                  
-                  // 3. Link: Apunta a la sección general de Freelance
                   link = links.freelance; 
                   
-                  // 4. Metadatos: Materia • Tipo | Fecha
-                  const metaText = `${item.subject[currentLang]} • ${item.type[currentLang]}`;
+                  // Metadatos también con activeLang
+                  const metaText = `${item.subject[activeLang]} • ${item.type[activeLang]}`;
                   metaHtml = `<div class="card-meta">${metaText} <span class="meta-separator">|</span> ${item.date}</div>`;
-
               } else {
-                  // --- CASO PROYECTOS NORMALES ---
-                  title = item.title[currentLang];
-                  desc = item.description[currentLang];
+                  title = item.title[activeLang];
+                  desc = item.description[activeLang];
                   tags = item.tags;
                   link = item.link;
               }
 
-              // Renderizado de la Card
               return `
               <a href="${link}" class="project-card" target="_blank">
                 <div class="card-top">
                    <h4 class="card-title">${title}</h4>
                    ${ICON_EXT}
                 </div>
-                ${metaHtml} <p class="card-desc">${desc}</p>
+                ${metaHtml}
+                <p class="card-desc">${desc}</p>
                 <div class="card-tags">
                   ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
                 </div>
@@ -150,7 +147,6 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
               } else if (action === 'openFreelance') {
                   modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
                   const currentYear = new Date().getFullYear();
-                  // Filtrar por año actual
                   const recentFreelance = freelanceData
                     .filter(item => parseInt(item.date.split('-')[0]) === currentYear)
                     .reverse(); 

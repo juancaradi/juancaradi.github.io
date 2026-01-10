@@ -115,19 +115,36 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
                       <p class="card-desc">{item.description?.[lang]}</p>
 
                       <div class="resources-list">
-                        {item.resources.map(res => (
-                          res.url ? (
-                            <a href={res.url} class={`resource-pill ${res.tool.toLowerCase()}`} target="_blank" rel="noopener noreferrer">
+                        {item.resources.map(res => {
+                          const hasUrl = res.url && res.url !== 'null';
+                          return hasUrl ? (
+                            <a 
+                              href={res.url} 
+                              class={`resource-pill ${res.tool.toLowerCase()}`} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              download
+                              onclick={`return confirm('¿Confirmas que deseas descargar: ${res.name}?');`}
+                            >
                               <span class="pill-text">{res.name}</span>
-                              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                              {/* Icono de DESCARGA */}
+                              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                              </svg>
                             </a>
                           ) : (
-                            <div class={`resource-pill disabled ${res.tool.toLowerCase()}`}>
+                            <div class={`resource-pill disabled ${res.tool.toLowerCase()}`} onclick="return false;">
                               <span class="pill-text">{res.name}</span>
-                              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                              {/* Icono de CANDADO */}
+                              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                              </svg>
                             </div>
                           )
-                        ))}
+                        })}
                       </div>
                     </div>
                   </div>
@@ -232,7 +249,9 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
   
   .card-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
   .resources-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
-  .resource-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; }
+  .resource-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; transition: all 0.2s; }
+  .resource-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  
   .resource-pill.python { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); }
   .resource-pill.r { background: rgba(39, 109, 195, 0.1); color: #276dc3; border-color: rgba(39, 109, 195, 0.2); }
   .resource-pill.excel { background: rgba(33, 115, 70, 0.1); color: #217346; border-color: rgba(33, 115, 70, 0.2); }
