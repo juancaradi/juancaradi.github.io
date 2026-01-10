@@ -104,83 +104,102 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   titles: { active: t.modalActive, done: t.modalDone, freelance: t.modalFreelance },
   currentLang: lang,
   links: { projects: projectsLink, freelance: freelanceLink },
-  emptyMsg: t.searchNoResults // <--- CORRECCIÓN: Pasamos la variable al JS
+  emptyMsg: t.searchNoResults
 }}>
-  const modal = document.getElementById('projects-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalContent = document.getElementById('modal-content');
-  const modalFooterLink = document.getElementById('modal-footer-link');
-  const closeBtn = document.getElementById('close-modal');
-  const buttons = document.querySelectorAll('.interactive');
+  // Función de inicialización encapsulada
+  const initHero = () => {
+      const modal = document.getElementById('projects-modal');
+      // Si no hay modal (ej: estamos en otra página y el script quedó vivo), salimos.
+      if (!modal) return; 
 
-  const renderProjects = (items) => {
-    // CORRECCIÓN: Usamos la variable emptyMsg en lugar de texto quemado
-    if (items.length === 0) return `<p class="empty-msg">${emptyMsg}</p>`;
-    
-    const isFreelance = items[0].hasOwnProperty('subject');
+      const modalTitle = document.getElementById('modal-title');
+      const modalContent = document.getElementById('modal-content');
+      const modalFooterLink = document.getElementById('modal-footer-link');
+      const closeBtn = document.getElementById('close-modal');
+      const buttons = document.querySelectorAll('.interactive');
 
-    return items.slice(0, 5).map(item => {
-        let title, desc, tags, link;
-        if (isFreelance) {
-            title = `${item.subject[currentLang]} - ${item.type[currentLang]}`;
-            desc = item.description[currentLang];
-            tags = item.resources.map(r => r.name); 
-            const mainResource = item.resources.find(r => r.url);
-            link = mainResource ? mainResource.url : '#';
-        } else {
-            title = item.title[currentLang];
-            desc = item.description[currentLang];
-            tags = item.tags;
-            link = item.link;
-        }
+      // Helper de renderizado
+      const renderProjects = (items) => {
+          if (items.length === 0) return `<p class="empty-msg">${emptyMsg || 'No items found'}</p>`;
+          
+          const isFreelance = items[0].hasOwnProperty('subject');
 
-        return `
-      <a href="${link}" class="project-card" target="_blank">
-        <div class="card-top">
-           <h4 class="card-title">${title}</h4>
-           <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-        </div>
-        <p class="card-desc">${desc}</p>
-        <div class="card-tags">
-          ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
-        </div>
-      </a>
-    `}).join('');
+          return items.slice(0, 5).map(item => {
+              let title, desc, tags, link;
+              if (isFreelance) {
+                  title = `${item.subject[currentLang]} - ${item.type[currentLang]}`;
+                  desc = item.description[currentLang];
+                  tags = item.resources.map(r => r.name); 
+                  const mainResource = item.resources.find(r => r.url);
+                  link = mainResource ? mainResource.url : '#';
+              } else {
+                  title = item.title[currentLang];
+                  desc = item.description[currentLang];
+                  tags = item.tags;
+                  link = item.link;
+              }
+
+              return `
+              <a href="${link}" class="project-card" target="_blank">
+                <div class="card-top">
+                   <h4 class="card-title">${title}</h4>
+                   <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+                <p class="card-desc">${desc}</p>
+                <div class="card-tags">
+                  ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                </div>
+              </a>`;
+          }).join('');
+      };
+
+      // Limpiamos eventos antiguos clonando los botones (Truco Ninja para evitar duplicados)
+      buttons.forEach(oldBtn => {
+          const btn = oldBtn.cloneNode(true);
+          oldBtn.parentNode.replaceChild(btn, oldBtn);
+          
+          btn.addEventListener('click', () => {
+              const action = btn.dataset.action;
+              if (!action) return;
+              
+              if (action === 'openActive') {
+                  modalTitle.innerHTML = `${titles.active} <span class="status-indicator active"></span>`;
+                  modalContent.innerHTML = renderProjects(activeProjects);
+                  if(modalFooterLink) modalFooterLink.href = links.projects;
+                  modal.showModal();
+              } else if (action === 'openCompleted') {
+                  modalTitle.innerHTML = `${titles.done} <span class="status-indicator done"></span>`;
+                  modalContent.innerHTML = renderProjects(completedProjects);
+                  if(modalFooterLink) modalFooterLink.href = links.projects;
+                  modal.showModal();
+              } else if (action === 'openFreelance') {
+                  modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
+                  const recentFreelance = [...freelanceData].reverse();
+                  modalContent.innerHTML = renderProjects(recentFreelance);
+                  if(modalFooterLink) modalFooterLink.href = links.freelance;
+                  modal.showModal();
+              }
+          });
+      });
+
+      // Eventos del modal (Limpieza y reasignación)
+      if(closeBtn) {
+          const newCloseBtn = closeBtn.cloneNode(true);
+          closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+          newCloseBtn.addEventListener('click', () => modal.close());
+      }
+
+      modal.onclick = (e) => {
+          const rect = modal.getBoundingClientRect();
+          if (e.clientX < rect.left || e.clientX > rect.right || 
+              e.clientY < rect.top || e.clientY > rect.bottom) {
+              modal.close();
+          }
+      };
   };
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action;
-      if (!action) return;
-      
-      if (action === 'openActive') {
-        modalTitle.innerHTML = `${titles.active} <span class="status-indicator active"></span>`;
-        modalContent.innerHTML = renderProjects(activeProjects);
-        if(modalFooterLink) modalFooterLink.href = links.projects;
-        modal.showModal();
-      } else if (action === 'openCompleted') {
-        modalTitle.innerHTML = `${titles.done} <span class="status-indicator done"></span>`;
-        modalContent.innerHTML = renderProjects(completedProjects);
-        if(modalFooterLink) modalFooterLink.href = links.projects;
-        modal.showModal();
-      } else if (action === 'openFreelance') {
-        modalTitle.innerHTML = `${titles.freelance} <span class="status-indicator freelance"></span>`;
-        const recentFreelance = [...freelanceData].reverse();
-        modalContent.innerHTML = renderProjects(recentFreelance);
-        if(modalFooterLink) modalFooterLink.href = links.freelance;
-        modal.showModal();
-      }
-    });
-  });
-
-  closeBtn?.addEventListener('click', () => modal.close());
-  modal?.addEventListener('click', (e) => {
-    const rect = modal.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || 
-        e.clientY < rect.top || e.clientY > rect.bottom) {
-      modal.close();
-    }
-  });
+  // 🔥 Ejecutar en carga inicial Y en cada navegación subsiguiente
+  document.addEventListener('astro:page-load', initHero);
 </script>
 
 <style is:global>
@@ -205,7 +224,7 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   :root { --color-active: #10b981; --color-done: #3b82f6; --color-freelance: #8b5cf6; --color-notes: #f59e0b; }
   .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
   .hero-content { display: flex; flex-direction: column; align-items: center; }
-  .hero::before { content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; height: 400px; background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.12; filter: blur(80px); z-index: -1; pointer-events: none; }
+  .hero::before { content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; height: 400px; background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.15; filter: blur(80px); z-index: -1; pointer-events: none; }
   
   .badge { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; background: rgba(139, 92, 246, 0.15); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.5); margin-bottom: 24px; box-shadow: 0 0 15px rgba(139, 92, 246, 0.35); animation: glowBadge 2s ease-in-out infinite alternate; }
 

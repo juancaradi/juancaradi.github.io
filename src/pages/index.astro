@@ -29,4 +29,18 @@
 	</head>
 	<body>
 	</body>
+
+
+	<style>
+    /* Ponemos el fondo oscuro por defecto para evitar el flash blanco en la redirección */
+    html, body {
+        background-color: #111111; /* O el color exacto de tu tema oscuro --bg */
+        color: #111111;
+    }
+    
+    /* Si el usuario explícitamente prefiere light, entonces blanco */
+    @media (prefers-color-scheme: light) {
+        html, body { background-color: #ffffff; }
+    }
+</style>
 </html>

@@ -10,162 +10,142 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const currentLang = (lang === 'en' || lang === 'es') ? lang : defaultLang;
-const t = ui[currentLang];
+// Aunque es un placeholder, mantenemos el pageTitle correcto para la pestaña del navegador
+const pageTitle = lang === 'en' ? "About Me | Camilo Ramírez" : "Sobre Mí | Camilo Ramírez";
 
-const pageTitle = lang === 'en' ? "About | Camilo Ramírez" : "Sobre mí | Camilo Ramírez";
+// Textos Hardcoded para el Placeholder
+const titleStart = lang === 'en' ? "About" : "Sobre";
+const titleEnd = lang === 'en' ? "Me" : "Mí";
 
-// Estas listas pueden quedarse aquí hardcoded por ahora, 
-// o podrías moverlas a un JSON si crecen mucho.
-const mathStack = ["Topological Data Analysis (TDA)", "Persistent Homology", "Category Theory", "Graph Theory", "LaTeX", "GUDHI"];
-const techStack = ["Python (Pandas/Scipy)", "MongoDB (NoSQL)", "Astro & TypeScript", "R Statistics", "SQL", "ETL Pipelines"];
+const emptyTitle = lang === 'en' ? "Profile Update" : "Actualización de Perfil";
+const emptyDesc = lang === 'en' 
+  ? "I am currently rewriting my biography and technical stack overview. Check back soon!" 
+  : "Actualmente estoy reescribiendo mi biografía y mi stack técnico. ¡Vuelve pronto!";
 ---
 
 <Layout title={pageTitle} lang={lang}>
-  <div class="about-container fade-in">
+  <div class="page-container">
     
-    <header class="about-header">
-      <span class="badge-role">{t.aboutRole}</span>
-      <h1 class="about-title">
-        {t.aboutTitle} <span class="math-symbol">$\cong$</span> Reality
+    <header class="page-header">
+      <h1 class="page-title">
+        {titleStart} <span class="gradient-text">{titleEnd}</span>
       </h1>
-      <p class="about-subtitle">{t.aboutSubtitle}</p>
     </header>
 
-    <div class="content-grid">
+    <div class="content-placeholder">
+      <div class="icon-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </div>
       
-      {/* BIO CARD: Estilo Editor de Código */}
-      <div class="bio-section card-glass">
-        <div class="code-header">
-          <div class="dots">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-          </div>
-          <span class="filename">profile.ts</span>
-        </div>
-        
-        <div class="text-content">
-          <p set:html={t.aboutBio1} />
-          <p set:html={t.aboutBio2} />
-          <div class="discipline-block">
-            <span class="discipline-icon">🥋</span>
-            <p set:html={t.aboutBio3} />
-          </div>
+      <h2>{emptyTitle}</h2>
+      <p>{emptyDesc}</p>
+      
+      <div class="skeleton-layout">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line text"></div>
+        <div class="skeleton-line text short"></div>
+        <div class="skeleton-grid">
+            <div class="skeleton-box"></div>
+            <div class="skeleton-box"></div>
         </div>
       </div>
-
-      {/* STACK SECTION */}
-      <div class="stack-section">
-        <div class="stack-card card-glass">
-          <h3 class="stack-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-            {t.aboutStackMath}
-          </h3>
-          <ul class="stack-list">
-            {mathStack.map(item => (
-              <li><span class="bullet">∫</span> {item}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="stack-card card-glass">
-          <h3 class="stack-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            {t.aboutStackTech}
-          </h3>
-          <ul class="stack-list">
-            {techStack.map(item => (
-              <li><span class="bullet">&gt;_</span> {item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* FILOSOFÍA */}
-      <div class="philosophy-section card-glass">
-        <h3 class="philo-title">{t.aboutPhiloTitle}</h3>
-        <p class="philo-text">{t.aboutPhiloText}</p>
-        <div class="math-decoration">
-          $$ \lim_{n \to \infty} \text{Knowledge}(n) = \infty $$
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div class="cta-section">
-        <p class="cta-text">{t.aboutCtaText}</p>
-        <div class="cta-buttons">
-          <a href="/cv-camilo-ramirez.pdf" class="btn btn-primary" target="_blank">{t.aboutBtnCv}</a>
-          <a href={`mailto:${t.email}`} class="btn btn-outline">{t.aboutBtnEmail}</a>
-        </div>
-      </div>
-
     </div>
+
   </div>
 </Layout>
 
 <style>
-  .about-container { max-width: 1000px; margin: 0 auto; padding: 40px 20px 80px; }
+  .page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
   
-  .about-header { text-align: center; margin-bottom: 60px; }
+  .page-header { text-align: center; margin-bottom: 60px; }
   
-  .badge-role { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; background: rgba(139, 92, 246, 0.1); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.3); margin-bottom: 16px; box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); animation: glowBadge 3s infinite alternate; }
-  
-  .about-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 10px; line-height: 1.1; }
-  .math-symbol { color: var(--link); font-family: 'Times New Roman', serif; font-style: italic; }
-  .about-subtitle { font-size: 1.2rem; color: var(--muted); }
-  
-  .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
-  
-  .card-glass { background: var(--code-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px; position: relative; overflow: hidden; }
-  
-  .bio-section { display: flex; flex-direction: column; gap: 0; }
-  
-  /* Cabecera estilo VS Code */
-  .code-header { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; align-items: center; }
-  .dots { display: flex; gap: 6px; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .red { background: #ef4444; } .yellow { background: #eab308; } .green { background: #22c55e; }
-  .filename { font-family: monospace; font-size: 0.8rem; color: var(--muted); margin-left: 10px; }
-  
-  .text-content p { font-size: 1.05rem; line-height: 1.7; color: var(--text); margin-bottom: 20px; text-align: left; }
-  
-  .discipline-block { display: flex; gap: 15px; background: rgba(139, 92, 246, 0.05); padding: 20px; border-radius: 12px; border-left: 3px solid var(--link); margin-top: 10px; }
-  .discipline-icon { font-size: 1.8rem; padding-top: 4px; }
-  .discipline-block p { margin: 0; font-size: 0.95rem; color: var(--muted); }
-  
-  .stack-section { display: flex; flex-direction: column; gap: 24px; }
-  .stack-card { padding: 24px; }
-  .stack-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: var(--text); border-bottom: 1px dashed var(--border); padding-bottom: 10px; }
-  
-  .stack-list { list-style: none; padding: 0; margin: 0; }
-  .stack-list li { font-size: 0.9rem; color: var(--muted); margin-bottom: 8px; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 8px; text-align: left; }
-  .bullet { color: var(--link); font-weight: bold; min-width: 15px; }
-  
-  .philosophy-section { grid-column: span 2; text-align: center; margin-top: 10px; background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05) 0%, transparent 70%), var(--code-bg); }
-  .philo-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
-  .philo-text { max-width: 700px; margin: 0 auto 30px; line-height: 1.6; color: var(--muted); }
-  .math-decoration { font-family: 'Times New Roman', serif; font-size: 1.2rem; color: var(--link); opacity: 0.8; }
-  
-  .cta-section { grid-column: span 2; text-align: center; padding: 40px; margin-top: 20px; }
-  .cta-text { font-size: 1.2rem; margin-bottom: 24px; font-weight: 500; color: var(--text); }
-  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-  
-  .btn { display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
-  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
-  
-  .icon { width: 20px; height: 20px; }
-
-  @media (max-width: 768px) { 
-    .content-grid { grid-template-columns: 1fr; } 
-    .philosophy-section, .cta-section { grid-column: span 1; } 
-    .about-title { font-size: 2.5rem; } 
+  .page-title { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    margin-bottom: 16px; 
+    color: var(--text); 
+    line-height: 1.1; 
   }
   
-  .fade-in { animation: fadeIn 0.6s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes glowBadge { from { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); } to { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); border-color: rgba(139, 92, 246, 0.7); } }
+  .gradient-text { 
+    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    background-clip: text;
+  }
+
+  /* --- PLACEHOLDER DESIGN --- */
+  .content-placeholder {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--code-bg);
+    border: 1px dashed var(--border);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .icon-box {
+    color: var(--link);
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  .content-placeholder h2 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .content-placeholder p {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  /* --- SKELETON UI --- */
+  .skeleton-layout {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0.4;
+  }
+
+  .skeleton-line {
+    height: 12px;
+    background: var(--border);
+    border-radius: 6px;
+    width: 100%;
+  }
+
+  .skeleton-line.title { height: 20px; width: 60%; margin: 0 auto 10px; }
+  .skeleton-line.text { width: 100%; }
+  .skeleton-line.short { width: 80%; margin: 0 auto; }
+
+  .skeleton-grid {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      justify-content: center;
+  }
+
+  .skeleton-box {
+      width: 100px;
+      height: 80px;
+      background: var(--border);
+      border-radius: 12px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 768px) {
+    .page-title { font-size: 2rem; }
+  }
 </style>

@@ -17,12 +17,12 @@ export const ui = {
         footer: "Hecho con Astro + GitHub Pages",
         desc: "Proyectos, trabajo freelance y notas de matemáticas.",
         
-        // --- 2. NAVEGACIÓN Y LAYOUT (ACTUALIZADO POR AUDITORÍA) ---
+        // --- 2. NAVEGACIÓN Y LAYOUT ---
         navLabel: "Navegación principal",
-        navBrandFirst: "CAMILO",    // Nuevo: Antes quemado en Layout
-        navBrandLast: "RAMÍREZ",    // Nuevo: Antes quemado en Layout
-        navAriaGithub: "Ir al perfil de GitHub",   // Nuevo: Accesibilidad
-        navAriaLinkedin: "Ir al perfil de LinkedIn", // Nuevo: Accesibilidad
+        navBrandFirst: "CAMILO",
+        navBrandLast: "RAMÍREZ",
+        navAriaGithub: "Ir al perfil de GitHub",
+        navAriaLinkedin: "Ir al perfil de LinkedIn",
         
         projects: "Proyectos",
         notes: "Notas",
@@ -40,8 +40,8 @@ export const ui = {
         btnProjects: "Ver Portafolio Completo",
         btnAbout: "Sobre mí",
         
-        // UI Generales (Nuevos)
-        searchNoResults: "No se encontraron elementos.", // Nuevo: Antes quemado en Hero
+        // UI Generales
+        searchNoResults: "No se encontraron elementos.",
         btnClose: "Cerrar",
 
         // --- 4. STATS & MODAL ---
@@ -56,21 +56,6 @@ export const ui = {
         modalDone: "Últimos Finalizados ✅",
         modalFreelance: "Soluciones Recientes 🚀",
         modalLink: "Ver todos los proyectos →",
-
-        // --- 5. PAGINA ABOUT (NECESARIO PARA TU NUEVO DISEÑO) ---
-        aboutRole: "Matemático & Data Analyst",
-        aboutTitle: "Matemáticas",
-        aboutSubtitle: "Donde la abstracción encuentra su propósito.",
-        aboutBio1: "Mi viaje comenzó con la curiosidad pura por las estructuras abstractas. Hoy, utilizo esa base teórica para resolver problemas complejos en ciencia de datos.",
-        aboutBio2: "Me especializo en traducir teoremas en algoritmos eficientes.",
-        aboutBio3: "Cinturón negro en Taekwondo: Disciplina en el dojo, disciplina en el código.",
-        aboutStackMath: "Arsenal Matemático",
-        aboutStackTech: "Arsenal Tecnológico",
-        aboutPhiloTitle: "Filosofía",
-        aboutPhiloText: "No se trata solo de calcular, sino de entender la estructura subyacente de la realidad.",
-        aboutCtaText: "¿Tienes un desafío interesante?",
-        aboutBtnCv: "Descargar CV",
-        aboutBtnEmail: "Contactar",
 
         // --- 6. FREELANCE PAGE ---
         freelanceTitlePre: "Bitácora",
@@ -146,21 +131,6 @@ export const ui = {
         modalDone: "Recently Completed ✅",
         modalFreelance: "Recent Solutions 🚀",
         modalLink: "View all repository →",
-
-        // --- 5. ABOUT PAGE ---
-        aboutRole: "Mathematician & Data Analyst",
-        aboutTitle: "Mathematics",
-        aboutSubtitle: "Where abstraction meets purpose.",
-        aboutBio1: "My journey began with pure curiosity for abstract structures. Today, I use that theoretical foundation to solve complex data science problems.",
-        aboutBio2: "I specialize in translating theorems into efficient algorithms.",
-        aboutBio3: "Taekwondo Black Belt: Discipline in the dojo, discipline in the code.",
-        aboutStackMath: "Math Arsenal",
-        aboutStackTech: "Tech Arsenal",
-        aboutPhiloTitle: "Philosophy",
-        aboutPhiloText: "It's not just about calculating, but understanding the underlying structure of reality.",
-        aboutCtaText: "Got an interesting challenge?",
-        aboutBtnCv: "Download CV",
-        aboutBtnEmail: "Contact Me",
 
         // --- 6. FREELANCE PAGE ---
         freelanceTitlePre: "Freelance",
