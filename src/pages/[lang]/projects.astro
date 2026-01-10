@@ -1,14 +1,25 @@
-﻿---
-import Layout from '../../../layouts/Layout.astro';
-import projectsData from '../../../data/projects.json';
-import { ui } from '../../../i18n/ui';
+---
+import Layout from '../../layouts/Layout.astro';
+import projectsData from '../../data/projects.json'; // Ajustado path
+import { ui, defaultLang } from '../../i18n/ui'; // Ajustado path
 
-const lang = 'es';
-const t = ui.es;
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'es' } },
+    { params: { lang: 'en' } },
+  ];
+}
+
+const { lang } = Astro.params;
+// Aseguramos que lang sea 'es' o 'en' para indexar el JSON correctamente
+const currentLang = (lang === 'en' || lang === 'es') ? lang : defaultLang;
+const t = ui[currentLang];
 const projects = projectsData;
+
+const pageTitle = lang === 'en' ? "Projects | Camilo Ramírez" : "Proyectos | Camilo Ramírez";
 ---
 
-<Layout title="Proyectos | Camilo Ramírez" lang="es">
+<Layout title={pageTitle} lang={lang}>
   
   <header class="page-header">
     <h1 class="page-title">
@@ -23,8 +34,9 @@ const projects = projectsData;
     {projects.map(project => (
       <a href={project.link || '#'} class="project-card" target="_blank">
         <div class="card-content">
-          <h3>{project.title[lang]}</h3>
-          <p>{project.description[lang]}</p>
+          {/* Acceso dinámico al idioma del proyecto */}
+          <h3>{project.title[currentLang]}</h3>
+          <p>{project.description[currentLang]}</p>
           
           <div class="tags">
             {project.tags.map(tag => (
@@ -120,7 +132,7 @@ const projects = projectsData;
   .status-dot.active { background-color: var(--color-active); box-shadow: 0 0 8px var(--color-active); }
   .status-dot.completed { background-color: var(--color-done); }
 
-  /* --- RESPONSIVE OPTIMIZADO (768px) --- */
+  /* --- RESPONSIVE --- */
   @media (max-width: 768px) {
     .page-header { padding: 40px 15px 30px; }
     .page-title { font-size: 2rem; }

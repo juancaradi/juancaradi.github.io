@@ -17,8 +17,13 @@ export const ui = {
         footer: "Hecho con Astro + GitHub Pages",
         desc: "Proyectos, trabajo freelance y notas de matemáticas.",
         
-        // --- 2. NAVEGACIÓN ---
+        // --- 2. NAVEGACIÓN Y LAYOUT (ACTUALIZADO POR AUDITORÍA) ---
         navLabel: "Navegación principal",
+        navBrandFirst: "CAMILO",    // Nuevo: Antes quemado en Layout
+        navBrandLast: "RAMÍREZ",    // Nuevo: Antes quemado en Layout
+        navAriaGithub: "Ir al perfil de GitHub",   // Nuevo: Accesibilidad
+        navAriaLinkedin: "Ir al perfil de LinkedIn", // Nuevo: Accesibilidad
+        
         projects: "Proyectos",
         notes: "Notas",
         about: "Acerca",
@@ -26,7 +31,7 @@ export const ui = {
         switchTo: "Cambiar a inglés",
         toggleTheme: "Cambiar tema",
 
-        // --- 3. HERO SECTION ---
+        // --- 3. HERO SECTION & UI ELEMENTS ---
         heroBadge: "Disponible para proyectos",
         heroTitlePre: "Explorando la",
         heroTitleGradient: "belleza abstracta",
@@ -34,6 +39,10 @@ export const ui = {
         heroDesc: "Hola, soy <strong>Camilo Ramírez</strong>, estudiante de Matemáticas dedicado a llevar la teoría a la práctica mediante código y análisis de datos. Bienvenido a mi jardín digital de notas, proyectos y soluciones.",
         btnProjects: "Ver Portafolio Completo",
         btnAbout: "Sobre mí",
+        
+        // UI Generales (Nuevos)
+        searchNoResults: "No se encontraron elementos.", // Nuevo: Antes quemado en Hero
+        btnClose: "Cerrar",
 
         // --- 4. STATS & MODAL ---
         statsLabel: "Métricas de Impacto (Click para ver)",
@@ -45,22 +54,37 @@ export const ui = {
         // Modal Titles
         modalActive: "Proyectos en Marcha 🚧",
         modalDone: "Últimos Finalizados ✅",
-        modalFreelance: "Soluciones Recientes 🚀", // Faltaba este
+        modalFreelance: "Soluciones Recientes 🚀",
         modalLink: "Ver todos los proyectos →",
 
-        // --- 5. FREELANCE PAGE ---
+        // --- 5. PAGINA ABOUT (NECESARIO PARA TU NUEVO DISEÑO) ---
+        aboutRole: "Matemático & Data Analyst",
+        aboutTitle: "Matemáticas",
+        aboutSubtitle: "Donde la abstracción encuentra su propósito.",
+        aboutBio1: "Mi viaje comenzó con la curiosidad pura por las estructuras abstractas. Hoy, utilizo esa base teórica para resolver problemas complejos en ciencia de datos.",
+        aboutBio2: "Me especializo en traducir teoremas en algoritmos eficientes.",
+        aboutBio3: "Cinturón negro en Taekwondo: Disciplina en el dojo, disciplina en el código.",
+        aboutStackMath: "Arsenal Matemático",
+        aboutStackTech: "Arsenal Tecnológico",
+        aboutPhiloTitle: "Filosofía",
+        aboutPhiloText: "No se trata solo de calcular, sino de entender la estructura subyacente de la realidad.",
+        aboutCtaText: "¿Tienes un desafío interesante?",
+        aboutBtnCv: "Descargar CV",
+        aboutBtnEmail: "Contactar",
+
+        // --- 6. FREELANCE PAGE ---
         freelanceTitlePre: "Bitácora",
         freelanceTitleGradient: "Freelance",
         freelanceSubtitle: "Como consultor académico, ofrezco soporte especializado en Matemáticas, Estadística y Programación. Esta bitácora funciona como un repositorio público de los retos que he resuelto, donde podrás encontrar y descargar el material técnico (código, PDFs y análisis) como recurso de estudio.",
         freelancePrivate: "Código Privado / No disponible",
         freelanceDownload: "Descargar Recurso",
 
-        // --- 6. PROJECTS PAGE (NUEVO) ---
+        // --- 7. PROJECTS PAGE ---
         projectsTitlePre: "Proyectos",
         projectsTitleGradient: "Destacados",
         projectsDesc: "Una colección de mis trabajos aplicando matemáticas puras y computación para resolver problemas reales.",
 
-        // --- FREELANCE DASHBOARD & TIMELINE ---
+        // --- 8. FREELANCE DASHBOARD & TIMELINE ---
         'freelance.impact': 'Impacto',
         'freelance.completed': 'Proyectos Finalizados',
         'freelance.topSubjects': 'Materias más solicitadas',
@@ -72,7 +96,6 @@ export const ui = {
         'freelance.noRecords': 'No hay registros para este año.'
     },
 
-    
     en: {
         // --- 1. SIDEBAR & META ---
         name: "Juan Camilo Ramírez Díaz",
@@ -84,8 +107,13 @@ export const ui = {
         footer: "Built with Astro + GitHub Pages",
         desc: "Projects, freelance work, and math course notes.",
 
-        // --- 2. NAVIGATION ---
+        // --- 2. NAVIGATION & LAYOUT ---
         navLabel: "Primary navigation",
+        navBrandFirst: "CAMILO",
+        navBrandLast: "RAMÍREZ",
+        navAriaGithub: "Go to GitHub profile",
+        navAriaLinkedin: "Go to LinkedIn profile",
+
         projects: "Projects",
         notes: "Notes",
         about: "About",
@@ -93,7 +121,7 @@ export const ui = {
         switchTo: "Switch to Spanish",
         toggleTheme: "Toggle theme",
 
-        // --- 3. HERO SECTION ---
+        // --- 3. HERO SECTION & UI ELEMENTS ---
         heroBadge: "Available for projects",
         heroTitlePre: "Exploring",
         heroTitleGradient: "abstract beauty",
@@ -101,6 +129,10 @@ export const ui = {
         heroDesc: "Hi, I'm <strong>Camilo Ramírez</strong>, a Mathematics student dedicated to bridging theory and practice through code and data analysis. Welcome to my digital garden of notes, projects, and solutions.",
         btnProjects: "View Full Portfolio",
         btnAbout: "About Me",
+
+        // UI Generales
+        searchNoResults: "No items found.",
+        btnClose: "Close",
 
         // --- 4. STATS & MODAL ---
         statsLabel: "Impact Metrics (Click to view)",
@@ -112,22 +144,37 @@ export const ui = {
         // Modal Titles
         modalActive: "Ongoing Projects 🚧",
         modalDone: "Recently Completed ✅",
-        modalFreelance: "Recent Solutions 🚀", // Faltaba este
+        modalFreelance: "Recent Solutions 🚀",
         modalLink: "View all repository →",
 
-        // --- 5. FREELANCE PAGE ---
+        // --- 5. ABOUT PAGE ---
+        aboutRole: "Mathematician & Data Analyst",
+        aboutTitle: "Mathematics",
+        aboutSubtitle: "Where abstraction meets purpose.",
+        aboutBio1: "My journey began with pure curiosity for abstract structures. Today, I use that theoretical foundation to solve complex data science problems.",
+        aboutBio2: "I specialize in translating theorems into efficient algorithms.",
+        aboutBio3: "Taekwondo Black Belt: Discipline in the dojo, discipline in the code.",
+        aboutStackMath: "Math Arsenal",
+        aboutStackTech: "Tech Arsenal",
+        aboutPhiloTitle: "Philosophy",
+        aboutPhiloText: "It's not just about calculating, but understanding the underlying structure of reality.",
+        aboutCtaText: "Got an interesting challenge?",
+        aboutBtnCv: "Download CV",
+        aboutBtnEmail: "Contact Me",
+
+        // --- 6. FREELANCE PAGE ---
         freelanceTitlePre: "Freelance",
         freelanceTitleGradient: "Log",
         freelanceSubtitle: "As an academic consultant, I provide specialized support in Mathematics, Statistics, and Programming. This log serves as a public repository of the challenges I have solved, where you can find and download technical material (code, PDFs, and analysis) as a study resource.",
         freelancePrivate: "Private Code / Not available",
         freelanceDownload: "Download Resource",
 
-        // --- 6. PROJECTS PAGE (NEW) ---
+        // --- 7. PROJECTS PAGE ---
         projectsTitlePre: "Featured",
         projectsTitleGradient: "Projects",
         projectsDesc: "A collection of my work applying pure mathematics and computing to solve real-world problems.",
 
-        // --- FREELANCE DASHBOARD & TIMELINE ---
+        // --- 8. FREELANCE DASHBOARD & TIMELINE ---
         'freelance.impact': 'Impact',
         'freelance.completed': 'Completed Projects',
         'freelance.topSubjects': 'Most Requested Subjects',

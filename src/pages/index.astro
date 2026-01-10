@@ -1,6 +1,6 @@
 ﻿---
-// No usamos Layout aquí porque esta página es invisible, 
-// solo sirve para redirigir rápido.
+// src/pages/index.astro
+// Esta página no usa Layout. Su única misión es dirigir el tráfico.
 ---
 
 <!doctype html>
@@ -9,22 +9,23 @@
 		<meta charset="UTF-8" />
 		<title>Redireccionando...</title>
 		
-		<script is:inline>
-			// 1. Detectar el idioma del navegador (ej: 'es-CO', 'en-US', 'fr-FR')
-			const lang = navigator.language || navigator.userLanguage;
-			
-			// 2. Lógica de decisión
-			// Si el idioma empieza por 'es' (español), mandarlo a /es/
-			if (lang.startsWith('es')) {
-				window.location.replace('/es/');
-			} 
-			// Para cualquier otro idioma (Inglés, Francés, Chino...), mandarlo a /en/
-			else {
-				window.location.replace('/en/');
-			}
-		</script>
+		<meta name="robots" content="noindex" />
 		
 		<meta http-equiv="refresh" content="0;url=/es/" />
+
+		<script is:inline>
+			// 1. Detectar idioma del navegador
+			// (navigator.language es el estándar moderno)
+			const browserLang = navigator.language || 'es';
+			
+			// 2. Lógica simplificada
+			// Si el navegador empieza con 'en' (en-US, en-GB), va a inglés.
+			// Todo lo demás (es, fr, pt, etc.) va a español por defecto.
+			const targetPath = browserLang.startsWith('en') ? '/en/' : '/es/';
+			
+			// 3. Ejecutar el salto
+			window.location.replace(targetPath);
+		</script>
 	</head>
 	<body>
 	</body>

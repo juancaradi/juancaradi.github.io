@@ -1,15 +1,31 @@
-﻿---
+---
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
+import { ui, defaultLang } from '../../i18n/ui';
+
+// 🔥 Generamos las rutas dinámicas para ES y EN
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'es' } },
+    { params: { lang: 'en' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+
+// Título dinámico según idioma
+const pageTitle = lang === 'en' 
+  ? "Camilo Ramírez | Math & Data" 
+  : "Camilo Ramírez | Matemáticas & Datos";
 ---
 
-<Layout title="Camilo Ramírez | Matemáticas & Datos" lang="es">
-  <Hero lang="es" />
+<Layout title={pageTitle} lang={lang}>
+  <Hero lang={lang} />
 </Layout>
 
 <style>
   /* --- FONDO CARTESIANO --- */
-  /* Lo dejamos aquí porque es un estilo global específico de la página de inicio */
   :global(body) { position: relative; }
   :global(body::before) {
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;

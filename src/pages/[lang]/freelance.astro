@@ -1,14 +1,24 @@
-﻿---
-import Layout from '../../../layouts/Layout.astro';
-import FreelanceTimeline from '../../../components/FreelanceTimeline.astro';
-import FreelanceDashboard from '../../../components/FreelanceDashboard.astro';
-import { ui } from '../../../i18n/ui';
+---
+import Layout from '../../layouts/Layout.astro';
+import FreelanceTimeline from '../../components/FreelanceTimeline.astro';
+import FreelanceDashboard from '../../components/FreelanceDashboard.astro';
+import { ui, defaultLang } from '../../i18n/ui';
 
-const lang = 'en';
-const t = ui.en;
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'es' } },
+    { params: { lang: 'en' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const currentLang = (lang === 'en' || lang === 'es') ? lang : defaultLang;
+const t = ui[currentLang];
+
+const pageTitle = lang === 'en' ? "Freelance Log | Camilo Ramírez" : "Bitácora Freelance | Camilo Ramírez";
 ---
 
-<Layout title="Freelance Log | Camilo Ramírez" lang="en">
+<Layout title={pageTitle} lang={lang}>
   <div class="page-container">
     <header class="page-header">
       <h1 class="page-title">
@@ -25,12 +35,14 @@ const t = ui.en;
 
     {/* 📺 VISTA 2026: TIMELINE */}
     <div id="view-2026" class="year-view">
-      <FreelanceTimeline lang="en" year={2026} />
+      {/* Pasamos lang dinámico */}
+      <FreelanceTimeline lang={currentLang} year={2026} />
     </div>
 
     {/* 📊 VISTA 2025: DASHBOARD */}
     <div id="view-2025" class="year-view hidden">
-      <FreelanceDashboard year={2025} lang="en" />
+      {/* Pasamos lang dinámico */}
+      <FreelanceDashboard year={2025} lang={currentLang} />
     </div>
 
   </div>
@@ -68,7 +80,7 @@ const t = ui.en;
   }
   
   .page-subtitle { 
-    font-size: 1.2rem; /* Subido a 1.2rem para igualar Projects */
+    font-size: 1.2rem; 
     color: var(--muted); 
     max-width: 700px; 
     margin: 0 auto; 
@@ -86,7 +98,7 @@ const t = ui.en;
   .year-view { animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- RESPONSIVE STANDARDIZED (768px) --- */
+  /* --- RESPONSIVE --- */
   @media (max-width: 768px) {
     .page-title { font-size: 2rem; }
     .page-subtitle { font-size: 1.1rem; }

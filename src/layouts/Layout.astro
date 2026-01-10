@@ -37,6 +37,16 @@ const isActive = (href: string) => {
 		<BaseHead title={title} description={t.desc} lang={lang} />
 		
 		<ClientRouter />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
+			onload="renderMathInElement(document.body, {
+				delimiters: [
+					{left: '$$', right: '$$', display: true},
+					{left: '$', right: '$', display: false}
+				]
+			});">
+		</script>
 	</head>
 
 	<body>
@@ -45,10 +55,10 @@ const isActive = (href: string) => {
 				<div class="topbar-left">
 					<a class="site-title" href={`${base}/`} aria-label={lang === "en" ? "Home" : "Inicio"}>
 						<span class="title-pill" aria-hidden="true">
-							<span class="title-first">CAMILO</span>
-							<span class="title-last">RAMÍREZ</span>
+							<span class="title-first">{t.navBrandFirst}</span>
+							<span class="title-last">{t.navBrandLast}</span>
 						</span>
-						<span class="sr-only">Camilo Ramírez</span>
+						<span class="sr-only">{t.navBrandFirst} {t.navBrandLast}</span>
 					</a>
 				</div>
 
@@ -107,13 +117,13 @@ const isActive = (href: string) => {
 					</div>
 
 					<div class="social" aria-label={lang === "en" ? "Links" : "Enlaces"}>
-						<a class="social-btn github" href={t.githubUrl} target="_blank" rel="noreferrer" aria-label="GitHub">
+						<a class="social-btn github" href={t.githubUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaGithub}>
 							<svg class="octicon" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
 								<path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07 -1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75 -3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38 A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
 							</svg>
 						</a>
 						
-						<a class="social-btn linkedin" href={t.linkedinUrl} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+						<a class="social-btn linkedin" href={t.linkedinUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaLinkedin}>
 							<span class="li" aria-hidden="true">in</span>
 						</a>
 						
@@ -163,7 +173,7 @@ const isActive = (href: string) => {
 		/* Colores Específicos */
 		--brand-linkedin: #0077b5; 
 		--brand-github: #24292f;   
-		--icon-loc: #dc2626;       
+		--icon-loc: #dc2626;        
 	}
 
 	/* Dark Theme Colors */
@@ -179,7 +189,7 @@ const isActive = (href: string) => {
 		--title-border: rgba(88, 166, 255, 0.22);
 		--title-glow: rgba(88, 166, 255, 0.6);
 		--brand-github: #ffffff;   
-		--icon-loc: #f87171;       
+		--icon-loc: #f87171;        
 	}
 
 	/* Estilos Base */
