@@ -3,7 +3,6 @@ import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import { ui, defaultLang } from '../../i18n/ui';
 
-// 🔥 Generamos las rutas dinámicas para ES y EN
 export function getStaticPaths() {
   return [
     { params: { lang: 'es' } },
@@ -14,9 +13,8 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
 
-// Título dinámico según idioma
-const pageTitle = lang === 'en' 
-  ? "Camilo Ramírez | Math & Data" 
+const pageTitle = lang === 'en'
+  ? "Camilo Ramírez | Math & Data"
   : "Camilo Ramírez | Matemáticas & Datos";
 ---
 
@@ -25,11 +23,15 @@ const pageTitle = lang === 'en'
 </Layout>
 
 <style>
-  /* --- FONDO CARTESIANO --- */
   :global(body) { position: relative; }
   :global(body::before) {
-    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;
-    background-image: 
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
       linear-gradient(to right, rgba(128, 128, 128, 0.08) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(128, 128, 128, 0.08) 1px, transparent 1px);
     background-size: 40px 40px;

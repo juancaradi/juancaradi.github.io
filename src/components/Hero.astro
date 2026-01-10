@@ -26,7 +26,9 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 <section class="hero">
   <div class="hero-content">
     <span class="badge">{t.heroBadge}</span>
+
     <h1 class="hero-title">{t.heroTitlePre} <span class="gradient-text">{t.heroTitleGradient}</span> {t.heroTitlePost}</h1>
+
     <p class="hero-desc" set:html={t.heroDesc}></p>
 
     <div class="stats-wrapper">
@@ -64,108 +66,125 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
   </dialog>
 </section>
 
-<script define:vars={{ 
+<script define:vars={{
   activeProjects, completedProjects, freelanceData,
-  // Pasamos el objeto UI completo para tener acceso a todas las traducciones en el cliente
-  allTranslations: ui, 
+  allTranslations: ui,
   links: { projects: projectsLink, freelance: freelanceLink },
   emptyMsg: t.searchNoResults
 }}>
-  const initHero = () => {
+  (() => {
+    const ICON_EXT = `<svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
+
+    const renderProjects = (items) => {
+      if (!items || items.length === 0) {
+        return `<p class="empty-msg">${emptyMsg || 'No items found'}</p>`;
+      }
+
+      const isFreelance = Object.prototype.hasOwnProperty.call(items[0], 'subject');
+      const activeLang = document.documentElement.lang || 'es';
+
+      return items.slice(0, 5).map(item => {
+        let title, desc, tags, link, metaHtml = '';
+
+        if (isFreelance) {
+          title = item.title?.[activeLang] ?? item.title?.es ?? '';
+          desc = item.description?.[activeLang] ?? item.description?.es ?? '';
+          tags = (item.resources || []).map(r => r.name);
+          link = links.freelance;
+          const metaText = `${item.subject?.[activeLang] ?? ''} • ${item.type?.[activeLang] ?? ''}`;
+          metaHtml = `<div class="card-meta">${metaText} <span class="meta-separator">|</span> ${item.date}</div>`;
+        } else {
+          title = item.title?.[activeLang] ?? item.title?.es ?? item.title ?? '';
+          desc = item.description?.[activeLang] ?? item.description?.es ?? item.description ?? '';
+          tags = item.tags || [];
+          link = item.link;
+        }
+
+        return `
+          <a href="${link}" class="project-card" target="_blank" rel="noreferrer">
+            <div class="card-top">
+              <h4 class="card-title">${title}</h4>
+              ${ICON_EXT}
+            </div>
+            ${metaHtml}
+            <p class="card-desc">${desc}</p>
+            <div class="card-tags">
+              ${(tags || []).map(t => `<span class="tech-tag">${t}</span>`).join('')}
+            </div>
+          </a>`;
+      }).join('');
+    };
+
+    const setup = () => {
       const modal = document.getElementById('projects-modal');
-      if (!modal) return; 
+      if (!modal) return;
+
+      // ✅ Limpieza real (evita duplicados al volver al hero)
+      if (window.__heroAbort) {
+        try { window.__heroAbort.abort(); } catch (_) {}
+      }
+      const ac = new AbortController();
+      window.__heroAbort = ac;
 
       const modalTitle = document.getElementById('modal-title');
       const modalContent = document.getElementById('modal-content');
       const modalFooterLink = document.getElementById('modal-footer-link');
       const closeBtn = document.getElementById('close-modal');
-      const buttons = document.querySelectorAll('.interactive');
+      const statsContainer = document.querySelector('.stats-container');
 
-      const ICON_EXT = `<svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
+      const openModal = (action) => {
+        const activeLang = document.documentElement.lang || 'es';
+        const t = allTranslations[activeLang] || allTranslations.es;
 
-      const renderProjects = (items) => {
-          if (items.length === 0) return `<p class="empty-msg">${emptyMsg || 'No items found'}</p>`;
-          
-          const isFreelance = items[0].hasOwnProperty('subject');
-          const activeLang = document.documentElement.lang || 'es';
+        if (action === 'openActive') {
+          modalTitle.innerHTML = `${t.modalActive} <span class="status-indicator active"></span>`;
+          modalContent.innerHTML = renderProjects(activeProjects);
+          if (modalFooterLink) modalFooterLink.href = links.projects;
+        } else if (action === 'openCompleted') {
+          modalTitle.innerHTML = `${t.modalDone} <span class="status-indicator done"></span>`;
+          modalContent.innerHTML = renderProjects(completedProjects);
+          if (modalFooterLink) modalFooterLink.href = links.projects;
+        } else if (action === 'openFreelance') {
+          modalTitle.innerHTML = `${t.modalFreelance} <span class="status-indicator freelance"></span>`;
+          const currentYear = new Date().getFullYear();
+          const recentFreelance = (freelanceData || [])
+            .filter(item => parseInt(String(item.date).split('-')[0]) === currentYear)
+            .reverse();
+          modalContent.innerHTML = renderProjects(recentFreelance);
+          if (modalFooterLink) modalFooterLink.href = links.freelance;
+        } else {
+          return;
+        }
 
-          return items.slice(0, 5).map(item => {
-              let title, desc, tags, link, metaHtml = '';
-
-              if (isFreelance) {
-                  title = item.title[activeLang]; 
-                  desc = item.description[activeLang];
-                  tags = item.resources.map(r => r.name); 
-                  link = links.freelance; 
-                  const metaText = `${item.subject[activeLang]} • ${item.type[activeLang]}`;
-                  metaHtml = `<div class="card-meta">${metaText} <span class="meta-separator">|</span> ${item.date}</div>`;
-              } else {
-                  title = item.title[activeLang];
-                  desc = item.description[activeLang];
-                  tags = item.tags;
-                  link = item.link;
-              }
-
-              return `
-              <a href="${link}" class="project-card" target="_blank">
-                <div class="card-top">
-                   <h4 class="card-title">${title}</h4>
-                   ${ICON_EXT}
-                </div>
-                ${metaHtml}
-                <p class="card-desc">${desc}</p>
-                <div class="card-tags">
-                  ${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
-                </div>
-              </a>`;
-          }).join('');
+        modal.showModal();
       };
 
-      buttons.forEach(oldBtn => {
-          const btn = oldBtn.cloneNode(true);
-          oldBtn.parentNode.replaceChild(btn, oldBtn);
-          
-          btn.addEventListener('click', () => {
-              const action = btn.dataset.action;
-              if (!action) return;
-              
-              // 🔥 OBTENEMOS EL IDIOMA ACTUAL DEL DOCUMENTO
-              const activeLang = document.documentElement.lang || 'es';
-              // Obtenemos las traducciones específicas para ese idioma
-              const t = allTranslations[activeLang];
-              
-              if (action === 'openActive') {
-                  modalTitle.innerHTML = `${t.modalActive} <span class="status-indicator active"></span>`;
-                  modalContent.innerHTML = renderProjects(activeProjects);
-                  if(modalFooterLink) modalFooterLink.href = links.projects;
-              } else if (action === 'openCompleted') {
-                  modalTitle.innerHTML = `${t.modalDone} <span class="status-indicator done"></span>`;
-                  modalContent.innerHTML = renderProjects(completedProjects);
-                  if(modalFooterLink) modalFooterLink.href = links.projects;
-              } else if (action === 'openFreelance') {
-                  modalTitle.innerHTML = `${t.modalFreelance} <span class="status-indicator freelance"></span>`;
-                  const currentYear = new Date().getFullYear();
-                  const recentFreelance = freelanceData
-                    .filter(item => parseInt(item.date.split('-')[0]) === currentYear)
-                    .reverse(); 
-                  modalContent.innerHTML = renderProjects(recentFreelance);
-                  if(modalFooterLink) modalFooterLink.href = links.freelance;
-              }
-              modal.showModal();
-          });
-      });
-
-      if(closeBtn) {
-          const newCloseBtn = closeBtn.cloneNode(true);
-          closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
-          newCloseBtn.addEventListener('click', () => modal.close());
+      // ✅ Event delegation: un solo listener
+      if (statsContainer) {
+        statsContainer.addEventListener('click', (e) => {
+          const btn = e.target.closest('button.interactive');
+          if (!btn) return;
+          const action = btn.dataset.action;
+          if (!action) return;
+          openModal(action);
+        }, { signal: ac.signal });
       }
-      modal.onclick = (e) => {
-          const rect = modal.getBoundingClientRect();
-          if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) modal.close();
-      };
-  };
-  document.addEventListener('astro:page-load', initHero);
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => modal.close(), { signal: ac.signal });
+      }
+
+      modal.addEventListener('click', (e) => {
+        const rect = modal.getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+          modal.close();
+        }
+      }, { signal: ac.signal });
+    };
+
+    document.addEventListener('astro:page-load', setup);
+    document.addEventListener('astro:after-swap', setup);
+  })();
 </script>
 
 <style is:global>
@@ -190,36 +209,77 @@ const freelanceLink = lang === 'en' ? '/en/freelance/' : '/es/freelance/';
 
 <style>
   :root { --color-active: #10b981; --color-done: #3b82f6; --color-freelance: #8b5cf6; --color-notes: #f59e0b; }
+
   .hero { position: relative; padding: 80px 0 60px; max-width: 900px; margin: 0 auto; text-align: center; }
   .hero-content { display: flex; flex-direction: column; align-items: center; }
   .hero::before { content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; height: 400px; background: radial-gradient(circle, var(--link) 0%, transparent 70%); opacity: 0.15; filter: blur(80px); z-index: -1; pointer-events: none; }
+
   .badge { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; background: rgba(139, 92, 246, 0.15); color: var(--link); border: 1px solid rgba(139, 92, 246, 0.5); margin-bottom: 24px; box-shadow: 0 0 15px rgba(139, 92, 246, 0.35); animation: glowBadge 2s ease-in-out infinite alternate; }
+
   .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; animation: fadeUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
   .gradient-text { background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .hero-desc { font-size: 1.35rem; color: var(--muted); line-height: 1.6; margin: 0 auto 40px; max-width: 700px; animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(20px); }
+
   .stats-wrapper { margin-bottom: 100px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(20px); }
   .stats-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; text-align: center; }
   .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); width: 100%; }
+
   .stat-item { background: var(--bg); padding: 24px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; height: 100%; border: none; margin: 0; appearance: none; outline: none; font-family: inherit; cursor: default; transition: all 0.2s ease; }
-  .stat-item.interactive { cursor: pointer; } .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); } .stat-item.interactive:active { transform: translateY(0); }
+  .stat-item.interactive { cursor: pointer; }
+  .stat-item.interactive:hover { background: var(--code-bg); transform: translateY(-2px); }
+  .stat-item.interactive:active { transform: translateY(0); }
+
   .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-family: ui-monospace, monospace; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .stat-name { font-size: 0.85rem; color: var(--muted); font-weight: 500; line-height: 1.2; max-width: 90%; }
   .pulse-dot { width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; animation: pulse 2s infinite; }
+
   .hero-actions { display: flex; gap: 16px; justify-content: center; animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(20px); }
   .btn { display: inline-flex; align-items: center; padding: 12px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); } .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); } .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
-  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); } .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
+  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { background: var(--code-bg); border-color: var(--text); }
+
+  .modal { border: none; background: transparent; padding: 0; margin: auto; max-width: 550px; width: 92%; color: var(--text); }
+  .modal::backdrop { background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); }
+
   .modal-box { background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
+
   .modal-header { display: flex; align-items: center; justify-content: center; padding: 20px 24px; border-bottom: 1px solid var(--border); position: relative; background: var(--bg); }
   .modal-title-text { margin: 0; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-  .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; } .close-btn:hover { background: var(--border); color: var(--text); }
-  .modal-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; } .modal-grid::-webkit-scrollbar { width: 6px; } .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; } .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; } .modal-grid::-webkit-scrollbar-thumb:hover { background-color: var(--text); opacity: 0.8; }
+
+  .close-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--code-bg); border: 1px solid transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--muted); cursor: pointer; transition: all 0.2s; line-height: 1; padding-bottom: 4px; }
+  .close-btn:hover { background: var(--border); color: var(--text); }
+
+  .modal-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .modal-grid::-webkit-scrollbar { width: 6px; }
+  .modal-grid::-webkit-scrollbar-track { background: transparent; margin-block: 10px; }
+  .modal-grid::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; border: 2px solid transparent; background-clip: content-box; }
+  .modal-grid::-webkit-scrollbar-thumb:hover { background-color: var(--text); opacity: 0.8; }
+
   .modal-footer { text-align: center; border-top: 1px solid var(--border); padding: 16px; background: var(--bg); }
-  .btn-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; } .btn-link:hover { color: var(--link); }
+  .btn-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
+  .btn-link:hover { color: var(--link); }
+
   @keyframes pulse { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); opacity: 0; } }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   @keyframes glowBadge { from { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); } to { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); border-color: rgba(139, 92, 246, 0.7); } }
+
   @media (max-width: 768px) { .hero-title { font-size: 2.8rem; } .stats-container { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .stat-item { padding: 20px 5px; } .stat-value { font-size: 2rem; } }
+
+  /* ✅ Fix swaps: no dejes al Hero "vacío" durante swaps */
+  :global(html.is-swapping) .hero-title,
+  :global(html.is-swapping) .hero-desc,
+  :global(html.is-swapping) .stats-wrapper,
+  :global(html.is-swapping) .hero-actions {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  :global(html.is-swapping) .hero::before {
+    filter: none !important;
+    opacity: 0.12;
+  }
 </style>

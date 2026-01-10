@@ -71,7 +71,7 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
       </div>
     </div>
 
-    {/* 4. Gráfica Temporal (Tendencia) */}
+    {/* 4. Gráfica Temporal (Tendencia Mensual) */}
     <div class="chart-card card-glass trend-chart-span">
       <h3 class="chart-title">{t['freelance.monthly']}</h3>
       <div class="trend-chart">
@@ -79,7 +79,7 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
           <div class="trend-col-wrapper">
             <div 
               class="trend-bar" 
-              style={`height: ${val > 0 ? (val / stats.maxMonthValue) * 100 : 2}%`}
+              style={`height: ${val > 0 ? (val / stats.maxMonthValue) * 100 : 3}%`}
             >
               {val > 0 && <span class="trend-val">{val}</span>}
             </div>
@@ -97,19 +97,16 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
 )}
 
 <style>
-  /* ==========================================
-     MÓVIL (Base / Mobile First)
-     ========================================== */
+  /* --- CONFIGURACIÓN BASE (MÓVIL) --- */
   .dashboard-container { 
     display: grid;
-    grid-template-columns: 1fr; /* Forzamos una columna */
+    grid-template-columns: 1fr;
     gap: 20px; 
     margin-top: 20px;
-    padding: 0 16px; /* Aumentamos padding lateral de seguridad */
+    padding: 0 16px;
     width: 100%;
     box-sizing: border-box;
-    justify-items: center; /* CENTRA los elementos del grid */
-    overflow-x: hidden;    /* Evita cualquier deslizamiento horizontal raro */
+    justify-items: center; /* Asegura el centrado de las cards en el lienzo */
   }
 
   .card-glass { 
@@ -118,10 +115,11 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
     border-radius: 16px; 
     padding: 20px;
     width: 100%;
-    max-width: 460px; /* Ancho máximo ideal para móviles */
+    max-width: 480px; /* Ancho máximo para evitar que se estiren de más en móvil */
     margin: 0 auto;
     box-sizing: border-box;
-    min-width: 0; /* Fix para que el contenido interno no desborde el grid */
+    min-width: 0; /* Permite que la caja se encoja correctamente */
+    overflow: hidden; /* Evita que las barras derramen contenido */
   }
   
   .chart-title { font-size: 1.1rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; text-align: left; }
@@ -131,66 +129,74 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
   .kpi-number { font-size: 4rem; font-weight: 800; color: var(--link); line-height: 1; margin: 8px 0; }
   .kpi-desc { color: var(--muted); font-size: 0.9rem; }
   
-  /* Barras */
+  /* Bars (Materias) */
   .bars-container { display: flex; flex-direction: column; gap: 12px; }
   .bar-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--text); }
   .progress-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
   
-  /* Tipos de Servicio */
+  /* Types */
   .types-list { display: flex; flex-direction: column; gap: 15px; }
   .type-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
   .mini-bar-bg { height: 4px; background: var(--border); border-radius: 2px; }
   .mini-bar-fill { height: 100%; background: var(--link); border-radius: 2px; }
   
-  /* Gráfica Mensual (El punto crítico del desbordamiento) */
+  /* --- GRÁFICA MENSUAL (RECALCULADA) --- */
   .trend-chart { 
     display: flex; 
     align-items: flex-end; 
-    justify-content: space-between; 
+    justify-content: center; /* Centrado fluido */
     height: 140px; 
-    padding-top: 25px; 
-    gap: 3px; /* Reducimos gap para que quepa en móviles pequeños */
+    padding: 25px 5px 0 5px; /* Padding interno de seguridad */
+    gap: 2px; 
+    width: 100%;
   }
-  .trend-col-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+
+  .trend-col-wrapper { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    flex: 1; /* Cada columna toma exactamente 1/12 del ancho disponible */
+    min-width: 0;
+    height: 100%; 
+    justify-content: flex-end; 
+  }
+
   .trend-bar { 
-    width: 100%; 
-    max-width: 16px; /* Barras más delgadas para móvil */
+    width: 85%; /* Deja un 15% de aire natural entre barras sin depender de píxeles fijos */
+    max-width: 14px; /* Límite para que no se vean demasiado gordas en pantallas grandes */
     background: linear-gradient(to top, var(--link), #8b5cf6); 
     border-radius: 3px 3px 0 0; 
     position: relative; 
     min-height: 3px; 
   }
-  .trend-val { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--text); font-weight: 700; }
-  .trend-label { margin-top: 8px; font-size: 0.6rem; color: var(--muted); text-transform: capitalize; }
+
+  .trend-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--text); font-weight: 700; }
+  .trend-label { margin-top: 8px; font-size: 0.55rem; color: var(--muted); text-transform: capitalize; }
   
   .empty-state { text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted); width: 100%; }
 
-  /* ==========================================
-     ESCRITORIO (A partir de 900px)
-     ========================================== */
+  /* --- ESCRITORIO (RESTAURADO) --- */
   @media (min-width: 900px) {
     .dashboard-container { 
-      grid-template-columns: repeat(3, 1fr); /* 3 columnas originales */
+      grid-template-columns: repeat(3, 1fr); 
       padding: 0;
-      justify-items: stretch; /* Volvemos al estiramiento normal */
+      justify-items: stretch; /* Estiramiento normal para llenar las celdas del grid */
     }
     .card-glass { 
       max-width: none; 
       margin: 0; 
     }
-    /* Distribución de escritorio favorita */
+    /* Mantenemos tus proporciones favoritas */
     .bar-chart-span { grid-column: span 2; }
     .trend-chart-span { grid-column: span 3; }
-    
-    .trend-chart { gap: 6px; }
-    .trend-bar { max-width: 25px; }
-    .trend-label { font-size: 0.75rem; }
-    .trend-val { font-size: 0.75rem; }
     .empty-state { grid-column: span 3; }
+    
+    .trend-chart { gap: 6px; padding: 25px 20px 0 20px; }
+    .trend-bar { max-width: 25px; width: 100%; }
+    .trend-label, .trend-val { font-size: 0.75rem; }
   }
 
-  /* Animación */
   .fade-in { animation: fadeIn 0.5s ease-in; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>

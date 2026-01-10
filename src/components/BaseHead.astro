@@ -1,8 +1,8 @@
 ﻿---
 interface Props {
-	title: string;
-	description: string;
-	lang: string;
+  title: string;
+  description: string;
+  lang: string;
 }
 
 const { title, description, lang } = Astro.props;
@@ -14,6 +14,9 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- ✅ Ayuda a Safari/UI -->
+<meta name="color-scheme" content="dark light" />
+
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
@@ -24,31 +27,44 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
 
+<!-- ✅ Theme-color dinámico (iOS address bar) -->
+<meta name="theme-color" content="#ffffff" data-dynamic-theme-color />
+
 <script is:inline>
-	const applyTheme = () => {
-		const root = document.documentElement;
-		const saved = localStorage.getItem("theme");
-		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  (() => {
+    const root = document.documentElement;
 
-		if (saved === "dark" || (!saved && prefersDark)) {
-			root.setAttribute("data-theme", "dark");
-		} else {
-			root.setAttribute("data-theme", "light");
-		}
-	};
+    const setThemeColor = (theme) => {
+      const meta = document.querySelector('meta[data-dynamic-theme-color]');
+      if (!meta) return;
+      meta.setAttribute('content', theme === 'dark' ? '#232323' : '#ffffff');
+    };
 
-	// 1. Ejecutar inmediatamente al cargar
-	applyTheme();
+    const applyTheme = () => {
+      let saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (_) {}
 
-	// 2. IMPORTANTE: Ejecutar de nuevo cada vez que Astro cambie de página
-	document.addEventListener('astro:after-swap', applyTheme);
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      const next = (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
+
+      if (root.getAttribute("data-theme") !== next) {
+        root.setAttribute("data-theme", next);
+      }
+      setThemeColor(next);
+    };
+
+    // 1) inmediato
+    applyTheme();
+
+    // 2) en swaps
+    document.addEventListener('astro:after-swap', applyTheme);
+  })();
 </script>
 
 <style>
-	html {
-		background-color: #ffffff; /* Fallback light */
-	}
-	html[data-theme="dark"] {
-		background-color: #232323; /* Fallback dark */
-	}
+  html { background-color: #ffffff; }
+  html[data-theme="dark"] { background-color: #232323; }
 </style>

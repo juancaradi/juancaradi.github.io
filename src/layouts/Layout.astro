@@ -6,401 +6,432 @@ import { ui, defaultLang } from '../i18n/ui';
 
 const { title = "Camilo Ramírez", lang = "es" } = Astro.props;
 
-// 1. Obtener textos desde nuestra nueva "Base de Datos" (ui.ts)
-// Si el idioma no existe, usa el por defecto.
 const t = ui[lang as keyof typeof ui] || ui[defaultLang];
 
-// 2. Lógica de Rutas (Base path)
 const base = lang === "en" ? "/en" : "/es";
 
-// 3. Switch de idioma inteligente
 const path = Astro.url.pathname;
 const swapped =
-	path.startsWith("/es/") ? path.replace("/es/", "/en/") :
-	path.startsWith("/en/") ? path.replace("/en/", "/es/") :
-	(lang === "en" ? "/es/" : "/en/");
+  path.startsWith("/es/") ? path.replace("/es/", "/en/") :
+  path.startsWith("/en/") ? path.replace("/en/", "/es/") :
+  (lang === "en" ? "/es/" : "/en/");
 
-// 4. Detectar sección activa
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) => {
-	const normalize = (p: string) => p.replace(/\/$/, "");
-	const h = normalize(href);
-	const c = normalize(currentPath);
-	if (h === normalize(base)) return c === h;
-	return c.startsWith(h);
+  const normalize = (p: string) => p.replace(/\/$/, "");
+  const h = normalize(href);
+  const c = normalize(currentPath);
+  if (h === normalize(base)) return c === h;
+  return c.startsWith(h);
 };
 ---
 
 <!doctype html>
 <html lang={lang}>
-	<head>
-		<BaseHead title={title} description={t.desc} lang={lang} />
-		
-		<ClientRouter />
-		
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-		
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<head>
+  <BaseHead title={title} description={t.desc} lang={lang} />
 
-		<script is:inline>
-			document.addEventListener('astro:page-load', () => {
-				if (window.renderMathInElement) {
-					renderMathInElement(document.body, {
-						delimiters: [
-							{left: '$$', right: '$$', display: true},
-							{left: '$', right: '$', display: false}
-						]
-					});
-				}
-			});
-		</script>
-	</head>
+  <!-- ✅ Swap marker (solo durante transitions) -->
+  <script is:inline>
+    (() => {
+      const root = document.documentElement;
 
-	<body>
-		<header class="topbar">
-			<div class="topbar-inner">
-				<div class="topbar-left">
-					<a class="site-title" href={`${base}/`} aria-label={lang === "en" ? "Home" : "Inicio"}>
-						<span class="title-pill" aria-hidden="true">
-							<span class="title-first">{t.navBrandFirst}</span>
-							<span class="title-last">{t.navBrandLast}</span>
-						</span>
-						<span class="sr-only">{t.navBrandFirst} {t.navBrandLast}</span>
-					</a>
-				</div>
+      const markSwapOn = () => root.classList.add('is-swapping');
+      const markSwapOff = () => root.classList.remove('is-swapping');
 
-				<nav class="topnav" aria-label={t.navLabel}>
-					<a href={`${base}/projects/`} class={isActive(`${base}/projects/`) ? "active" : ""}>
-						{t.projects}
-					</a>
-					<a href={`${base}/freelance/`} class={isActive(`${base}/freelance/`) ? "active" : ""}>
-						{t.freelance}
-					</a>
-					<a href={`${base}/notes/`} class={isActive(`${base}/notes/`) ? "active" : ""}>
-						{t.notes}
-					</a>
-					<a href={`${base}/about/`} class={isActive(`${base}/about/`) ? "active" : ""}>
-						{t.about}
-					</a>
-				</nav>
+      document.addEventListener('astro:before-swap', markSwapOn);
+      document.addEventListener('astro:after-swap', markSwapOff);
+      document.addEventListener('astro:page-load', markSwapOff);
+    })();
+  </script>
 
-				<div class="top-actions">
-					<a class="pill lang-pill" href={swapped} aria-label={t.switchTo}>
-						{lang === "en" ? "ES" : "EN"}
-					</a>
+  <ClientRouter />
 
-					<ThemeToggle label={t.toggleTheme} />
-				</div>
-			</div>
-		</header>
+  <!-- KaTeX -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+    crossorigin="anonymous"
+  />
 
-		<div class="shell">
-			<aside class="sidebar" aria-label={lang === "en" ? "Profile card" : "Tarjeta de perfil"}>
-				<a class="avatar" href={`${base}/`} aria-label={lang === "en" ? "Home" : "Inicio"}>
-					<img
-						src="/img/avatar.jpg"
-						alt={lang === "en" ? "Portrait photo" : "Foto de perfil"}
-						width="240"
-						height="240"
-						loading="eager"
-						fetchpriority="high"
-					/>
-				</a>
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
+    crossorigin="anonymous"></script>
 
-				<div class="identity">
-					<div class="name">{t.name}</div>
-					<p class="bio muted">{t.bio}</p>
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+    crossorigin="anonymous"></script>
 
-					<div class="meta muted">
-						<span class="meta-item" title={lang === "en" ? "Location" : "Ubicación"}>
-							<span class="meta-ico location-icon" aria-hidden="true">
-								<svg class="ico" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="35" height="35">
-									<path fill="currentColor" d="M100.232 149.198c-2.8 0-5.4-1.8-7.2-5.2-22.2-41-22.4-41.4-22.4-41.6-3.2-5.1-4.9-11.3-4.9-17.6 0-19.1 15.5-34.6 34.6-34.6s34.6 15.5 34.6 34.6c0 6.5-1.8 12.8-5.2 18.2 0 0-1.2 2.4-22.2 41-1.9 3.4-4.4 5.2-7.3 5.2zm.1-95c-16.9 0-30.6 13.7-30.6 30.6 0 5.6 1.5 11.1 4.5 15.9.6 1.3 16.4 30.4 22.4 41.5 2.1 3.9 5.2 3.9 7.4 0 7.5-13.8 21.7-40.1 22.2-41 3.1-5 4.7-10.6 4.7-16.3-.1-17-13.8-30.7-30.6-30.7z"/>
-									<path fill="currentColor" d="M100.332 105.598c-10.6 0-19.1-8.6-19.1-19.1s8.5-19.2 19.1-19.2c10.6 0 19.1 8.6 19.1 19.1s-8.6 19.2-19.1 19.2zm0-34.3c-8.3 0-15.1 6.8-15.1 15.1s6.8 15.1 15.1 15.1 15.1-6.8 15.1-15.1-6.8-15.1-15.1-15.1z"/>
-								</svg>
-							</span>
-							{t.location}
-						</span>
-					</div>
+  <!-- ✅ Render KaTeX en swaps sin duplicar agresivamente -->
+  <script is:inline>
+    (() => {
+      const renderMath = () => {
+        // Renderiza solo el main (evita re-render innecesario en sidebar)
+        const scope = document.querySelector('main.content');
+        if (!scope) return;
 
-					<div class="social" aria-label={lang === "en" ? "Links" : "Enlaces"}>
-						<a class="social-btn github" href={t.githubUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaGithub}>
-							<svg class="octicon" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
-								<path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07 -1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75 -3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38 A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-							</svg>
-						</a>
-						
-						<a class="social-btn linkedin" href={t.linkedinUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaLinkedin}>
-							<span class="li" aria-hidden="true">in</span>
-						</a>
-						
-						<a class="social-btn" href={`mailto:${t.email}`} aria-label={lang === "en" ? "Email" : "Correo"}>
-							<span aria-hidden="true">✉</span>
-						</a>
-					</div>
-				</div>
+        // auto-render define window.renderMathInElement
+        if (window.renderMathInElement) {
+          window.renderMathInElement(scope, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+          });
+        }
+      };
 
-				<footer class="side-footer muted">
-					© {new Date().getFullYear()} · {t.footer}
-				</footer>
-			</aside>
+      document.addEventListener('astro:page-load', renderMath);
+      document.addEventListener('astro:after-swap', renderMath);
+    })();
+  </script>
+</head>
 
-			<main class="content" aria-label={lang === "en" ? "Content" : "Contenido"}>
-				<slot />
-			</main>
-		</div>
-	</body>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <a class="site-title" href={`${base}/`} aria-label={lang === "en" ? "Home" : "Inicio"}>
+          <span class="title-pill" aria-hidden="true">
+            <span class="title-first">{t.navBrandFirst}</span>
+            <span class="title-last">{t.navBrandLast}</span>
+          </span>
+          <span class="sr-only">{t.navBrandFirst} {t.navBrandLast}</span>
+        </a>
+      </div>
+
+      <nav class="topnav" aria-label={t.navLabel}>
+        <a href={`${base}/projects/`} class={isActive(`${base}/projects/`) ? "active" : ""}>{t.projects}</a>
+        <a href={`${base}/freelance/`} class={isActive(`${base}/freelance/`) ? "active" : ""}>{t.freelance}</a>
+        <a href={`${base}/notes/`} class={isActive(`${base}/notes/`) ? "active" : ""}>{t.notes}</a>
+        <a href={`${base}/about/`} class={isActive(`${base}/about/`) ? "active" : ""}>{t.about}</a>
+      </nav>
+
+      <div class="top-actions">
+        <a class="pill lang-pill" href={swapped} aria-label={t.switchTo}>
+          {lang === "en" ? "ES" : "EN"}
+        </a>
+        <ThemeToggle label={t.toggleTheme} />
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar" aria-label={lang === "en" ? "Profile card" : "Tarjeta de perfil"}>
+      <a class="avatar" href={`${base}/`} aria-label={lang === "en" ? "Home" : "Inicio"}>
+        <img
+          src="/img/avatar.jpg"
+          alt={lang === "en" ? "Portrait photo" : "Foto de perfil"}
+          width="240"
+          height="240"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+
+      <div class="identity">
+        <div class="name">{t.name}</div>
+        <p class="bio muted">{t.bio}</p>
+
+        <div class="meta muted">
+          <span class="meta-item" title={lang === "en" ? "Location" : "Ubicación"}>
+            <span class="meta-ico location-icon" aria-hidden="true">
+              <svg class="ico" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="35" height="35">
+                <path fill="currentColor" d="M100.232 149.198c-2.8 0-5.4-1.8-7.2-5.2-22.2-41-22.4-41.4-22.4-41.6-3.2-5.1-4.9-11.3-4.9-17.6 0-19.1 15.5-34.6 34.6-34.6s34.6 15.5 34.6 34.6c0 6.5-1.8 12.8-5.2 18.2 0 0-1.2 2.4-22.2 41-1.9 3.4-4.4 5.2-7.3 5.2zm.1-95c-16.9 0-30.6 13.7-30.6 30.6 0 5.6 1.5 11.1 4.5 15.9.6 1.3 16.4 30.4 22.4 41.5 2.1 3.9 5.2 3.9 7.4 0 7.5-13.8 21.7-40.1 22.2-41 3.1-5 4.7-10.6 4.7-16.3-.1-17-13.8-30.7-30.6-30.7z"/>
+                <path fill="currentColor" d="M100.332 105.598c-10.6 0-19.1-8.6-19.1-19.1s8.5-19.2 19.1-19.2c10.6 0 19.1 8.6 19.1 19.1s-8.6 19.2-19.1 19.2zm0-34.3c-8.3 0-15.1 6.8-15.1 15.1s6.8 15.1 15.1 15.1 15.1-6.8 15.1-15.1-6.8-15.1-15.1-15.1z"/>
+              </svg>
+            </span>
+            {t.location}
+          </span>
+        </div>
+
+        <div class="social" aria-label={lang === "en" ? "Links" : "Enlaces"}>
+          <a class="social-btn github" href={t.githubUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaGithub}>
+            <svg class="octicon" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+              <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07 -1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75 -3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38 A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+          </a>
+
+          <a class="social-btn linkedin" href={t.linkedinUrl} target="_blank" rel="noreferrer" aria-label={t.navAriaLinkedin}>
+            <span class="li" aria-hidden="true">in</span>
+          </a>
+
+          <a class="social-btn" href={`mailto:${t.email}`} aria-label={lang === "en" ? "Email" : "Correo"}>
+            <span aria-hidden="true">✉</span>
+          </a>
+        </div>
+      </div>
+
+      <footer class="side-footer muted">
+        © {new Date().getFullYear()} · {t.footer}
+      </footer>
+    </aside>
+
+    <main class="content" aria-label={lang === "en" ? "Content" : "Contenido"}>
+      <slot />
+    </main>
+  </div>
+</body>
 </html>
 
 <style>
-	/* VARIABLES GLOBALES */
-	:root {
-		/* Layout */
-		--maxw: 1100px;
-		--pad: 24px;
+/* ✅ Safari stability */
+html { background: var(--bg); color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
 
-		/* Light Theme Colors */
-		--bg: #ffffff;
-		--text: #111111;
-		--muted: rgba(127, 127, 127, 0.85);
-		--border: rgba(127, 127, 127, 0.22);
+/* VARIABLES GLOBALES */
+:root {
+  --maxw: 1100px;
+  --pad: 24px;
 
-		/* Links: Azul Principal */
-		--link: #0969da;
-		--link-hover: #0550ae;
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: rgba(127, 127, 127, 0.85);
+  --border: rgba(127, 127, 127, 0.22);
 
-		/* Code */
-		--code-bg: rgba(127, 127, 127, 0.08);
+  --link: #0969da;
+  --link-hover: #0550ae;
 
-		/* Title Badge Vars */
-		--title-bg: rgba(9, 105, 218, 0.08);
-		--title-border: rgba(9, 105, 218, 0.22);
-		--title-glow: rgba(9, 105, 218, 0.5);
+  --code-bg: rgba(127, 127, 127, 0.08);
 
-		/* Colores Específicos */
-		--brand-linkedin: #0077b5; 
-		--brand-github: #24292f;   
-		--icon-loc: #dc2626;        
-	}
+  --title-bg: rgba(9, 105, 218, 0.08);
+  --title-border: rgba(9, 105, 218, 0.22);
+  --title-glow: rgba(9, 105, 218, 0.5);
 
-	/* Dark Theme Colors */
-	html[data-theme="dark"] {
-		--bg: #232323;
-		--text: #f2f2f2;
-		--muted: rgba(242, 242, 242, 0.72);
-		--border: rgba(255, 255, 255, 0.18);
-		--link: #58a6ff;
-		--link-hover: #79c0ff;
-		--code-bg: rgba(255, 255, 255, 0.10);
-		--title-bg: rgba(88, 166, 255, 0.10);
-		--title-border: rgba(88, 166, 255, 0.22);
-		--title-glow: rgba(88, 166, 255, 0.6);
-		--brand-github: #ffffff;   
-		--icon-loc: #f87171;        
-	}
+  --brand-linkedin: #0077b5;
+  --brand-github: #24292f;
+  --icon-loc: #dc2626;
+}
 
-	/* Estilos Base */
-	body {
-		background: transparent; 
-		color: var(--text);
-		font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-		line-height: 1.55;
-		transition: background 0.15s ease, color 0.15s ease;
-		min-height: 100vh;
-	}
+html[data-theme="dark"] {
+  --bg: #232323;
+  --text: #f2f2f2;
+  --muted: rgba(242, 242, 242, 0.72);
+  --border: rgba(255, 255, 255, 0.18);
+  --link: #58a6ff;
+  --link-hover: #79c0ff;
+  --code-bg: rgba(255, 255, 255, 0.10);
+  --title-bg: rgba(88, 166, 255, 0.10);
+  --title-border: rgba(88, 166, 255, 0.22);
+  --title-glow: rgba(88, 166, 255, 0.6);
+  --brand-github: #ffffff;
+  --icon-loc: #f87171;
+}
 
-	.muted { color: var(--muted); }
+/* Estilos Base */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  line-height: 1.55;
+  transition: background 0.15s ease, color 0.15s ease;
+  min-height: 100vh;
+}
 
-	/* ---------- Topbar ---------- */
-	.topbar {
-		position: sticky; top: 0; z-index: 50;
-		background: var(--bg);
-		border-bottom: 1px solid var(--border);
-	}
+.muted { color: var(--muted); }
 
-	.topbar-inner {
-		max-width: var(--maxw); margin: 0 auto; padding: 14px var(--pad);
-		display: flex; align-items: center; justify-content: space-between; gap: 16px;
-	}
+/* ---------- Topbar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
 
-	.topbar-left { flex: 0 0 290px; display: flex; justify-content: center; }
+.topbar-inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 14px var(--pad);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
 
-	/* Site title */
-	.site-title { display: inline-flex; align-items: center; text-decoration: none; color: var(--text); }
-	.site-title:hover { text-decoration: none; }
+.topbar-left { flex: 0 0 290px; display: flex; justify-content: center; }
 
-	.title-pill {
-		display: inline-flex; align-items: baseline; gap: 0.2em; padding: 6px 14px;
-		border-radius: 999px; border: 1px solid var(--title-border);
-		background: var(--title-bg); box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-		transition: all 0.2s ease; 
-	}
+/* Site title */
+.site-title { display: inline-flex; align-items: center; text-decoration: none; color: var(--text); }
+.site-title:hover { text-decoration: none; }
 
-	.title-first, .title-last { font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; line-height: 1; font-size: 1.05rem; transition: color 0.2s ease; }
-	.title-first { color: var(--link); }
-	.title-last { color: var(--text); }
+.title-pill {
+  display: inline-flex; align-items: baseline; gap: 0.2em; padding: 6px 14px;
+  border-radius: 999px; border: 1px solid var(--title-border);
+  background: var(--title-bg); box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+}
 
-	.site-title:hover .title-pill {
-		background: var(--link); border-color: var(--link);
-		transform: translateY(-2px); box-shadow: 0 6px 15px var(--title-glow);
-	}
-	.site-title:hover .title-first, .site-title:hover .title-last { color: var(--bg); }
+.title-first, .title-last {
+  font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; line-height: 1;
+  font-size: 1.05rem; transition: color 0.2s ease;
+}
+.title-first { color: var(--link); }
+.title-last { color: var(--text); }
 
-	.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.site-title:hover .title-pill {
+  background: var(--link); border-color: var(--link);
+  transform: translateY(-2px); box-shadow: 0 6px 15px var(--title-glow);
+}
+.site-title:hover .title-first, .site-title:hover .title-last { color: var(--bg); }
 
-	/* Navigation */
-	.topnav { 
-		display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
-		flex: 1; justify-content: center; padding-left: 90px; 
-	}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-	.topnav a {
-		position: relative; padding: 8px 16px; border-radius: 12px;
-		color: var(--muted); font-weight: 500; text-decoration: none;
-		transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
-	}
+/* Navigation */
+.topnav {
+  display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+  flex: 1; justify-content: center; padding-left: 90px;
+}
 
-	.topnav a:not(:last-child)::after {
-		content: ''; position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
-		height: 18px; width: 2px; background: var(--muted); opacity: 0.4; border-radius: 4px; transition: opacity 0.2s ease;
-	}
+.topnav a {
+  position: relative; padding: 8px 16px; border-radius: 12px;
+  color: var(--muted); font-weight: 500; text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
+}
 
-	.topnav a:hover::after, .topnav a:focus-visible::after, .topnav a.active::after,
-	.topnav a:has(+ a:hover)::after, .topnav a:has(+ a:focus-visible)::after, .topnav a:has(+ a.active)::after {
-		background: var(--link); width: 4px; opacity: 1;
-	}
+.topnav a:not(:last-child)::after {
+  content: ''; position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+  height: 18px; width: 2px; background: var(--muted); opacity: 0.4; border-radius: 4px; transition: opacity 0.2s ease;
+}
 
-	.topnav a:hover {
-		color: var(--link); background: var(--title-bg);
-		box-shadow: 0 0 15px var(--title-bg); transform: translateY(-1px);
-	}
+.topnav a:hover::after, .topnav a:focus-visible::after, .topnav a.active::after,
+.topnav a:has(+ a:hover)::after, .topnav a:has(+ a:focus-visible)::after, .topnav a:has(+ a.active)::after {
+  background: var(--link); width: 4px; opacity: 1;
+}
 
-	.topnav a.active {
-		color: var(--text); font-weight: 700; background: var(--code-bg);
-		box-shadow: inset 0 0 0 1px var(--border);
-	}
+.topnav a:hover {
+  color: var(--link); background: var(--title-bg);
+  box-shadow: 0 0 15px var(--title-bg); transform: translateY(-1px);
+}
 
-	/* ---------- ACCIONES (IDIOMA Y TEMA) ---------- */
-	
-	.top-actions { display: flex; gap: 12px; align-items: center; }
+.topnav a.active {
+  color: var(--text); font-weight: 700; background: var(--code-bg);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
 
-	/* Estilo Base para Pills (usado por idioma) */
-	.pill {
-		display: inline-flex; align-items: center; justify-content: center;
-		gap: 8px; padding: 6px 14px; height: 36px;
-		border-radius: 12px; border: 1px solid transparent;
-		font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
-		backdrop-filter: blur(4px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-		user-select: none; -webkit-tap-highlight-color: transparent;
-	}
+/* ---------- ACCIONES (IDIOMA Y TEMA) ---------- */
+.top-actions { display: flex; gap: 12px; align-items: center; }
 
-	/* Botón Idioma */
-	.lang-pill, .lang-pill:visited, .lang-pill:active {
-		background: rgba(9, 105, 218, 0.06); 
-		border-color: rgba(9, 105, 218, 0.15);
-		color: var(--link) !important;
-	}
-	.lang-pill:hover {
-		background: var(--link) !important; border-color: var(--link) !important;
-		color: var(--bg) !important; transform: translateY(-2px);
-		box-shadow: 0 4px 12px var(--title-glow);
-	}
-	html[data-theme="dark"] .lang-pill { background: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.2); }
-    
-    .lang-pill:active { transform: scale(0.95); }
+.pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 6px 14px; height: 36px;
+  border-radius: 12px; border: 1px solid transparent;
+  font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer;
+  backdrop-filter: blur(4px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
 
-	/* Links Generales */
-	a, a:visited { color: var(--link); text-decoration: none; }
-	a:hover { color: var(--link-hover); text-decoration: underline; }
+.lang-pill, .lang-pill:visited, .lang-pill:active {
+  background: rgba(9, 105, 218, 0.06);
+  border-color: rgba(9, 105, 218, 0.15);
+  color: var(--link) !important;
+}
+.lang-pill:hover {
+  background: var(--link) !important; border-color: var(--link) !important;
+  color: var(--bg) !important; transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--title-glow);
+}
+html[data-theme="dark"] .lang-pill { background: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.2); }
+.lang-pill:active { transform: scale(0.95); }
 
-	/* ---------- Layout Shell ---------- */
-	.shell {
-		max-width: var(--maxw); margin: 0 auto; padding: var(--pad);
-		display: grid; grid-template-columns: 290px 1fr; gap: 28px; align-items: start;
-	}
+a, a:visited { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
 
-	.sidebar {
-		position: sticky; top: 72px;
-		border: 1px solid var(--border); border-radius: 18px; padding: 18px;
-		background: var(--bg);
-		display: flex; flex-direction: column; align-items: center;
-	}
-	.content { min-width: 0; }
+/* ---------- Layout Shell ---------- */
+.shell {
+  max-width: var(--maxw); margin: 0 auto; padding: var(--pad);
+  display: grid; grid-template-columns: 290px 1fr; gap: 28px; align-items: start;
+}
 
-	.avatar { display: inline-block; width: 170px; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
-	.avatar img { display: block; width: 100%; height: auto; }
+.sidebar {
+  position: sticky; top: 72px;
+  border: 1px solid var(--border); border-radius: 18px; padding: 18px;
+  background: var(--bg);
+  display: flex; flex-direction: column; align-items: center;
+}
+.content { min-width: 0; }
 
-	.identity { margin-top: 14px; text-align: center; width: 100%; }
-	.name { font-weight: 750; font-size: 18px; letter-spacing: -0.01em; }
-	.bio { margin: 8px 0 10px; font-size: 0.95em; line-height: 1.45; }
+.avatar { display: inline-block; width: 170px; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+.avatar img { display: block; width: 100%; height: auto; }
 
-	.meta { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 14px; align-items: center; }
-	.meta-item { display: inline-flex; gap: 4px; align-items: center; font-size: 0.92em; }
-	.meta-ico { display: inline-flex; align-items: center; justify-content: center; }
-	.location-icon { color: var(--icon-loc); }
-	.meta-ico .ico { display: block; }
+.identity { margin-top: 14px; text-align: center; width: 100%; }
+.name { font-weight: 750; font-size: 18px; letter-spacing: -0.01em; }
+.bio { margin: 8px 0 10px; font-size: 0.95em; line-height: 1.45; }
 
-	.social { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
-	.social-btn {
-		width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
-		border: 1px solid var(--border); border-radius: 12px; background: transparent; text-decoration: none; color: var(--text);
-	}
-	.social-btn:hover { border-color: var(--link-hover); }
-	.social-btn.linkedin { color: var(--brand-linkedin); }
-	.social-btn.github { color: var(--brand-github); }
-	.octicon { display: block; }
-	.li { font-weight: 800; font-size: 14px; }
+.meta { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 14px; align-items: center; }
+.meta-item { display: inline-flex; gap: 4px; align-items: center; font-size: 0.92em; }
+.meta-ico { display: inline-flex; align-items: center; justify-content: center; }
+.location-icon { color: var(--icon-loc); }
+.meta-ico .ico { display: block; }
 
-	.side-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.9em; text-align: center; width: 100%; }
+.social { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
+.social-btn {
+  width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: 12px; background: transparent; text-decoration: none; color: var(--text);
+}
+.social-btn:hover { border-color: var(--link-hover); }
+.social-btn.linkedin { color: var(--brand-linkedin); }
+.social-btn.github { color: var(--brand-github); }
+.octicon { display: block; }
+.li { font-weight: 800; font-size: 14px; }
 
-	h1 { font-size: 34px; letter-spacing: -0.02em; margin: 0.2em 0 0.4em; }
-	h2 { font-size: 24px; letter-spacing: -0.01em; margin: 1.2em 0 0.4em; }
-	p { margin: 0.4em 0 1em; }
+.side-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.9em; text-align: center; width: 100%; }
 
-	code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.95em; padding: 0.15em 0.35em; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; }
-	pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; overflow-x: auto; }
-	pre code { background: none; border: none; padding: 0; }
+h1 { font-size: 34px; letter-spacing: -0.02em; margin: 0.2em 0 0.4em; }
+h2 { font-size: 24px; letter-spacing: -0.01em; margin: 1.2em 0 0.4em; }
+p { margin: 0.4em 0 1em; }
 
-	/* 🔥 ESTILOS PARA MÓVIL 🔥 */
-	@media (max-width: 900px) {
-		.shell { grid-template-columns: 1fr; gap: 20px; padding-top: 10px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.95em; padding: 0.15em 0.35em; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; }
+pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; overflow-x: auto; }
+pre code { background: none; border: none; padding: 0; }
 
-		.topbar-inner {
-			display: grid; grid-template-areas: "brand actions" "nav nav";
-			grid-template-columns: 1fr auto; gap: 0; padding: 10px var(--pad);
-		}
+/* 🔥 Mobile */
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; gap: 20px; padding-top: 10px; }
 
-		.topbar-left { grid-area: brand; justify-content: flex-start; min-width: 0; }
-		.title-pill { padding: 4px 10px; font-size: 0.9rem; }
+  .topbar-inner {
+    display: grid; grid-template-areas: "brand actions" "nav nav";
+    grid-template-columns: 1fr auto; gap: 0; padding: 10px var(--pad);
+  }
 
-		.top-actions { grid-area: actions; margin-left: 10px; gap: 8px; }
-		.pill, .social-btn { padding: 4px 8px; height: 32px; }
+  .topbar-left { grid-area: brand; justify-content: flex-start; min-width: 0; }
+  .title-pill { padding: 4px 10px; font-size: 0.9rem; }
 
-		/* Fix Menú Móvil */
-		.topnav {
-			grid-area: nav; width: 100%; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
-			padding-left: 0; justify-content: flex-start;
-			display: flex; flex-wrap: nowrap; gap: 8px;
-			overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-		}
-		.topnav::-webkit-scrollbar { display: none; }
-		
-		.topnav a {
-			font-size: 0.9rem; padding: 6px 10px; background: transparent !important; box-shadow: none !important;
-			color: var(--muted); border-radius: 6px; white-space: nowrap; flex-shrink: 0;
-		}
-		.topnav a.active { background: var(--code-bg) !important; color: var(--text); font-weight: 600; }
-		.topnav a::after { display: none; }
+  .top-actions { grid-area: actions; margin-left: 10px; gap: 8px; }
+  .pill, .social-btn { padding: 4px 8px; height: 32px; }
 
-		.sidebar { position: static; border: none; background: transparent; padding: 0; text-align: center; margin-bottom: 0; }
-		.avatar { width: 110px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-		.side-footer { display: none; }
-		.bio { font-size: 0.9em; margin-bottom: 16px; padding: 0 10px; }
-		h1.hero-title { font-size: 2rem; line-height: 1.2; }
-	}
+  .topnav {
+    grid-area: nav; width: 100%; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+    padding-left: 0; justify-content: flex-start;
+    display: flex; flex-wrap: nowrap; gap: 8px;
+    overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .topnav::-webkit-scrollbar { display: none; }
 
-	::view-transition-group(root) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
-	::view-transition-old(root) { animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-out; }
-	::view-transition-new(root) { animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in; }
+  .topnav a {
+    font-size: 0.9rem; padding: 6px 10px; background: transparent !important; box-shadow: none !important;
+    color: var(--muted); border-radius: 6px; white-space: nowrap; flex-shrink: 0;
+  }
+  .topnav a.active { background: var(--code-bg) !important; color: var(--text); font-weight: 600; }
+  .topnav a::after { display: none; }
+
+  .sidebar { position: static; border: none; background: transparent; padding: 0; text-align: center; margin-bottom: 0; }
+  .avatar { width: 110px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .side-footer { display: none; }
+  .bio { font-size: 0.9em; margin-bottom: 16px; padding: 0 10px; }
+  h1.hero-title { font-size: 2rem; line-height: 1.2; }
+}
+
+/* View Transitions */
+::view-transition-group(root) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-old(root) {
+  animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+  background: var(--bg);
+}
+::view-transition-new(root) {
+  animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
+  background: var(--bg);
+}
 </style>

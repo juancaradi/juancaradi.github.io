@@ -1,46 +1,49 @@
 ﻿---
-// src/pages/index.astro
-// Esta página no usa Layout. Su única misión es dirigir el tráfico.
+// Redirección raíz: decide idioma del navegador.
+// ✅ Mejor: JS + fallback <noscript>.
 ---
 
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Redireccionando...</title>
-		
-		<meta name="robots" content="noindex" />
-		
-		<meta http-equiv="refresh" content="0;url=/es/" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redireccionando...</title>
+    <meta name="robots" content="noindex" />
 
-		<script is:inline>
-			// 1. Detectar idioma del navegador
-			// (navigator.language es el estándar moderno)
-			const browserLang = navigator.language || 'es';
-			
-			// 2. Lógica simplificada
-			// Si el navegador empieza con 'en' (en-US, en-GB), va a inglés.
-			// Todo lo demás (es, fr, pt, etc.) va a español por defecto.
-			const targetPath = browserLang.startsWith('en') ? '/en/' : '/es/';
-			
-			// 3. Ejecutar el salto
-			window.location.replace(targetPath);
-		</script>
-	</head>
-	<body>
-	</body>
+    <script is:inline>
+      (() => {
+        // Fondo consistente mientras redirige (evita flash)
+        const html = document.documentElement;
 
+        let saved = null;
+        try { saved = localStorage.getItem("theme"); } catch (_) {}
 
-	<style>
-    /* Ponemos el fondo oscuro por defecto para evitar el flash blanco en la redirección */
-    html, body {
-        background-color: #111111; /* O el color exacto de tu tema oscuro --bg */
-        color: #111111;
-    }
-    
-    /* Si el usuario explícitamente prefiere light, entonces blanco */
-    @media (prefers-color-scheme: light) {
-        html, body { background-color: #ffffff; }
-    }
-</style>
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = (saved === "dark" || (!saved && prefersDark)) ? "dark" : "light";
+
+        html.style.backgroundColor = theme === "dark" ? "#232323" : "#ffffff";
+
+        // Idioma
+        const browserLang = navigator.language || 'es';
+        const targetPath = browserLang.startsWith('en') ? '/en/' : '/es/';
+
+        window.location.replace(targetPath);
+      })();
+    </script>
+
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/es/" />
+    </noscript>
+
+    <style>
+      html, body {
+        background-color: #232323;
+        color: #232323;
+      }
+      @media (prefers-color-scheme: light) {
+        html, body { background-color: #ffffff; color: #ffffff; }
+      }
+    </style>
+  </head>
+  <body></body>
 </html>
