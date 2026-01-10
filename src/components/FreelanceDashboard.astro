@@ -1,37 +1,37 @@
 ---
 import { getYearStats } from '../utils/statistics';
 import { getSubjectColor } from '../utils/subjectColors';
-import { ui, defaultLang } from '../i18n/ui';
+import { ui, defaultLang, normalizeLang } from '../i18n/ui';
 
 interface Props {
   year: number;
-  lang?: string; 
+  lang?: string;
 }
 
-const { year, lang = 'es' } = Astro.props;
-const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+const { year, lang: langInput = defaultLang } = Astro.props;
+const lang = normalizeLang(langInput);
+const t = ui[lang];
 
 const stats = getYearStats(year, lang);
 
-const monthNames = Array.from({ length: 12 }, (_, i) => {
-  const d = new Date(2000, i, 1);
-  return d.toLocaleDateString(lang, { month: 'short' }); 
-});
+// Meses: usamos Intl directo (más estable) y corto.
+const monthNames = Array.from({ length: 12 }, (_, i) =>
+  new Intl.DateTimeFormat(lang, { month: 'short', timeZone: 'UTC' }).format(new Date(Date.UTC(2000, i, 1)))
+);
 ---
 
 {stats ? (
   <div class="dashboard-container fade-in">
-    
-    {/* 1. KPI Principal */}
+
     <div class="kpi-card card-glass">
       <h3 class="chart-title" style="text-align: center;">{t['freelance.impact']}&nbsp;{year}</h3>
       <div class="kpi-number">{stats.total}</div>
       <p class="kpi-desc">{t['freelance.completed']}</p>
     </div>
 
-    {/* 2. Gráfica de Materias */}
     <div class="chart-card card-glass bar-chart-span">
       <h3 class="chart-title">{t['freelance.topSubjects']}</h3>
+
       <div class="bars-container">
         {stats.topSubjects.slice(0, 5).map((sub) => {
           const color = getSubjectColor(sub.name);
@@ -41,9 +41,9 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
                 <span class="bar-label">{sub.name}</span>
                 <span class="bar-value">{sub.count}</span>
               </div>
-              <div class="progress-bg">
-                <div 
-                  class="progress-fill" 
+              <div class="progress-bg" aria-hidden="true">
+                <div
+                  class="progress-fill"
                   style={`width: ${sub.percentage}%; background-color: rgb(${color}); box-shadow: 0 0 10px rgba(${color}, 0.4);`}
                 ></div>
               </div>
@@ -53,9 +53,9 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
       </div>
     </div>
 
-    {/* 3. Tipos de Servicio */}
     <div class="chart-card card-glass">
       <h3 class="chart-title">{t['freelance.serviceTypes']}</h3>
+
       <div class="types-list">
         {stats.topTypes.map((type) => (
           <div class="type-item">
@@ -63,7 +63,7 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
               <span class="type-name">{type.name}</span>
               <span class="type-pct">{type.percentage}%</span>
             </div>
-            <div class="mini-bar-bg">
+            <div class="mini-bar-bg" aria-hidden="true">
               <div class="mini-bar-fill" style={`width: ${type.percentage}%`}></div>
             </div>
           </div>
@@ -71,15 +71,16 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
       </div>
     </div>
 
-    {/* 4. Gráfica Temporal (Tendencia Mensual) */}
     <div class="chart-card card-glass trend-chart-span">
       <h3 class="chart-title">{t['freelance.monthly']}</h3>
-      <div class="trend-chart">
+
+      <div class="trend-chart" role="img" aria-label={t['freelance.monthly']}>
         {stats.monthlyTrend.map((val, index) => (
           <div class="trend-col-wrapper">
-            <div 
-              class="trend-bar" 
+            <div
+              class="trend-bar"
               style={`height: ${val > 0 ? (val / stats.maxMonthValue) * 100 : 3}%`}
+              aria-hidden="true"
             >
               {val > 0 && <span class="trend-val">{val}</span>}
             </div>
@@ -97,101 +98,41 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
 )}
 
 <style>
-  /* --- CONFIGURACIÓN BASE (MÓVIL) --- */
-  .dashboard-container { 
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px; 
-    margin-top: 20px;
-    padding: 0 16px;
-    width: 100%;
-    box-sizing: border-box;
-    justify-items: center; /* Asegura el centrado de las cards en el lienzo */
-  }
+  .dashboard-container { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; padding: 0 16px; width: 100%; box-sizing: border-box; justify-items: center; }
 
-  .card-glass { 
-    background: var(--code-bg); 
-    border: 1px solid var(--border); 
-    border-radius: 16px; 
-    padding: 20px;
-    width: 100%;
-    max-width: 480px; /* Ancho máximo para evitar que se estiren de más en móvil */
-    margin: 0 auto;
-    box-sizing: border-box;
-    min-width: 0; /* Permite que la caja se encoja correctamente */
-    overflow: hidden; /* Evita que las barras derramen contenido */
-  }
-  
+  .card-glass { background: var(--code-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 100%; max-width: 480px; margin: 0 auto; box-sizing: border-box; min-width: 0; overflow: hidden; }
+
   .chart-title { font-size: 1.1rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; text-align: left; }
-  
-  /* KPI */
+
   .kpi-card { text-align: center; }
   .kpi-number { font-size: 4rem; font-weight: 800; color: var(--link); line-height: 1; margin: 8px 0; }
   .kpi-desc { color: var(--muted); font-size: 0.9rem; }
-  
-  /* Bars (Materias) */
+
   .bars-container { display: flex; flex-direction: column; gap: 12px; }
   .bar-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--text); }
   .progress-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
-  
-  /* Types */
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
   .types-list { display: flex; flex-direction: column; gap: 15px; }
   .type-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
   .mini-bar-bg { height: 4px; background: var(--border); border-radius: 2px; }
   .mini-bar-fill { height: 100%; background: var(--link); border-radius: 2px; }
-  
-  /* --- GRÁFICA MENSUAL (RECALCULADA) --- */
-  .trend-chart { 
-    display: flex; 
-    align-items: flex-end; 
-    justify-content: center; /* Centrado fluido */
-    height: 140px; 
-    padding: 25px 5px 0 5px; /* Padding interno de seguridad */
-    gap: 2px; 
-    width: 100%;
-  }
 
-  .trend-col-wrapper { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    flex: 1; /* Cada columna toma exactamente 1/12 del ancho disponible */
-    min-width: 0;
-    height: 100%; 
-    justify-content: flex-end; 
-  }
-
-  .trend-bar { 
-    width: 85%; /* Deja un 15% de aire natural entre barras sin depender de píxeles fijos */
-    max-width: 14px; /* Límite para que no se vean demasiado gordas en pantallas grandes */
-    background: linear-gradient(to top, var(--link), #8b5cf6); 
-    border-radius: 3px 3px 0 0; 
-    position: relative; 
-    min-height: 3px; 
-  }
-
+  .trend-chart { display: flex; align-items: flex-end; justify-content: center; height: 140px; padding: 25px 5px 0 5px; gap: 2px; width: 100%; }
+  .trend-col-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; height: 100%; justify-content: flex-end; }
+  .trend-bar { width: 85%; max-width: 14px; background: linear-gradient(to top, var(--link), #8b5cf6); border-radius: 3px 3px 0 0; position: relative; min-height: 3px; }
   .trend-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--text); font-weight: 700; }
   .trend-label { margin-top: 8px; font-size: 0.55rem; color: var(--muted); text-transform: capitalize; }
-  
+
   .empty-state { text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted); width: 100%; }
 
-  /* --- ESCRITORIO (RESTAURADO) --- */
   @media (min-width: 900px) {
-    .dashboard-container { 
-      grid-template-columns: repeat(3, 1fr); 
-      padding: 0;
-      justify-items: stretch; /* Estiramiento normal para llenar las celdas del grid */
-    }
-    .card-glass { 
-      max-width: none; 
-      margin: 0; 
-    }
-    /* Mantenemos tus proporciones favoritas */
+    .dashboard-container { grid-template-columns: repeat(3, 1fr); padding: 0; justify-items: stretch; }
+    .card-glass { max-width: none; margin: 0; }
     .bar-chart-span { grid-column: span 2; }
     .trend-chart-span { grid-column: span 3; }
     .empty-state { grid-column: span 3; }
-    
+
     .trend-chart { gap: 6px; padding: 25px 20px 0 20px; }
     .trend-bar { max-width: 25px; width: 100%; }
     .trend-label, .trend-val { font-size: 0.75rem; }

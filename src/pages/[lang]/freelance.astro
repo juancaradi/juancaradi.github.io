@@ -2,20 +2,18 @@
 import Layout from '../../layouts/Layout.astro';
 import FreelanceTimeline from '../../components/FreelanceTimeline.astro';
 import FreelanceDashboard from '../../components/FreelanceDashboard.astro';
-import { ui, defaultLang } from '../../i18n/ui';
+import { normalizeLang, ui } from '../../i18n/ui';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'es' } },
-    { params: { lang: 'en' } },
-  ];
+  return [{ params: { lang: 'es' } }, { params: { lang: 'en' } }];
 }
 
-const { lang } = Astro.params;
-const currentLang = (lang === 'en' || lang === 'es') ? lang : defaultLang;
-const t = ui[currentLang];
+const lang = normalizeLang(Astro.params.lang);
+const t = ui[lang];
 
-const pageTitle = lang === 'en' ? "Freelance Log | Camilo Ramírez" : "Bitácora Freelance | Camilo Ramírez";
+const pageTitle = lang === 'en'
+  ? "Freelance Log | Camilo Ramírez"
+  : "Bitácora Freelance | Camilo Ramírez";
 ---
 
 <Layout title={pageTitle} lang={lang}>
@@ -26,79 +24,120 @@ const pageTitle = lang === 'en' ? "Freelance Log | Camilo Ramírez" : "Bitácora
       </h1>
       <p class="page-subtitle">{t.freelanceSubtitle}</p>
 
-      {/* 🎛️ SELECTOR DE AÑO */}
-      <div class="year-selector">
-        <button id="btn-2026" class="year-btn active" onclick="switchYear('2026')">2026</button>
-        <button id="btn-2025" class="year-btn" onclick="switchYear('2025')">2025</button>
+      <div class="year-selector" role="tablist" aria-label={lang === 'en' ? "Year selector" : "Selector de año"}>
+        <button class="year-btn active" type="button" data-year="2026" aria-selected="true">2026</button>
+        <button class="year-btn" type="button" data-year="2025" aria-selected="false">2025</button>
       </div>
     </header>
 
-    {/* 📺 VISTA 2026: TIMELINE */}
-    <div id="view-2026" class="year-view">
-      {/* Pasamos lang dinámico */}
-      <FreelanceTimeline lang={currentLang} year={2026} />
+    <div id="view-2026" class="year-view" role="tabpanel">
+      <FreelanceTimeline lang={lang} year={2026} />
     </div>
 
-    {/* 📊 VISTA 2025: DASHBOARD */}
-    <div id="view-2025" class="year-view hidden">
-      {/* Pasamos lang dinámico */}
-      <FreelanceDashboard year={2025} lang={currentLang} />
+    <div id="view-2025" class="year-view hidden" role="tabpanel">
+      <FreelanceDashboard year={2025} lang={lang} />
     </div>
-
   </div>
 </Layout>
 
 <script is:inline>
-  function switchYear(year) {
-    document.querySelectorAll('.year-view').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.year-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(`view-${year}`).classList.remove('hidden');
-    document.getElementById(`btn-${year}`).classList.add('active');
-  }
+  const initYearSwitcher = () => {
+    const selector = document.querySelector('.year-selector');
+    if (!selector) return;
+
+    // Evita listeners duplicados si Astro rehidrata / swap
+    const cloned = selector.cloneNode(true);
+    selector.parentNode.replaceChild(cloned, selector);
+
+    cloned.addEventListener('click', (e) => {
+      const btn = e.target.closest('.year-btn');
+      if (!btn) return;
+
+      const year = btn.getAttribute('data-year');
+      if (!year) return;
+
+      // 1) Cambiar vistas
+      document.querySelectorAll('.year-view').forEach(v => v.classList.add('hidden'));
+      const targetView = document.getElementById(`view-${year}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      // 2) Activar/desactivar botones (AHORA SÍ: son los del DOM actual)
+      cloned.querySelectorAll('.year-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+    });
+  };
+
+  document.addEventListener('astro:page-load', initYearSwitcher);
+  document.addEventListener('astro:after-swap', initYearSwitcher);
 </script>
 
 <style>
   .page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-  
-  /* Header alineado con Projects */
   .page-header { text-align: center; margin-bottom: 40px; }
-  
-  .page-title { 
-    font-size: 2.5rem; 
-    font-weight: 800; 
-    margin-bottom: 16px; 
-    letter-spacing: -0.02em; 
-    color: var(--text); 
-    line-height: 1.1; 
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.1;
   }
-  
-  .gradient-text { 
-    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--link) 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
-  .page-subtitle { 
-    font-size: 1.2rem; 
-    color: var(--muted); 
-    max-width: 700px; 
-    margin: 0 auto; 
-    line-height: 1.6; 
+
+  .page-subtitle {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
   }
 
-  /* Selector de Año */
-  .year-selector { display: inline-flex; background: var(--code-bg); padding: 5px; border-radius: 12px; margin-top: 30px; border: 1px solid var(--border); }
-  .year-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 8px; color: var(--muted); font-weight: 600; cursor: pointer; transition: all 0.3s; }
-  .year-btn:hover { color: var(--text); }
-  .year-btn.active { background: var(--link); color: white; shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+  .year-selector {
+    display: inline-flex;
+    background: var(--code-bg);
+    padding: 5px;
+    border-radius: 12px;
+    margin-top: 30px;
+    border: 1px solid var(--border);
+  }
 
-  /* Utilidades */
+  .year-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .year-btn:hover { color: var(--text); }
+
+  .year-btn.active {
+    background: var(--link);
+    color: white;
+  }
+
   .hidden { display: none; }
   .year-view { animation: fadeIn 0.4s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- RESPONSIVE --- */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   @media (max-width: 768px) {
     .page-title { font-size: 2rem; }
     .page-subtitle { font-size: 1.1rem; }

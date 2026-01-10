@@ -1,109 +1,104 @@
 ---
 import freelanceData from '../data/freelance.json';
-import { ui, defaultLang } from '../i18n/ui';
-import { getSubjectColor } from '../utils/subjectColors'; 
+import { ui, defaultLang, normalizeLang, format } from '../i18n/ui';
+import { getSubjectColor } from '../utils/subjectColors';
 
 interface Props {
   lang: string;
   year: number;
 }
 
-const { lang = 'es', year } = Astro.props;
-const t = ui[lang as keyof typeof ui] || ui[defaultLang];
+const { lang: langInput = defaultLang, year } = Astro.props;
+const lang = normalizeLang(langInput);
+const t = ui[lang];
 
-// 1. Filtrar datos del año
 const yearData = freelanceData
   .filter(item => {
     if (!item.date) return false;
-    const itemYear = parseInt(item.date.split('-')[0]);
+    const itemYear = Number(item.date.split('-')[0]);
     return itemYear === year;
   })
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-// 2. Agrupar por meses
 const groupedByMonth = yearData.reduce((acc, item) => {
-  const monthKey = item.date.slice(0, 7); 
-  
+  const monthKey = item.date.slice(0, 7);
+
   if (!acc[monthKey]) {
-    const dateObj = new Date(`${monthKey}-15`);
+    const dateObj = new Date(`${monthKey}-15T00:00:00Z`);
     const monthName = dateObj.toLocaleDateString(lang, { month: 'long', timeZone: 'UTC' });
     const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-    
-    acc[monthKey] = {
-      name: capitalizedMonth,
-      items: [],
-      subjects: new Set() 
-    };
+
+    acc[monthKey] = { name: capitalizedMonth, items: [], subjects: new Set() };
   }
-  
+
   acc[monthKey].items.push(item);
-  if (item.subject && item.subject[lang]) {
-    acc[monthKey].subjects.add(item.subject[lang]);
-  }
-  
+
+  const s = item.subject?.[lang];
+  if (s) acc[monthKey].subjects.add(s);
+
   return acc;
-}, {} as Record<string, { name: string, items: typeof yearData, subjects: Set<string> }>);
+}, {} as Record<string, { name: string; items: typeof yearData; subjects: Set<string> }>);
 
 const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
+
+const confirmTemplate = t["freelance.confirmDownload"];
 ---
 
 {yearData.length > 0 ? (
-  <div class="timeline-container">
-    
+  <div class="timeline-container" data-confirm-template={confirmTemplate}>
     {sortedMonths.map((monthKey) => {
       const group = groupedByMonth[monthKey];
       const subjectsList = Array.from(group.subjects).sort();
-      
+
       return (
         <div class="month-accordion">
-          {/* HEADER DEL MES */}
-          <button class="month-trigger" aria-expanded="false">
+          <button class="month-trigger" type="button" aria-expanded="false">
             <div class="trigger-info">
               <span class="month-name">{group.name}</span>
               <span class="month-count">{group.items.length}&nbsp;{t['freelance.projectsCount']}</span>
             </div>
-            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
 
-          {/* CONTENIDO DESPLEGABLE */}
           <div class="month-content">
-            
-            {/* 🔽 BARRA DE FILTROS 🔽 */}
             {subjectsList.length > 0 && (
-              <div class="filter-bar">
-                <button class="filter-pill active" data-filter="all">{t['freelance.filterAll']}</button>
-                
+              <div class="filter-bar" role="toolbar" aria-label={lang === 'en' ? "Filters" : "Filtros"}>
+                <button class="filter-pill active" type="button" data-filter="all">{t['freelance.filterAll']}</button>
+
                 {subjectsList.map(sub => {
                   const color = getSubjectColor(sub);
                   return (
-                    <button 
-                      class="filter-pill dynamic-pill" 
+                    <button
+                      class="filter-pill dynamic-pill"
+                      type="button"
                       data-filter={sub}
-                      style={`--pill-color: ${color};`} 
+                      style={`--pill-color: ${color};`}
                     >
                       {sub}
                     </button>
-                  )
+                  );
                 })}
               </div>
             )}
 
             <div class="timeline-wrapper">
-              
               {group.items.map((item) => {
-                const subColor = getSubjectColor(item.subject?.[lang]);
-                
+                const subject = item.subject?.[lang];
+                const subColor = getSubjectColor(subject);
+
                 return (
-                  <div class="timeline-item fade-in" data-subject={item.subject?.[lang]}>
-                    <div class="timeline-dot"></div>
-                    
+                  <div class="timeline-item fade-in" data-subject={subject ?? ''}>
+                    <div class="timeline-dot" aria-hidden="true"></div>
+
                     <div class="timeline-card card-glass">
                       <div class="card-header">
-                        <span 
+                        <span
                           class="badge-subject"
                           style={`background: rgba(${subColor}, 0.1); color: rgb(${subColor}); border: 1px solid rgba(${subColor}, 0.25);`}
                         >
-                          {item.subject?.[lang]}
+                          {subject}
                         </span>
                         <span class="badge-type">{item.type?.[lang]}</span>
                         <span class="date-inline">
@@ -117,141 +112,181 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
                       <div class="resources-list">
                         {item.resources.map(res => {
                           const hasUrl = res.url && res.url !== 'null';
+                          const toolClass = (res.tool || 'default').toLowerCase();
+
                           return hasUrl ? (
-                            <a 
-                              href={res.url} 
-                              class={`resource-pill ${res.tool.toLowerCase()}`} 
-                              target="_blank" 
+                            <a
+                              href={res.url}
+                              class={`resource-pill ${toolClass}`}
+                              target="_blank"
                               rel="noopener noreferrer"
                               download
-                              onclick={`return confirm('¿Confirmas que deseas descargar: ${res.name}?');`}
+                              data-download-name={res.name}
                             >
                               <span class="pill-text">{res.name}</span>
-                              {/* Icono de DESCARGA */}
-                              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                               </svg>
                             </a>
                           ) : (
-                            <div class={`resource-pill disabled ${res.tool.toLowerCase()}`} onclick="return false;">
+                            <div class={`resource-pill disabled ${toolClass}`} role="button" aria-disabled="true">
                               <span class="pill-text">{res.name}</span>
-                              {/* Icono de CANDADO */}
-                              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                               </svg>
                             </div>
-                          )
+                          );
                         })}
                       </div>
                     </div>
                   </div>
-                )
+                );
               })}
-
             </div>
           </div>
         </div>
       );
     })}
-
   </div>
 ) : (
   <div class="empty-state">{t['freelance.noRecords']}</div>
 )}
 
 <script is:inline>
-  function setupInteractions() {
-    const triggers = document.querySelectorAll('.month-trigger');
-    triggers.forEach(trigger => {
-      const newTrigger = trigger.cloneNode(true);
-      trigger.parentNode.replaceChild(newTrigger, trigger);
-      newTrigger.addEventListener('click', (e) => {
-        const button = e.currentTarget; 
-        const parent = button.parentElement;
+  const setupTimelineInteractions = () => {
+    const root = document.querySelector('.timeline-container');
+    if (!root) return;
+
+    const confirmTemplate = root.getAttribute('data-confirm-template') || 'Confirm download: {name}?';
+
+    // 1) Accordion triggers (clonado para limpiar)
+    root.querySelectorAll('.month-trigger').forEach((oldTrigger) => {
+      const trigger = oldTrigger.cloneNode(true);
+      oldTrigger.parentNode.replaceChild(trigger, oldTrigger);
+
+      trigger.addEventListener('click', () => {
+        const parent = trigger.parentElement;
         const content = parent.querySelector('.month-content');
-        button.classList.toggle('active');
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null; 
-          button.setAttribute('aria-expanded', 'false');
+
+        trigger.classList.toggle('active');
+
+        const isOpen = !!content.style.maxHeight;
+        if (isOpen) {
+          content.style.maxHeight = null;
+          trigger.setAttribute('aria-expanded', 'false');
         } else {
-          content.style.maxHeight = content.scrollHeight + "px"; 
-          button.setAttribute('aria-expanded', 'true');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          trigger.setAttribute('aria-expanded', 'true');
         }
       });
     });
 
-    const filterPills = document.querySelectorAll('.filter-pill');
-    filterPills.forEach(pill => {
-      pill.addEventListener('click', (e) => {
-        const btn = e.target;
-        const filterValue = btn.getAttribute('data-filter');
-        const monthContent = btn.closest('.month-content');
-        const timelineWrapper = monthContent.querySelector('.timeline-wrapper');
-        const siblings = monthContent.querySelectorAll('.filter-pill');
-        siblings.forEach(s => {
-          s.classList.remove('active');
-          s.classList.contains('dynamic-pill') && (s.style.backgroundColor = 'transparent', s.style.color = 'var(--muted)', s.style.borderColor = 'var(--border)');
+    // 2) Filtros: por cada month-content, clonamos pills y aplicamos filtro
+    root.querySelectorAll('.month-content').forEach((monthContent) => {
+      const timelineWrapper = monthContent.querySelector('.timeline-wrapper');
+      if (!timelineWrapper) return;
+
+      const pills = Array.from(monthContent.querySelectorAll('.filter-pill'));
+      pills.forEach((oldPill) => {
+        const pill = oldPill.cloneNode(true);
+        oldPill.parentNode.replaceChild(pill, oldPill);
+
+        pill.addEventListener('click', () => {
+          const filterValue = pill.getAttribute('data-filter');
+
+          // reset siblings
+          monthContent.querySelectorAll('.filter-pill').forEach((s) => {
+            s.classList.remove('active');
+            if (s.classList.contains('dynamic-pill')) {
+              s.style.backgroundColor = 'transparent';
+              s.style.color = 'var(--muted)';
+              s.style.borderColor = 'var(--border)';
+            }
+          });
+
+          pill.classList.add('active');
+          if (pill.classList.contains('dynamic-pill')) {
+            const color = pill.style.getPropertyValue('--pill-color');
+            pill.style.backgroundColor = `rgb(${color})`;
+            pill.style.color = '#fff';
+            pill.style.borderColor = `rgb(${color})`;
+          }
+
+          timelineWrapper.querySelectorAll('.timeline-item').forEach((item) => {
+            const itemSubject = item.getAttribute('data-subject');
+            item.style.display = (filterValue === 'all' || itemSubject === filterValue) ? 'flex' : 'none';
+          });
+
+          // reajusta altura si el panel está abierto
+          monthContent.style.maxHeight = monthContent.scrollHeight + 'px';
         });
-        btn.classList.add('active');
-        if (btn.classList.contains('dynamic-pill')) {
-          const color = btn.style.getPropertyValue('--pill-color');
-          btn.style.backgroundColor = `rgb(${color})`;
-          btn.style.color = '#fff';
-          btn.style.borderColor = `rgb(${color})`;
-        }
-        const items = timelineWrapper.querySelectorAll('.timeline-item');
-        items.forEach(item => {
-          const itemSubject = item.getAttribute('data-subject');
-          (filterValue === 'all' || itemSubject === filterValue) ? item.style.display = 'flex' : item.style.display = 'none';
-        });
-        monthContent.style.maxHeight = monthContent.scrollHeight + "px";
       });
     });
-  }
-  setupInteractions();
-  document.addEventListener('astro:after-swap', setupInteractions);
+
+    // 3) Confirmación de descarga (delegación)
+    root.querySelectorAll('a[data-download-name]').forEach((oldLink) => {
+      const link = oldLink.cloneNode(true);
+      oldLink.parentNode.replaceChild(link, oldLink);
+
+      link.addEventListener('click', (e) => {
+        const name = link.getAttribute('data-download-name') || '';
+        const msg = confirmTemplate.replace('{name}', name);
+        if (!window.confirm(msg)) e.preventDefault();
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', setupTimelineInteractions);
+  document.addEventListener('astro:after-swap', setupTimelineInteractions);
 </script>
 
 <style>
   .timeline-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
   .month-accordion { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--code-bg); transition: border-color 0.3s; }
   .month-accordion:hover { border-color: var(--muted); }
+
   .month-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px; background: transparent; border: none; cursor: pointer; color: var(--text); transition: background 0.2s; }
   .month-trigger:hover { background: rgba(255,255,255, 0.02); }
+
   .trigger-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-  
-  /* ✨ CAMBIO: 1.3rem para dominar la sección */
   .month-name { font-size: 1.3rem; font-weight: 700; color: var(--text); }
-  
   .month-count { font-size: 0.85rem; color: var(--muted); }
+
   .chevron { transition: transform 0.3s ease; color: var(--muted); }
   .month-trigger.active .chevron { transform: rotate(180deg); color: var(--link); }
+
   .month-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: rgba(0,0,0,0.1); }
-  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 15px 20px 0 20px; border-bottom: 1px dashed var(--border); padding-bottom: 15px; }
+
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 15px 20px 15px 20px; border-bottom: 1px dashed var(--border); }
   .filter-pill { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
   .filter-pill:hover { border-color: var(--link); color: var(--text); }
   .filter-pill[data-filter="all"].active { background: var(--link); color: white; border-color: var(--link); }
+
   .timeline-wrapper { padding: 30px 20px 10px 20px; position: relative; }
   .timeline-wrapper::before { content: ''; position: absolute; left: 44px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
+
   .timeline-item { position: relative; margin-bottom: 30px; display: flex; padding-left: 60px; }
   .timeline-dot { position: absolute; left: 39px; top: 20px; width: 12px; height: 12px; background: var(--link); border: 3px solid var(--code-bg); border-radius: 50%; z-index: 10; }
+
   .timeline-card { flex-grow: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+
   .card-header { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
   .date-inline { margin-left: auto; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+
   .badge-subject { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
   .badge-type { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; }
-  
-  /* ✨ CAMBIO: 1.25rem para igualar a Proyectos Destacados */
+
   .card-title { margin: 0 0 8px 0; font-size: 1.25rem; color: var(--text); font-weight: 700; }
-  
   .card-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+
   .resources-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
   .resource-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; transition: all 0.2s; }
   .resource-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  
+
   .resource-pill.python { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); }
   .resource-pill.r { background: rgba(39, 109, 195, 0.1); color: #276dc3; border-color: rgba(39, 109, 195, 0.2); }
   .resource-pill.excel { background: rgba(33, 115, 70, 0.1); color: #217346; border-color: rgba(33, 115, 70, 0.2); }
@@ -262,8 +297,7 @@ const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
   .resource-pill.sql { background: rgba(242, 145, 17, 0.1); color: #f29111; border-color: rgba(242, 145, 17, 0.2); }
   .resource-pill.default { background: var(--border); color: var(--muted); }
   .resource-pill.disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
-  
-  /* ✨ CAMBIO: Estandarizado a 768px (antes 600px) */
+
   @media (max-width: 768px) {
     .timeline-item { padding-left: 20px; }
     .timeline-dot, .timeline-wrapper::before { display: none; }
