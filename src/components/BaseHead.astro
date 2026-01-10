@@ -14,8 +14,8 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- ✅ Ayuda a Safari/UI -->
-<meta name="color-scheme" content="dark light" />
+<!-- ✅ Orden correcto -->
+<meta name="color-scheme" content="light dark" />
 
 <title>{title}</title>
 <meta name="title" content={title} />
@@ -65,12 +65,15 @@ const ogImage = new URL('/img/og-image.jpg', Astro.url);
 </script>
 
 <style>
-  /* 🔥 FIX: Usamos !important para ganar la carrera de renderizado a Safari */
-  html { 
-    background-color: #ffffff; 
-    transition: background-color 0s; /* Evita delays en el cambio de color base */
+  /* ✅ NO forzar blanco: deja que el browser use color-scheme y el CSS global */
+  html { background: transparent; }
+
+  /* ✅ Anti-flash real: si el sistema prefiere dark, el primer frame ya es oscuro */
+  @media (prefers-color-scheme: dark) {
+    html { background-color: #232323; }
   }
-  html[data-theme="dark"] { 
-    background-color: #232323 !important; 
-  }
+
+  /* ✅ Si ya quedó data-theme, gana eso (consistente con tus variables globales) */
+  html[data-theme="dark"] { background-color: #232323; }
+  html[data-theme="light"] { background-color: #ffffff; }
 </style>
