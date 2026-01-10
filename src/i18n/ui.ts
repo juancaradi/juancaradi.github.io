@@ -52,9 +52,9 @@ export const ui = {
         statNotes: "Notas de Estudio",
         
         // Modal Titles
-        modalActive: "Proyectos en Marcha 🚧",
-        modalDone: "Últimos Finalizados ✅",
-        modalFreelance: "Soluciones Recientes 🚀",
+        modalActive: "Proyectos en Marcha",
+        modalDone: "Últimos Finalizados",
+        modalFreelance: "Soluciones Recientes",
         modalLink: "Ver todos los proyectos →",
 
         // --- 6. FREELANCE PAGE ---
@@ -127,9 +127,9 @@ export const ui = {
         statNotes: "Study Notes",
 
         // Modal Titles
-        modalActive: "Ongoing Projects 🚧",
-        modalDone: "Recently Completed ✅",
-        modalFreelance: "Recent Solutions 🚀",
+        modalActive: "Ongoing Projects",
+        modalDone: "Recently Completed",
+        modalFreelance: "Recent Solutions",
         modalLink: "View all repository →",
 
         // --- 6. FREELANCE PAGE ---

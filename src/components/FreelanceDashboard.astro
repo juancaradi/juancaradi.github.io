@@ -29,7 +29,7 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
       <p class="kpi-desc">{t['freelance.completed']}</p>
     </div>
 
-    {/* 2. Gráfica de Barras */}
+    {/* 2. Gráfica de Materias */}
     <div class="chart-card card-glass bar-chart-span">
       <h3 class="chart-title">{t['freelance.topSubjects']}</h3>
       <div class="bars-container">
@@ -71,7 +71,7 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
       </div>
     </div>
 
-    {/* 4. Gráfica Temporal */}
+    {/* 4. Gráfica Temporal (Tendencia) */}
     <div class="chart-card card-glass trend-chart-span">
       <h3 class="chart-title">{t['freelance.monthly']}</h3>
       <div class="trend-chart">
@@ -97,15 +97,19 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
 )}
 
 <style>
-  /* --- MÓVIL (Base) --- */
+  /* ==========================================
+     MÓVIL (Base / Mobile First)
+     ========================================== */
   .dashboard-container { 
     display: grid;
-    grid-template-columns: 1fr; /* Una sola columna en móvil */
-    gap: 16px; 
+    grid-template-columns: 1fr; /* Forzamos una columna */
+    gap: 20px; 
     margin-top: 20px;
-    padding: 0 12px;
-    box-sizing: border-box;
+    padding: 0 16px; /* Aumentamos padding lateral de seguridad */
     width: 100%;
+    box-sizing: border-box;
+    justify-items: center; /* CENTRA los elementos del grid */
+    overflow-x: hidden;    /* Evita cualquier deslizamiento horizontal raro */
   }
 
   .card-glass { 
@@ -114,55 +118,79 @@ const monthNames = Array.from({ length: 12 }, (_, i) => {
     border-radius: 16px; 
     padding: 20px;
     width: 100%;
-    max-width: 450px; /* Controlamos el ancho en móvil */
-    margin: 0 auto;   /* CENTRADO REAL */
+    max-width: 460px; /* Ancho máximo ideal para móviles */
+    margin: 0 auto;
     box-sizing: border-box;
+    min-width: 0; /* Fix para que el contenido interno no desborde el grid */
   }
   
-  .chart-title { font-size: 1.15rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; text-align: left; }
+  .chart-title { font-size: 1.1rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; text-align: left; }
   
-  /* KPI Específico */
+  /* KPI */
   .kpi-card { text-align: center; }
-  .kpi-number { font-size: 4.5rem; font-weight: 800; color: var(--link); line-height: 1; margin: 10px 0; }
-  .kpi-desc { color: var(--muted); font-size: 0.95rem; font-weight: 500; }
+  .kpi-number { font-size: 4rem; font-weight: 800; color: var(--link); line-height: 1; margin: 8px 0; }
+  .kpi-desc { color: var(--muted); font-size: 0.9rem; }
   
-  /* Bars */
+  /* Barras */
   .bars-container { display: flex; flex-direction: column; gap: 12px; }
   .bar-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--text); }
   .progress-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
   
-  /* Types */
+  /* Tipos de Servicio */
   .types-list { display: flex; flex-direction: column; gap: 15px; }
   .type-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
   .mini-bar-bg { height: 4px; background: var(--border); border-radius: 2px; }
   .mini-bar-fill { height: 100%; background: var(--link); border-radius: 2px; }
   
-  /* Monthly Chart */
-  .trend-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; padding-top: 25px; gap: 4px; }
+  /* Gráfica Mensual (El punto crítico del desbordamiento) */
+  .trend-chart { 
+    display: flex; 
+    align-items: flex-end; 
+    justify-content: space-between; 
+    height: 140px; 
+    padding-top: 25px; 
+    gap: 3px; /* Reducimos gap para que quepa en móviles pequeños */
+  }
   .trend-col-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
-  .trend-bar { width: 100%; max-width: 18px; background: linear-gradient(to top, var(--link), #8b5cf6); border-radius: 4px 4px 0 0; position: relative; min-height: 3px; }
-  .trend-val { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--text); font-weight: 700; }
-  .trend-label { margin-top: 10px; font-size: 0.65rem; color: var(--muted); text-transform: capitalize; }
+  .trend-bar { 
+    width: 100%; 
+    max-width: 16px; /* Barras más delgadas para móvil */
+    background: linear-gradient(to top, var(--link), #8b5cf6); 
+    border-radius: 3px 3px 0 0; 
+    position: relative; 
+    min-height: 3px; 
+  }
+  .trend-val { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--text); font-weight: 700; }
+  .trend-label { margin-top: 8px; font-size: 0.6rem; color: var(--muted); text-transform: capitalize; }
   
-  .empty-state { text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted); width: 100%; grid-column: 1 / -1; }
+  .empty-state { text-align: center; padding: 40px; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted); width: 100%; }
 
-  /* --- ESCRITORIO (A partir de 900px) --- */
+  /* ==========================================
+     ESCRITORIO (A partir de 900px)
+     ========================================== */
   @media (min-width: 900px) {
     .dashboard-container { 
-      grid-template-columns: repeat(3, 1fr); /* Volvemos a las 3 columnas */
+      grid-template-columns: repeat(3, 1fr); /* 3 columnas originales */
       padding: 0;
+      justify-items: stretch; /* Volvemos al estiramiento normal */
     }
     .card-glass { 
-      max-width: none; /* Quitamos el límite de ancho de móvil */
-      margin: 0;       /* Quitamos el margen auto para que llene su celda */
+      max-width: none; 
+      margin: 0; 
     }
-    .bar-chart-span { grid-column: span 2; } /* Distribución favorita */
-    .trend-chart-span { grid-column: span 3; } /* Distribución favorita */
-    .trend-label { font-size: 0.75rem; }
+    /* Distribución de escritorio favorita */
+    .bar-chart-span { grid-column: span 2; }
+    .trend-chart-span { grid-column: span 3; }
+    
+    .trend-chart { gap: 6px; }
     .trend-bar { max-width: 25px; }
+    .trend-label { font-size: 0.75rem; }
+    .trend-val { font-size: 0.75rem; }
+    .empty-state { grid-column: span 3; }
   }
 
+  /* Animación */
   .fade-in { animation: fadeIn 0.5s ease-in; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
