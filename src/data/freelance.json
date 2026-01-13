@@ -4161,5 +4161,32 @@
         "url": "/freelance/statistics/154_13150_asg.pdf"
       }
     ]
+  },
+  {
+    "id": 155,
+    "date": "2026-01-12",
+    "subject": {
+      "es": "Cálculo Diferencial",
+      "en": "Differential Calculus"
+    },
+    "type": {
+      "es": "Clase",
+      "en": "Tutoring"
+    },
+    "title": {
+      "es": "Funciones Exponenciales, Logarítmicas e Invertibilidad",
+      "en": "Exponential, Logarithmic Functions and Invertibility"
+    },
+    "description": {
+      "es": "Aplicación de propiedades algebraicas de logaritmos y exponenciales para resolver sistemas de ecuaciones mixtos, cálculo de funciones inversas y modelado de crecimiento poblacional y desintegración radiactiva",
+      "en": "Application of algebraic properties of logarithms and exponentials to solve mixed systems of equations, inverse function calculations, and modeling of population growth and radioactive decay."
+    },
+    "resources": [
+      {
+        "tool": "pdf",
+        "name": "PDF",
+        "url": "/freelance/differential-calculus/155_13160_sol.pdf"
+      }
+    ]
   }
 ]
